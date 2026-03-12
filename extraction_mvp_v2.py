@@ -44,7 +44,7 @@ import numpy as np
 # ── Pipeline config ──────────────────────────────────────────────────────────
 from pipeline_config import (
     load_config, get_pdf_path, get_document_title, get_ground_truth,
-    get_all_table_keywords, get_benchmark_pages,
+    get_all_table_keywords, get_benchmark_pages, get_clinical_table_keywords,
 )
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -294,10 +294,11 @@ _STRUCTURAL_KEYWORDS = [
     "contents", "annex", "preparation of the guidelines",
     "abbreviation", "glossary", "introduction......",
 ]
-_CLINICAL_MGMT_KEYWORDS = [
+_CLINICAL_MGMT_KEYWORDS_DEFAULT = [
     "manifestation", "complication", "immediate management",
     "clinical feature", "danger sign", "referral", "severity",
 ]
+_CLINICAL_MGMT_KEYWORDS = get_clinical_table_keywords(CONFIG) or _CLINICAL_MGMT_KEYWORDS_DEFAULT
 
 
 def classify_table(table_md: str) -> str:
@@ -309,7 +310,7 @@ def classify_table(table_md: str) -> str:
     md_lower = table_md.lower()
 
     def _score(keywords):
-        return sum(1 for kw in keywords if kw in md_lower)
+        return sum(1 for kw in keywords if kw.lower() in md_lower)
 
     scores = {
         "dosing": _score(_DOSING_KEYWORDS),
@@ -318,8 +319,17 @@ def classify_table(table_md: str) -> str:
         "clinical_management": _score(_CLINICAL_MGMT_KEYWORDS),
     }
     best = max(scores, key=scores.get)
+
+    # Standard threshold: 2+ keyword matches
     if scores[best] >= 2:
         return best
+
+    # Relaxed threshold for clinical_management: a single clinical keyword
+    # is sufficient if no dosing keywords are present (catches TREATMENT|LOC
+    # tables where one strong indicator like "TREATMENT" or "HC3" appears)
+    if scores["clinical_management"] >= 1 and scores["dosing"] == 0:
+        return "clinical_management"
+
     return "other"
 
 
@@ -973,6 +983,22 @@ def save_outputs(extraction: dict, accuracy: dict, tbl_report: dict,
     inv_path = OUTPUT_DIR / "table_inventory.json"
     inv_path.write_text(json.dumps(inventory, indent=2), encoding="utf-8")
     print(f"💾 Saved: {inv_path}")
+
+    # Image inventory — per-image OCR text + metadata for Stage 4a
+    img_inventory = []
+    for img in extraction["images"]:
+        img_inventory.append({
+            "index": img.get("index"),
+            "page_no": img.get("page_no"),
+            "caption": img.get("caption", ""),
+            "ocr_text": img.get("ocr_text", ""),
+            "saved_path": img.get("saved_path", ""),
+            "width": img.get("width"),
+            "height": img.get("height"),
+        })
+    img_inv_path = OUTPUT_DIR / "image_inventory.json"
+    img_inv_path.write_text(json.dumps(img_inventory, indent=2), encoding="utf-8")
+    print(f"💾 Saved: {img_inv_path}")
 
     # JSON summary
     summary = {

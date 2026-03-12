@@ -124,6 +124,13 @@ CHECK_APPLICABILITY = {
         "conditional_logic": "conditional",
         "provenance": True,
     },
+    "image": {
+        "dosage_accuracy": "conditional",
+        "stratification": "conditional",
+        "contraindications": "conditional",
+        "conditional_logic": "conditional",
+        "provenance": True,
+    },
 }
 
 # Tier definitions
@@ -268,10 +275,18 @@ def classify_chunk_tier(chunk: Dict) -> int:
     if ct == "clinical_table":
         return 3
 
-    # Tier 4: evidence tables + high-preservation narratives
+    # Tier 3 (catch-all): other_table with LOC or danger sign content
+    if ct == "other_table":
+        cm = chunk.get("clinical_metadata") or {}
+        if cm.get("level_of_care") or cm.get("danger_signs"):
+            return 3
+
+    # Tier 4: evidence tables + high/verbatim-preservation narratives/images
     if ct == "evidence_table":
         return 4
-    if ct == "narrative" and preservation == "high":
+    if ct == "narrative" and preservation in ("high", "verbatim"):
+        return 4
+    if ct == "image" and preservation in ("high", "verbatim"):
         return 4
 
     # Tier 5: everything else
@@ -355,20 +370,27 @@ def _build_guidance(
         cm = chunk.get("clinical_metadata") or {}
         existing = cm.get("contraindications", [])
         sp = cm.get("special_populations", [])
+        dangers = cm.get("danger_signs", [])
         hints = []
         if existing:
             hints.append(f"Extracted contraindications: {', '.join(existing)}")
         if sp:
             hints.append(f"Special populations: {', '.join(sp)}")
-        base = "Check for warnings (e.g., 'Do not use in first trimester', 'contraindicated in G6PD deficiency')."
+        if dangers:
+            hints.append(f"Danger signs: {', '.join(d[:60] for d in dangers[:3])}")
+        base = "Check for warnings, danger signs, and referral criteria."
         if hints:
             base += " " + "; ".join(hints) + "."
         return base
 
     if check_key == "conditional_logic":
         has_nll = bool(chunk.get("nll"))
+        cm = chunk.get("clinical_metadata") or {}
+        loc = cm.get("level_of_care", [])
         if has_nll:
             return "Verify that the NLL (Natural Language Logic) correctly represents the weight→dose mapping from the table."
+        if loc:
+            return f"Verify Level of Care assignments ({', '.join(loc)}) match the source PDF. Confirm referral pathways between facility levels are intact."
         return "Verify any IF/THEN logic, referral criteria, or decision pathways are intact."
 
     if check_key == "provenance":

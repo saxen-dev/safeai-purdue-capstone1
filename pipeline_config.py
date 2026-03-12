@@ -138,6 +138,34 @@ def build_high_preservation_regex(config: Dict) -> re.Pattern:
     return re.compile(pattern, re.IGNORECASE)
 
 
+def get_clinical_section_keywords(config: Dict) -> Dict[str, List[str]]:
+    """Return {section_type: [keywords]} for clinical content sections.
+
+    Section types include: clinical_features, diagnostic_criteria, management,
+    referral, prevention, complications, danger_signs.
+    """
+    return config.get("clinical_section_keywords", {})
+
+
+def get_loc_keywords(config: Dict) -> List[str]:
+    """Return Level of Care indicator keywords (HC2, HC3, hospital, etc.)."""
+    return config.get("loc_keywords", [])
+
+
+def get_clinical_table_keywords(config: Dict) -> List[str]:
+    """Return expanded keywords for clinical management table classification."""
+    return config.get("clinical_table_keywords", [])
+
+
+def build_loc_regex(config: Dict) -> re.Pattern:
+    """Build a compiled regex from the config's LOC keywords."""
+    kws = get_loc_keywords(config)
+    if not kws:
+        return re.compile(r"(?!)")  # matches nothing
+    pattern = "|".join(re.escape(k) for k in kws)
+    return re.compile(pattern, re.IGNORECASE)
+
+
 def get_benchmark_pages(config: Dict) -> Tuple[int, ...]:
     """Return benchmark page tuple for Stage 1."""
     pages = config.get("processing", {}).get("benchmark_pages", [])

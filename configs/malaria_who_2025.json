@@ -92,8 +92,12 @@
       "danger signs", "severe malaria"
     ]
   },
+  "clinical_section_keywords": {},
+  "loc_keywords": [],
+  "clinical_table_keywords": [],
   "cross_validation": {
     "dosing_pages": [173, 174, 175, 176, 177, 178],
-    "severe_pages": [212]
+    "severe_pages": [212],
+    "clinical_assessment_pages": []
   }
 }

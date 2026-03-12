@@ -419,14 +419,45 @@
       "contraindicated",
       "do not give",
       "danger sign",
+      "danger signs",
       "refer urgently",
+      "refer immediately",
       "emergency",
       "not recommended",
       "should not be used",
       "avoid",
-      "first-line treatment"
+      "first-line treatment",
+      "clinical features",
+      "HC2", "HC3", "HC4",
+      "level of care",
+      "severity classification"
     ]
   },
+  "clinical_section_keywords": {
+    "clinical_features": ["clinical features", "signs and symptoms", "presenting features", "symptoms include"],
+    "diagnostic_criteria": ["diagnostic criteria", "diagnosis", "differential diagnosis", "investigations"],
+    "management": ["management", "treatment"],
+    "referral": ["referral criteria", "refer to", "refer immediately", "refer urgently", "refer the patient"],
+    "prevention": ["prevention", "preventive measures", "prophylaxis"],
+    "complications": ["complications", "adverse outcomes"],
+    "danger_signs": ["danger sign", "danger signs", "warning sign", "emergency signs", "red flag"]
+  },
+  "loc_keywords": [
+    "HC2", "HC3", "HC4", "HC II", "HC III", "HC IV",
+    "health centre", "hospital", "regional referral",
+    "national referral", "district hospital"
+  ],
+  "clinical_table_keywords": [
+    "manifestation", "complication", "immediate management",
+    "clinical feature", "danger sign", "referral", "severity",
+    "TREATMENT", "LOC", "level of care", "health centre",
+    "HC2", "HC3", "HC4", "HC II", "HC III", "HC IV",
+    "management", "clinical presentation", "diagnosis",
+    "differential diagnosis", "investigations", "signs",
+    "symptoms", "classification", "assessment",
+    "prevention", "counselling", "follow-up",
+    "first aid", "emergency", "stabilize", "stabilise"
+  ],
   "cross_validation": {
     "dosing_pages": [
       68,
@@ -480,6 +511,7 @@
       236,
       237
     ],
-    "severe_pages": []
+    "severe_pages": [],
+    "clinical_assessment_pages": []
   }
 }

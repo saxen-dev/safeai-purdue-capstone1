@@ -251,14 +251,102 @@ def discover_conditions(page_texts: List[str]) -> List[List[str]]:
     return found
 
 
+def discover_clinical_sections(page_texts: List[str]) -> Dict[str, List[str]]:
+    """Discover clinical section keywords present in the PDF.
+
+    Scans all page text for common clinical section types:
+    clinical_features, diagnostic_criteria, management, referral,
+    prevention, complications, danger_signs.
+    """
+    full_text = " ".join(page_texts).lower()
+
+    section_types = {
+        "clinical_features": [
+            "clinical features", "signs and symptoms",
+            "presenting features", "symptoms include",
+        ],
+        "diagnostic_criteria": [
+            "diagnostic criteria", "diagnosis",
+            "differential diagnosis", "investigations",
+        ],
+        "management": ["management", "treatment"],
+        "referral": [
+            "referral criteria", "refer to",
+            "refer immediately", "refer urgently", "refer the patient",
+        ],
+        "prevention": [
+            "prevention", "preventive measures", "prophylaxis",
+        ],
+        "complications": ["complications", "adverse outcomes"],
+        "danger_signs": [
+            "danger sign", "danger signs",
+            "warning sign", "emergency signs", "red flag",
+        ],
+    }
+
+    found_sections: Dict[str, List[str]] = {}
+    for stype, keywords in section_types.items():
+        found_kws = [kw for kw in keywords if kw in full_text]
+        if found_kws:
+            found_sections[stype] = found_kws
+
+    print(f"  Discovered {len(found_sections)} clinical section types")
+    for stype, kws in found_sections.items():
+        print(f"    {stype}: {kws}")
+    return found_sections
+
+
+def discover_loc_keywords(page_texts: List[str]) -> List[str]:
+    """Discover Level of Care indicators (HC2, HC3, hospital, etc.) in the PDF."""
+    full_text = " ".join(page_texts)
+
+    loc_candidates = [
+        "HC2", "HC3", "HC4", "HC II", "HC III", "HC IV",
+        "health centre", "hospital", "regional referral",
+        "national referral", "district hospital",
+    ]
+
+    found = [kw for kw in loc_candidates if kw.lower() in full_text.lower()]
+    print(f"  Discovered {len(found)} LOC indicators: {found}")
+    return found
+
+
+def discover_clinical_assessment_pages(
+    page_texts: List[str], clinical_sections: Dict[str, List[str]]
+) -> List[int]:
+    """Identify pages with clinical assessment content (non-dosing)."""
+    assessment_keywords: List[str] = []
+    for kws in clinical_sections.values():
+        assessment_keywords.extend(kws)
+
+    if not assessment_keywords:
+        return []
+
+    pages: List[int] = []
+    for i, text in enumerate(page_texts):
+        text_lower = text.lower()
+        score = sum(1 for kw in assessment_keywords if kw in text_lower)
+        if score >= 2:
+            pages.append(i + 1)
+
+    pages = pages[:50]  # cap
+    print(f"  Discovered {len(pages)} clinical assessment pages")
+    return pages
+
+
 # ─────────────────────────────────────────────────────────────────────────────
 # 4.  GROUND TRUTH GENERATION (verified against raw text)
 # ─────────────────────────────────────────────────────────────────────────────
 
 def generate_ground_truth(
-    scan: Dict[str, Any], drugs: List[str]
+    scan: Dict[str, Any],
+    drugs: List[str],
+    clinical_sections: Optional[Dict[str, List[str]]] = None,
 ) -> List[Dict]:
-    """Generate verified ground truth entries from PDF content."""
+    """Generate verified ground truth entries from PDF content.
+
+    Includes dosing-page strategies (1, 2) and clinical assessment strategy (3).
+    """
     page_texts = scan["page_texts"]
     dosing_pages = scan["dosing_table_pages"]
     gt_entries: List[Dict] = []
@@ -326,6 +414,49 @@ def generate_ground_truth(
     except Exception:
         pass
 
+    # Strategy 3: Clinical assessment page text checks (non-dosing)
+    if clinical_sections:
+        assessment_pages = discover_clinical_assessment_pages(
+            page_texts, clinical_sections
+        )
+        clinical_gt_count = 0
+        for pg in assessment_pages:
+            if clinical_gt_count >= 5:  # cap at 5 clinical entries
+                break
+            text = page_texts[pg - 1]
+            text_lower = text.lower()
+            added = False
+            for section_type, keywords in clinical_sections.items():
+                if added:
+                    break
+                for kw in keywords:
+                    if kw in text_lower:
+                        # Find a sentence containing this keyword
+                        sentences = re.split(r"[.;\n]", text)
+                        for sent in sentences:
+                            if kw in sent.lower() and 10 < len(sent.strip()) < 120:
+                                words = [w for w in sent.strip().split() if len(w) > 3]
+                                if len(words) >= 2:
+                                    gt_kws = [kw]
+                                    for w in words:
+                                        wl = w.lower().strip(".,;:()")
+                                        if wl != kw and wl not in {
+                                            "with", "from", "that", "this",
+                                            "have", "been", "also",
+                                        }:
+                                            gt_kws.append(wl)
+                                            break
+                                    if len(gt_kws) >= 2:
+                                        gt_entries.append({
+                                            "page": pg,
+                                            "type": "text",
+                                            "must_contain": gt_kws,
+                                        })
+                                        clinical_gt_count += 1
+                                        added = True
+                                        break
+                        break
+
     # Deduplicate by page+type
     seen = set()
     unique = []
@@ -335,8 +466,8 @@ def generate_ground_truth(
             seen.add(key)
             unique.append(gt)
 
-    # Cap at 15 entries
-    unique = unique[:15]
+    # Cap at 20 entries (increased from 15 to allow clinical entries)
+    unique = unique[:20]
 
     print(f"  Generated {len(unique)} ground truth entries")
     return unique
@@ -471,6 +602,8 @@ def assemble_config(
     conditions: List[List[str]],
     ground_truth: List[Dict],
     enrichment: Dict[str, Any],
+    clinical_sections: Optional[Dict[str, List[str]]] = None,
+    loc_keywords: Optional[List[str]] = None,
 ) -> Dict[str, Any]:
     """Assemble the final pipeline_config.json structure."""
 
@@ -495,9 +628,15 @@ def assemble_config(
     # Generic high preservation keywords
     high_pres = [
         "mg/kg", "contraindicated", "do not give", "danger sign",
-        "refer urgently", "emergency", "not recommended",
+        "danger signs", "refer urgently", "refer immediately",
+        "emergency", "not recommended",
         "should not be used", "avoid", "first-line treatment",
+        "clinical features", "level of care", "severity classification",
     ]
+    # Add LOC keywords to high preservation if found
+    if loc_keywords:
+        high_pres.extend(loc_keywords)
+        high_pres = list(dict.fromkeys(high_pres))  # deduplicate, preserve order
 
     # Generic contraindication terms
     contra_terms = enrichment.get("contraindication_terms", [
@@ -540,13 +679,48 @@ def assemble_config(
             "contraindication_terms": contra_terms,
             "high_preservation_keywords": high_pres,
         },
+        "clinical_section_keywords": clinical_sections or {},
+        "loc_keywords": loc_keywords or [],
+        "clinical_table_keywords": _build_clinical_table_keywords(
+            clinical_sections, loc_keywords
+        ),
         "cross_validation": {
             "dosing_pages": scan["dosing_table_pages"][:50],  # cap
             "severe_pages": [],
+            "clinical_assessment_pages": discover_clinical_assessment_pages(
+                scan["page_texts"], clinical_sections or {}
+            ) if clinical_sections else [],
         },
     }
 
     return config
+
+
+def _build_clinical_table_keywords(
+    clinical_sections: Optional[Dict[str, List[str]]],
+    loc_keywords: Optional[List[str]],
+) -> List[str]:
+    """Build the clinical_table_keywords list from discovered content."""
+    # Start with defaults
+    kws = [
+        "manifestation", "complication", "immediate management",
+        "clinical feature", "danger sign", "referral", "severity",
+    ]
+    # Add discovered section keywords
+    if clinical_sections:
+        for section_kws in clinical_sections.values():
+            kws.extend(section_kws)
+    # Add LOC keywords (powerful table classifiers)
+    if loc_keywords:
+        kws.extend(loc_keywords)
+    # Add generic clinical table terms
+    kws.extend([
+        "management", "clinical presentation", "diagnosis",
+        "differential diagnosis", "classification", "assessment",
+        "prevention", "counselling", "follow-up",
+        "emergency", "stabilize", "stabilise",
+    ])
+    return list(dict.fromkeys(kws))  # deduplicate, preserve order
 
 
 def _make_short_name(title: str) -> str:
@@ -600,9 +774,14 @@ def main():
     print(f"\n  Step 3: Discovering clinical conditions...")
     conditions = discover_conditions(scan["page_texts"])
 
-    # Step 4: Generate ground truth
+    # Step 3b: Discover clinical sections & LOC indicators
+    print(f"\n  Step 3b: Discovering clinical section types...")
+    clinical_sections = discover_clinical_sections(scan["page_texts"])
+    loc_kws = discover_loc_keywords(scan["page_texts"])
+
+    # Step 4: Generate ground truth (includes clinical assessment entries)
     print(f"\n  Step 4: Generating ground truth...")
-    raw_gt = generate_ground_truth(scan, drugs)
+    raw_gt = generate_ground_truth(scan, drugs, clinical_sections)
 
     # Step 5: Validate ground truth
     print(f"\n  Step 5: Validating ground truth...")
@@ -618,7 +797,10 @@ def main():
 
     # Step 7: Assemble config
     print(f"\n  Step 7: Assembling config...")
-    config = assemble_config(scan, drugs, conditions, valid_gt, enrichment)
+    config = assemble_config(
+        scan, drugs, conditions, valid_gt, enrichment,
+        clinical_sections=clinical_sections, loc_keywords=loc_kws,
+    )
 
     # Determine output path
     if args.output:
@@ -646,9 +828,13 @@ def main():
     print(f"  Pages         : {config['document']['page_count']}")
     print(f"  Drugs found   : {len(config['drug_keywords'])}")
     print(f"  Conditions    : {len(config['domain_keywords']['conditions'])}")
+    print(f"  Clinical sects: {len(config.get('clinical_section_keywords', {}))} types")
+    print(f"  LOC keywords  : {len(config.get('loc_keywords', []))}")
+    print(f"  Clin table kws: {len(config.get('clinical_table_keywords', []))}")
     print(f"  Ground truth  : {len(config['ground_truth'])} verified entries")
     print(f"  Dose ranges   : {len(config['dose_reference_ranges'])} drugs")
     print(f"  Dosing pages  : {len(config['cross_validation']['dosing_pages'])}")
+    print(f"  Assessment pgs: {len(config['cross_validation'].get('clinical_assessment_pages', []))}")
     llm_status = "enriched" if enrichment else "heuristic only"
     print(f"  LLM status    : {llm_status}")
     print(f"  Output        : {out_path}")
