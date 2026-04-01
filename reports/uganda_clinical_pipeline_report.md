@@ -1,35 +1,22 @@
 # Uganda Clinical Guidelines 2023 pipeline run report
 
-- **Generated (UTC)**: 2026-03-20T00:08:38.762362+00:00
+- **Generated (UTC)**: 2026-04-01T05:01:02.873729+00:00
 - **Preset**: uganda (MoH Clinical Guidelines 2023)
 - **PDF**: `C:\temp\capstone\Uganda Clinical Guidelines 2023.pdf`
 - **KB output directory**: `C:\temp\capstone\medical_kb_uganda_clinical_2023`
-- **Reuse KB flag**: `False`
+- **Reuse KB flag**: `True`
 
 ---
 ## Stage 1: Multi-pass extraction
 
+_Loaded from existing `knowledge_base.json` (pass-level log not in memory)._
+
 | Metric | Value |
 |--------|-------|
-| PDF path | `C:\temp\capstone\Uganda Clinical Guidelines 2023.pdf` |
-| Extraction timestamp | 2026-03-19T19:08:33.693748 |
-| Total pages extracted | 1161 |
-| Tables extracted | 950 |
-| Embedded images saved | 43 |
-| OCR / manual-review flags | 0 |
-| Cross-validation method | pdfplumber |
-| Cross-validation consistency score | 0.9081618439234158 |
-| Passes logged | 5 |
-
-### Extraction passes
-
-| Pass | Strategy | Details |
-|------|----------|---------|
-| 0 | `analysis` | `{"pass": 0, "strategy": "analysis", "profile_pages_sample": "[{'page': 1, 'text_length': 140, 'has_images': True, 'has_vector_graphics': True"}` |
-| 1 | `text_extraction` | `{"pass": 1, "strategy": "text_extraction", "pages": 1161}` |
-| 2 | `table_extraction` | `{"pass": 2, "strategy": "table_extraction", "tables_found": 950}` |
-| 4 | `cross_validation` | `{"pass": 4, "strategy": "cross_validation", "results": {"method": "pdfplumber", "page_matches": [{"page": 1, "similarity": 0.9819494584837546}, {"page": 2, "similarity": 0.9928970065956367}, {"page": 3, "similarity": 0.9855564995751912}, {"` |
-| images | `embedded_raster` | `{"pass": "images", "strategy": "embedded_raster", "images_saved": 43}` |
+| Pages (summary) | 1161 |
+| Tables (summary) | 950 |
+| Images (summary) | 43 |
+| Extraction passes (summary) | 5 |
 
 ## Stage 2: Validation
 
@@ -300,9 +287,12 @@
 
 ## Stage 5: Search & Q&A (25 queries)
 
-BM25 top-5 excerpts per query; guardrail summary below each.
+For each query: **full query text**, BM25 sources, metrics, then **complete** outputs — 
+VHT standard, referral note, quick summary, and BM25+guardrail evidence bundle (no truncation).
 
 ### 1. Query
+
+**Full query**
 
 > Integrated management of childhood illness pneumonia classification
 
@@ -313,7 +303,89 @@ BM25 top-5 excerpts per query; guardrail summary below each.
 - Page 879: Childhood Illness
 - Page 897: Childhood Illness
 
-**Response**
+**Metrics:** Triage `GREEN` | Guardrail passed=`True` | Confidence `0.90` | errors=0 | warnings=0
+
+#### VHT standard (`vht_response`)
+
+```
+**QUICK SUMMARY: GREEN (Manage at Community Level)**
+
+• What I see: Routine evidence retrieval from national guidelines
+• What to do: Follow advice below, monitor for changes
+• What NOT to do: Do NOT give medicine at home for danger signs
+
+**WHAT TO DO (step by step):**
+
+**Step 1:** Assess patient carefully
+**Step 2:** Check for danger signs (see below)
+**Step 3:** If unsure, refer to health facility
+**Step 4:** Record all findings
+
+**MONITORING:**
+
+• Check if patient can drink normally
+• Watch for convulsions or shaking
+• Monitor breathing – is it fast or difficult?
+• Check if patient is awake and alert
+• Look for pale or yellow skin/eyes
+
+**DANGER SIGNS - STOP AND REFER IF YOU SEE:**
+
+• Cannot drink or breastfeed
+• Very weak, cannot sit up or wake up
+• Shaking/fitting (convulsions)
+• Vomiting everything
+• Difficulty breathing
+• Pale or yellow skin/eyes
+• Bleeding from any place
+
+**WHAT TO TELL THE FAMILY:**
+
+The symptoms can be managed at home with guidance. Follow the advice you were given. Come back if symptoms get worse.
+
+**REMEMBER AS A VHT:**
+
+• Always check for danger signs first
+• If you are unsure, it is better to refer
+• Record all patients you see
+• Keep your VHT kit and referral forms ready
+
+**FROM THE GUIDELINES:**
+
+• Uganda Clinical Guidelines 2023, Page 37: IPT
+• Uganda Clinical Guidelines 2023, Page 932: 17.4  INTEGRATED COMMUNITY CASE MANAGEMENT
+• Uganda Clinical Guidelines 2023, Page 878: Childhood Illness
+```
+
+#### Referral note (`referral_note`)
+
+```
+**VHT REFERRAL NOTE**
+
+**Triage:** 🟢 GREEN (Manage at Community Level)
+**Reason:** Routine evidence retrieval from national guidelines
+
+**Actions taken:**
+• Assess patient carefully
+• Check for danger signs (see below)
+• If unsure, refer to health facility
+
+**Referral completed:** [ ]
+**Health worker received:** [ ]
+
+---
+_This is a VHT referral. Please assess patient promptly._
+```
+
+#### Quick summary (`quick_summary`)
+
+```
+MANAGE AT HOME
+Reason: Routine evidence retrieval from national guidelines
+Action: Follow advice below, monitor for changes
+```
+
+#### BM25 + guardrail evidence bundle (`response`)
 
 ```
 **Uganda Clinical Guidelines 2023**
@@ -506,11 +578,11 @@ Citations: Page 37, Page 878, Page 879, Page 897, Page 932
 
 ```
 
-**Guardrail**: passed=`True` | errors=0 | warnings=0
-
 ---
 
 ### 2. Query
+
+**Full query**
 
 > Diarrhea dehydration ORS zinc treatment plan
 
@@ -521,7 +593,89 @@ Citations: Page 37, Page 878, Page 879, Page 897, Page 932
 - Page 77: Emergencies and Trauma
 - Page 75: Management
 
-**Response**
+**Metrics:** Triage `GREEN` | Guardrail passed=`True` | Confidence `0.90` | errors=0 | warnings=0
+
+#### VHT standard (`vht_response`)
+
+```
+**QUICK SUMMARY: GREEN (Manage at Community Level)**
+
+• What I see: Routine evidence retrieval from national guidelines
+• What to do: Follow advice below, monitor for changes
+• What NOT to do: Do NOT give medicine at home for danger signs
+
+**WHAT TO DO (step by step):**
+
+**Step 1:** Assess patient carefully
+**Step 2:** Check for danger signs (see below)
+**Step 3:** If unsure, refer to health facility
+**Step 4:** Record all findings
+
+**MONITORING:**
+
+• Check if patient can drink normally
+• Watch for convulsions or shaking
+• Monitor breathing – is it fast or difficult?
+• Check if patient is awake and alert
+• Look for pale or yellow skin/eyes
+
+**DANGER SIGNS - STOP AND REFER IF YOU SEE:**
+
+• Cannot drink or breastfeed
+• Very weak, cannot sit up or wake up
+• Shaking/fitting (convulsions)
+• Vomiting everything
+• Difficulty breathing
+• Pale or yellow skin/eyes
+• Bleeding from any place
+
+**WHAT TO TELL THE FAMILY:**
+
+The symptoms can be managed at home with guidance. Follow the advice you were given. Come back if symptoms get worse.
+
+**REMEMBER AS A VHT:**
+
+• Always check for danger signs first
+• If you are unsure, it is better to refer
+• Record all patients you see
+• Keep your VHT kit and referral forms ready
+
+**FROM THE GUIDELINES:**
+
+• Uganda Clinical Guidelines 2023, Page 75: Plan A (No dehydration and for prevention)
+• Uganda Clinical Guidelines 2023, Page 77: Plan C (Severe dehydration)
+• Uganda Clinical Guidelines 2023, Page 75: ORS
+```
+
+#### Referral note (`referral_note`)
+
+```
+**VHT REFERRAL NOTE**
+
+**Triage:** 🟢 GREEN (Manage at Community Level)
+**Reason:** Routine evidence retrieval from national guidelines
+
+**Actions taken:**
+• Assess patient carefully
+• Check for danger signs (see below)
+• If unsure, refer to health facility
+
+**Referral completed:** [ ]
+**Health worker received:** [ ]
+
+---
+_This is a VHT referral. Please assess patient promptly._
+```
+
+#### Quick summary (`quick_summary`)
+
+```
+MANAGE AT HOME
+Reason: Routine evidence retrieval from national guidelines
+Action: Follow advice below, monitor for changes
+```
+
+#### BM25 + guardrail evidence bundle (`response`)
 
 ```
 **Uganda Clinical Guidelines 2023**
@@ -658,11 +812,11 @@ Citations: Page 75, Page 77
 
 ```
 
-**Guardrail**: passed=`True` | errors=0 | warnings=0
-
 ---
 
 ### 3. Query
+
+**Full query**
 
 > HIV antiretroviral therapy first-line regimen adults
 
@@ -673,7 +827,89 @@ Citations: Page 75, Page 77
 - Page 289: HIV/AIDS and Sexually Transmitted Infections
 - Page 268: Principles of ART
 
-**Response**
+**Metrics:** Triage `GREEN` | Guardrail passed=`True` | Confidence `0.90` | errors=0 | warnings=0
+
+#### VHT standard (`vht_response`)
+
+```
+**QUICK SUMMARY: GREEN (Manage at Community Level)**
+
+• What I see: Routine evidence retrieval from national guidelines
+• What to do: Follow advice below, monitor for changes
+• What NOT to do: Do NOT give medicine at home for danger signs
+
+**WHAT TO DO (step by step):**
+
+**Step 1:** Assess patient carefully
+**Step 2:** Check for danger signs (see below)
+**Step 3:** If unsure, refer to health facility
+**Step 4:** Record all findings
+
+**MONITORING:**
+
+• Check if patient can drink normally
+• Watch for convulsions or shaking
+• Monitor breathing – is it fast or difficult?
+• Check if patient is awake and alert
+• Look for pale or yellow skin/eyes
+
+**DANGER SIGNS - STOP AND REFER IF YOU SEE:**
+
+• Cannot drink or breastfeed
+• Very weak, cannot sit up or wake up
+• Shaking/fitting (convulsions)
+• Vomiting everything
+• Difficulty breathing
+• Pale or yellow skin/eyes
+• Bleeding from any place
+
+**WHAT TO TELL THE FAMILY:**
+
+The symptoms can be managed at home with guidance. Follow the advice you were given. Come back if symptoms get worse.
+
+**REMEMBER AS A VHT:**
+
+• Always check for danger signs first
+• If you are unsure, it is better to refer
+• Record all patients you see
+• Keep your VHT kit and referral forms ready
+
+**FROM THE GUIDELINES:**
+
+• Uganda Clinical Guidelines 2023, Page 444: ment regimen
+• Uganda Clinical Guidelines 2023, Page 444: Important:
+• Uganda Clinical Guidelines 2023, Page 444: Susceptible TB: 1st line treatment regimens
+```
+
+#### Referral note (`referral_note`)
+
+```
+**VHT REFERRAL NOTE**
+
+**Triage:** 🟢 GREEN (Manage at Community Level)
+**Reason:** Routine evidence retrieval from national guidelines
+
+**Actions taken:**
+• Assess patient carefully
+• Check for danger signs (see below)
+• If unsure, refer to health facility
+
+**Referral completed:** [ ]
+**Health worker received:** [ ]
+
+---
+_This is a VHT referral. Please assess patient promptly._
+```
+
+#### Quick summary (`quick_summary`)
+
+```
+MANAGE AT HOME
+Reason: Routine evidence retrieval from national guidelines
+Action: Follow advice below, monitor for changes
+```
+
+#### BM25 + guardrail evidence bundle (`response`)
 
 ```
 **Uganda Clinical Guidelines 2023**
@@ -854,11 +1090,11 @@ Citations: Page 268, Page 289, Page 444
 
 ```
 
-**Guardrail**: passed=`True` | errors=0 | warnings=0
-
 ---
 
 ### 4. Query
+
+**Full query**
 
 > Tuberculosis treatment regimen and contact investigation
 
@@ -869,7 +1105,89 @@ Citations: Page 268, Page 289, Page 444
 - Page 320: HIV/AIDS and Sexually Transmitted Infections
 - Page 451: Contact tracing
 
-**Response**
+**Metrics:** Triage `GREEN` | Guardrail passed=`True` | Confidence `0.90` | errors=0 | warnings=0
+
+#### VHT standard (`vht_response`)
+
+```
+**QUICK SUMMARY: GREEN (Manage at Community Level)**
+
+• What I see: Routine evidence retrieval from national guidelines
+• What to do: Follow advice below, monitor for changes
+• What NOT to do: Do NOT give medicine at home for danger signs
+
+**WHAT TO DO (step by step):**
+
+**Step 1:** Assess patient carefully
+**Step 2:** Check for danger signs (see below)
+**Step 3:** If unsure, refer to health facility
+**Step 4:** Record all findings
+
+**MONITORING:**
+
+• Check if patient can drink normally
+• Watch for convulsions or shaking
+• Monitor breathing – is it fast or difficult?
+• Check if patient is awake and alert
+• Look for pale or yellow skin/eyes
+
+**DANGER SIGNS - STOP AND REFER IF YOU SEE:**
+
+• Cannot drink or breastfeed
+• Very weak, cannot sit up or wake up
+• Shaking/fitting (convulsions)
+• Vomiting everything
+• Difficulty breathing
+• Pale or yellow skin/eyes
+• Bleeding from any place
+
+**WHAT TO TELL THE FAMILY:**
+
+The symptoms can be managed at home with guidance. Follow the advice you were given. Come back if symptoms get worse.
+
+**REMEMBER AS A VHT:**
+
+• Always check for danger signs first
+• If you are unsure, it is better to refer
+• Record all patients you see
+• Keep your VHT kit and referral forms ready
+
+**FROM THE GUIDELINES:**
+
+• Uganda Clinical Guidelines 2023, Page 166: Investigation
+• Uganda Clinical Guidelines 2023, Page 497: Investigation
+• Uganda Clinical Guidelines 2023, Page 452: 5.3.2.3	 Tuberculosis Preventive Treatment
+```
+
+#### Referral note (`referral_note`)
+
+```
+**VHT REFERRAL NOTE**
+
+**Triage:** 🟢 GREEN (Manage at Community Level)
+**Reason:** Routine evidence retrieval from national guidelines
+
+**Actions taken:**
+• Assess patient carefully
+• Check for danger signs (see below)
+• If unsure, refer to health facility
+
+**Referral completed:** [ ]
+**Health worker received:** [ ]
+
+---
+_This is a VHT referral. Please assess patient promptly._
+```
+
+#### Quick summary (`quick_summary`)
+
+```
+MANAGE AT HOME
+Reason: Routine evidence retrieval from national guidelines
+Action: Follow advice below, monitor for changes
+```
+
+#### BM25 + guardrail evidence bundle (`response`)
 
 ```
 **Uganda Clinical Guidelines 2023**
@@ -998,11 +1316,11 @@ Citations: Page 166, Page 320, Page 451, Page 452, Page 497
 
 ```
 
-**Guardrail**: passed=`True` | errors=0 | warnings=0
-
 ---
 
 ### 5. Query
+
+**Full query**
 
 > Malaria uncomplicated case management ACT dosing children
 
@@ -1013,7 +1331,89 @@ Citations: Page 166, Page 320, Page 451, Page 452, Page 497
 - Page 235: Infectious Diseases
 - Page 932: 17.4  INTEGRATED COMMUNITY CASE MANAGEMENT
 
-**Response**
+**Metrics:** Triage `GREEN` | Guardrail passed=`True` | Confidence `0.90` | errors=0 | warnings=0
+
+#### VHT standard (`vht_response`)
+
+```
+**QUICK SUMMARY: GREEN (Manage at Community Level)**
+
+• What I see: Routine evidence retrieval from national guidelines
+• What to do: Follow advice below, monitor for changes
+• What NOT to do: Do NOT give medicine at home for danger signs
+
+**WHAT TO DO (step by step):**
+
+**Step 1:** Assess patient carefully
+**Step 2:** Check for danger signs (see below)
+**Step 3:** If unsure, refer to health facility
+**Step 4:** Record all findings
+
+**MONITORING:**
+
+• Check if patient can drink normally
+• Watch for convulsions or shaking
+• Monitor breathing – is it fast or difficult?
+• Check if patient is awake and alert
+• Look for pale or yellow skin/eyes
+
+**DANGER SIGNS - STOP AND REFER IF YOU SEE:**
+
+• Cannot drink or breastfeed
+• Very weak, cannot sit up or wake up
+• Shaking/fitting (convulsions)
+• Vomiting everything
+• Difficulty breathing
+• Pale or yellow skin/eyes
+• Bleeding from any place
+
+**WHAT TO TELL THE FAMILY:**
+
+The symptoms can be managed at home with guidance. Follow the advice you were given. Come back if symptoms get worse.
+
+**REMEMBER AS A VHT:**
+
+• Always check for danger signs first
+• If you are unsure, it is better to refer
+• Record all patients you see
+• Keep your VHT kit and referral forms ready
+
+**FROM THE GUIDELINES:**
+
+• Uganda Clinical Guidelines 2023, Page 235: Treatment of uncomplicated malaria
+• Uganda Clinical Guidelines 2023, Page 235: Management of Malaria
+• Uganda Clinical Guidelines 2023, Page 775: Management of Malaria in Pregnancy
+```
+
+#### Referral note (`referral_note`)
+
+```
+**VHT REFERRAL NOTE**
+
+**Triage:** 🟢 GREEN (Manage at Community Level)
+**Reason:** Routine evidence retrieval from national guidelines
+
+**Actions taken:**
+• Assess patient carefully
+• Check for danger signs (see below)
+• If unsure, refer to health facility
+
+**Referral completed:** [ ]
+**Health worker received:** [ ]
+
+---
+_This is a VHT referral. Please assess patient promptly._
+```
+
+#### Quick summary (`quick_summary`)
+
+```
+MANAGE AT HOME
+Reason: Routine evidence retrieval from national guidelines
+Action: Follow advice below, monitor for changes
+```
+
+#### BM25 + guardrail evidence bundle (`response`)
 
 ```
 **Uganda Clinical Guidelines 2023**
@@ -1188,11 +1588,11 @@ Citations: Page 235, Page 775, Page 932
 
 ```
 
-**Guardrail**: passed=`True` | errors=0 | warnings=0
-
 ---
 
 ### 6. Query
+
+**Full query**
 
 > Postpartum hemorrhage emergency management oxytocin
 
@@ -1203,7 +1603,89 @@ Citations: Page 235, Page 775, Page 932
 - Page 837: Check for vaginal bleeding and possible uterine/urinary tract or febrile infection
 - Page 807: Cervix not favourable
 
-**Response**
+**Metrics:** Triage `GREEN` | Guardrail passed=`True` | Confidence `0.90` | errors=0 | warnings=0
+
+#### VHT standard (`vht_response`)
+
+```
+**QUICK SUMMARY: GREEN (Manage at Community Level)**
+
+• What I see: Routine evidence retrieval from national guidelines
+• What to do: Follow advice below, monitor for changes
+• What NOT to do: Do NOT give medicine at home for danger signs
+
+**WHAT TO DO (step by step):**
+
+**Step 1:** Assess patient carefully
+**Step 2:** Check for danger signs (see below)
+**Step 3:** If unsure, refer to health facility
+**Step 4:** Record all findings
+
+**MONITORING:**
+
+• Check if patient can drink normally
+• Watch for convulsions or shaking
+• Monitor breathing – is it fast or difficult?
+• Check if patient is awake and alert
+• Look for pale or yellow skin/eyes
+
+**DANGER SIGNS - STOP AND REFER IF YOU SEE:**
+
+• Cannot drink or breastfeed
+• Very weak, cannot sit up or wake up
+• Shaking/fitting (convulsions)
+• Vomiting everything
+• Difficulty breathing
+• Pale or yellow skin/eyes
+• Bleeding from any place
+
+**WHAT TO TELL THE FAMILY:**
+
+The symptoms can be managed at home with guidance. Follow the advice you were given. Come back if symptoms get worse.
+
+**REMEMBER AS A VHT:**
+
+• Always check for danger signs first
+• If you are unsure, it is better to refer
+• Record all patients you see
+• Keep your VHT kit and referral forms ready
+
+**FROM THE GUIDELINES:**
+
+• Uganda Clinical Guidelines 2023, Page 789: and no signs of infection
+• Uganda Clinical Guidelines 2023, Page 812: 16.4.6 Postpartum Haemorrhage (PPH)
+• Uganda Clinical Guidelines 2023, Page 789: Obstetric Conditions
+```
+
+#### Referral note (`referral_note`)
+
+```
+**VHT REFERRAL NOTE**
+
+**Triage:** 🟢 GREEN (Manage at Community Level)
+**Reason:** Routine evidence retrieval from national guidelines
+
+**Actions taken:**
+• Assess patient carefully
+• Check for danger signs (see below)
+• If unsure, refer to health facility
+
+**Referral completed:** [ ]
+**Health worker received:** [ ]
+
+---
+_This is a VHT referral. Please assess patient promptly._
+```
+
+#### Quick summary (`quick_summary`)
+
+```
+MANAGE AT HOME
+Reason: Routine evidence retrieval from national guidelines
+Action: Follow advice below, monitor for changes
+```
+
+#### BM25 + guardrail evidence bundle (`response`)
 
 ```
 **Uganda Clinical Guidelines 2023**
@@ -1426,11 +1908,11 @@ Citations: Page 789, Page 807, Page 812, Page 837
 
 ```
 
-**Guardrail**: passed=`True` | errors=0 | warnings=0
-
 ---
 
 ### 7. Query
+
+**Full query**
 
 > Family planning contraceptive counseling methods
 
@@ -1441,7 +1923,89 @@ Citations: Page 789, Page 807, Page 812, Page 837
 - Page 730: Methods all couples (except a few) can safely use
 - Page 1062: Oral contraceptives
 
-**Response**
+**Metrics:** Triage `GREEN` | Guardrail passed=`True` | Confidence `0.90` | errors=0 | warnings=0
+
+#### VHT standard (`vht_response`)
+
+```
+**QUICK SUMMARY: GREEN (Manage at Community Level)**
+
+• What I see: Routine evidence retrieval from national guidelines
+• What to do: Follow advice below, monitor for changes
+• What NOT to do: Do NOT give medicine at home for danger signs
+
+**WHAT TO DO (step by step):**
+
+**Step 1:** Assess patient carefully
+**Step 2:** Check for danger signs (see below)
+**Step 3:** If unsure, refer to health facility
+**Step 4:** Record all findings
+
+**MONITORING:**
+
+• Check if patient can drink normally
+• Watch for convulsions or shaking
+• Monitor breathing – is it fast or difficult?
+• Check if patient is awake and alert
+• Look for pale or yellow skin/eyes
+
+**DANGER SIGNS - STOP AND REFER IF YOU SEE:**
+
+• Cannot drink or breastfeed
+• Very weak, cannot sit up or wake up
+• Shaking/fitting (convulsions)
+• Vomiting everything
+• Difficulty breathing
+• Pale or yellow skin/eyes
+• Bleeding from any place
+
+**WHAT TO TELL THE FAMILY:**
+
+The symptoms can be managed at home with guidance. Follow the advice you were given. Come back if symptoms get worse.
+
+**REMEMBER AS A VHT:**
+
+• Always check for danger signs first
+• If you are unsure, it is better to refer
+• Record all patients you see
+• Keep your VHT kit and referral forms ready
+
+**FROM THE GUIDELINES:**
+
+• Uganda Clinical Guidelines 2023, Page 751: Family Planning (FP)
+• Uganda Clinical Guidelines 2023, Page 725: 15.1.10  Summary of Medical Eligibility for Contraceptives
+• Uganda Clinical Guidelines 2023, Page 730: 15.2  Overview Of Key Contraceptive Methods
+```
+
+#### Referral note (`referral_note`)
+
+```
+**VHT REFERRAL NOTE**
+
+**Triage:** 🟢 GREEN (Manage at Community Level)
+**Reason:** Routine evidence retrieval from national guidelines
+
+**Actions taken:**
+• Assess patient carefully
+• Check for danger signs (see below)
+• If unsure, refer to health facility
+
+**Referral completed:** [ ]
+**Health worker received:** [ ]
+
+---
+_This is a VHT referral. Please assess patient promptly._
+```
+
+#### Quick summary (`quick_summary`)
+
+```
+MANAGE AT HOME
+Reason: Routine evidence retrieval from national guidelines
+Action: Follow advice below, monitor for changes
+```
+
+#### BM25 + guardrail evidence bundle (`response`)
 
 ```
 **Uganda Clinical Guidelines 2023**
@@ -1550,11 +2114,11 @@ Citations: Page 725, Page 730, Page 751, Page 1062
 
 ```
 
-**Guardrail**: passed=`True` | errors=0 | warnings=0
-
 ---
 
 ### 8. Query
+
+**Full query**
 
 > Hypertension diagnosis and management primary care
 
@@ -1565,7 +2129,89 @@ Citations: Page 725, Page 730, Page 751, Page 1062
 - Page 1046: Differential diagnosis
 - Page 995: Management
 
-**Response**
+**Metrics:** Triage `GREEN` | Guardrail passed=`True` | Confidence `0.90` | errors=0 | warnings=0
+
+#### VHT standard (`vht_response`)
+
+```
+**QUICK SUMMARY: GREEN (Manage at Community Level)**
+
+• What I see: Routine evidence retrieval from national guidelines
+• What to do: Follow advice below, monitor for changes
+• What NOT to do: Do NOT give medicine at home for danger signs
+
+**WHAT TO DO (step by step):**
+
+**Step 1:** Assess patient carefully
+**Step 2:** Check for danger signs (see below)
+**Step 3:** If unsure, refer to health facility
+**Step 4:** Record all findings
+
+**MONITORING:**
+
+• Check if patient can drink normally
+• Watch for convulsions or shaking
+• Monitor breathing – is it fast or difficult?
+• Check if patient is awake and alert
+• Look for pale or yellow skin/eyes
+
+**DANGER SIGNS - STOP AND REFER IF YOU SEE:**
+
+• Cannot drink or breastfeed
+• Very weak, cannot sit up or wake up
+• Shaking/fitting (convulsions)
+• Vomiting everything
+• Difficulty breathing
+• Pale or yellow skin/eyes
+• Bleeding from any place
+
+**WHAT TO TELL THE FAMILY:**
+
+The symptoms can be managed at home with guidance. Follow the advice you were given. Come back if symptoms get worse.
+
+**REMEMBER AS A VHT:**
+
+• Always check for danger signs first
+• If you are unsure, it is better to refer
+• Record all patients you see
+• Keep your VHT kit and referral forms ready
+
+**FROM THE GUIDELINES:**
+
+• Uganda Clinical Guidelines 2023, Page 54: Chronic Care
+• Uganda Clinical Guidelines 2023, Page 830: Postpartum care services
+• Uganda Clinical Guidelines 2023, Page 296: Management
+```
+
+#### Referral note (`referral_note`)
+
+```
+**VHT REFERRAL NOTE**
+
+**Triage:** 🟢 GREEN (Manage at Community Level)
+**Reason:** Routine evidence retrieval from national guidelines
+
+**Actions taken:**
+• Assess patient carefully
+• Check for danger signs (see below)
+• If unsure, refer to health facility
+
+**Referral completed:** [ ]
+**Health worker received:** [ ]
+
+---
+_This is a VHT referral. Please assess patient promptly._
+```
+
+#### Quick summary (`quick_summary`)
+
+```
+MANAGE AT HOME
+Reason: Routine evidence retrieval from national guidelines
+Action: Follow advice below, monitor for changes
+```
+
+#### BM25 + guardrail evidence bundle (`response`)
 
 ```
 **Uganda Clinical Guidelines 2023**
@@ -1726,11 +2372,11 @@ Citations: Page 54, Page 296, Page 830, Page 995, Page 1046
 
 ```
 
-**Guardrail**: passed=`True` | errors=0 | warnings=0
-
 ---
 
 ### 9. Query
+
+**Full query**
 
 > Diabetes mellitus type 2 glycemic targets
 
@@ -1741,7 +2387,89 @@ Citations: Page 54, Page 296, Page 830, Page 995, Page 1046
 - Page 721: 15.1.6  Obtain and Record Client History
 - Page 10: 8 ENDOCRINE AND METABOLIC DISEASES..................................468
 
-**Response**
+**Metrics:** Triage `GREEN` | Guardrail passed=`True` | Confidence `0.90` | errors=0 | warnings=0
+
+#### VHT standard (`vht_response`)
+
+```
+**QUICK SUMMARY: GREEN (Manage at Community Level)**
+
+• What I see: Routine evidence retrieval from national guidelines
+• What to do: Follow advice below, monitor for changes
+• What NOT to do: Do NOT give medicine at home for danger signs
+
+**WHAT TO DO (step by step):**
+
+**Step 1:** Assess patient carefully
+**Step 2:** Check for danger signs (see below)
+**Step 3:** If unsure, refer to health facility
+**Step 4:** Record all findings
+
+**MONITORING:**
+
+• Check if patient can drink normally
+• Watch for convulsions or shaking
+• Monitor breathing – is it fast or difficult?
+• Check if patient is awake and alert
+• Look for pale or yellow skin/eyes
+
+**DANGER SIGNS - STOP AND REFER IF YOU SEE:**
+
+• Cannot drink or breastfeed
+• Very weak, cannot sit up or wake up
+• Shaking/fitting (convulsions)
+• Vomiting everything
+• Difficulty breathing
+• Pale or yellow skin/eyes
+• Bleeding from any place
+
+**WHAT TO TELL THE FAMILY:**
+
+The symptoms can be managed at home with guidance. Follow the advice you were given. Come back if symptoms get worse.
+
+**REMEMBER AS A VHT:**
+
+• Always check for danger signs first
+• If you are unsure, it is better to refer
+• Record all patients you see
+• Keep your VHT kit and referral forms ready
+
+**FROM THE GUIDELINES:**
+
+• Uganda Clinical Guidelines 2023, Page 778: Therapeutic targets
+• Uganda Clinical Guidelines 2023, Page 537: Diabetes Mellitus
+• Uganda Clinical Guidelines 2023, Page 541: Treatment targets
+```
+
+#### Referral note (`referral_note`)
+
+```
+**VHT REFERRAL NOTE**
+
+**Triage:** 🟢 GREEN (Manage at Community Level)
+**Reason:** Routine evidence retrieval from national guidelines
+
+**Actions taken:**
+• Assess patient carefully
+• Check for danger signs (see below)
+• If unsure, refer to health facility
+
+**Referral completed:** [ ]
+**Health worker received:** [ ]
+
+---
+_This is a VHT referral. Please assess patient promptly._
+```
+
+#### Quick summary (`quick_summary`)
+
+```
+MANAGE AT HOME
+Reason: Routine evidence retrieval from national guidelines
+Action: Follow advice below, monitor for changes
+```
+
+#### BM25 + guardrail evidence bundle (`response`)
 
 ```
 **Uganda Clinical Guidelines 2023**
@@ -1904,11 +2632,11 @@ Citations: Page 10, Page 537, Page 541, Page 721, Page 778
 
 ```
 
-**Guardrail**: passed=`True` | errors=0 | warnings=0
-
 ---
 
 ### 10. Query
+
+**Full query**
 
 > Acute stroke referral and supportive care
 
@@ -1919,7 +2647,89 @@ Citations: Page 10, Page 537, Page 541, Page 721, Page 778
 - Page 394: Cardiovascular Diseases
 - Page 394: Management of stable angina
 
-**Response**
+**Metrics:** Triage `GREEN` | Guardrail passed=`True` | Confidence `0.90` | errors=0 | warnings=0
+
+#### VHT standard (`vht_response`)
+
+```
+**QUICK SUMMARY: GREEN (Manage at Community Level)**
+
+• What I see: Routine evidence retrieval from national guidelines
+• What to do: Follow advice below, monitor for changes
+• What NOT to do: Do NOT give medicine at home for danger signs
+
+**WHAT TO DO (step by step):**
+
+**Step 1:** Assess patient carefully
+**Step 2:** Check for danger signs (see below)
+**Step 3:** If unsure, refer to health facility
+**Step 4:** Record all findings
+
+**MONITORING:**
+
+• Check if patient can drink normally
+• Watch for convulsions or shaking
+• Monitor breathing – is it fast or difficult?
+• Check if patient is awake and alert
+• Look for pale or yellow skin/eyes
+
+**DANGER SIGNS - STOP AND REFER IF YOU SEE:**
+
+• Cannot drink or breastfeed
+• Very weak, cannot sit up or wake up
+• Shaking/fitting (convulsions)
+• Vomiting everything
+• Difficulty breathing
+• Pale or yellow skin/eyes
+• Bleeding from any place
+
+**WHAT TO TELL THE FAMILY:**
+
+The symptoms can be managed at home with guidance. Follow the advice you were given. Come back if symptoms get worse.
+
+**REMEMBER AS A VHT:**
+
+• Always check for danger signs first
+• If you are unsure, it is better to refer
+• Record all patients you see
+• Keep your VHT kit and referral forms ready
+
+**FROM THE GUIDELINES:**
+
+• Uganda Clinical Guidelines 2023, Page 394: If stroke clinically haemorrhagic
+• Uganda Clinical Guidelines 2023, Page 394: Chronic care of ischaemic stroke
+• Uganda Clinical Guidelines 2023, Page 394: If ischaemic stroke
+```
+
+#### Referral note (`referral_note`)
+
+```
+**VHT REFERRAL NOTE**
+
+**Triage:** 🟢 GREEN (Manage at Community Level)
+**Reason:** Routine evidence retrieval from national guidelines
+
+**Actions taken:**
+• Assess patient carefully
+• Check for danger signs (see below)
+• If unsure, refer to health facility
+
+**Referral completed:** [ ]
+**Health worker received:** [ ]
+
+---
+_This is a VHT referral. Please assess patient promptly._
+```
+
+#### Quick summary (`quick_summary`)
+
+```
+MANAGE AT HOME
+Reason: Routine evidence retrieval from national guidelines
+Action: Follow advice below, monitor for changes
+```
+
+#### BM25 + guardrail evidence bundle (`response`)
 
 ```
 **Uganda Clinical Guidelines 2023**
@@ -2034,11 +2844,11 @@ Citations: Page 394
 
 ```
 
-**Guardrail**: passed=`True` | errors=0 | warnings=0
-
 ---
 
 ### 11. Query
+
+**Full query**
 
 > Syndromic management sexually transmitted infections
 
@@ -2049,7 +2859,89 @@ Citations: Page 394
 - Page 346: HIV/AIDS and Sexually Transmitted Infections
 - Page 356: HIV/AIDS and Sexually Transmitted Infections
 
-**Response**
+**Metrics:** Triage `GREEN` | Guardrail passed=`True` | Confidence `0.90` | errors=0 | warnings=0
+
+#### VHT standard (`vht_response`)
+
+```
+**QUICK SUMMARY: GREEN (Manage at Community Level)**
+
+• What I see: Routine evidence retrieval from national guidelines
+• What to do: Follow advice below, monitor for changes
+• What NOT to do: Do NOT give medicine at home for danger signs
+
+**WHAT TO DO (step by step):**
+
+**Step 1:** Assess patient carefully
+**Step 2:** Check for danger signs (see below)
+**Step 3:** If unsure, refer to health facility
+**Step 4:** Record all findings
+
+**MONITORING:**
+
+• Check if patient can drink normally
+• Watch for convulsions or shaking
+• Monitor breathing – is it fast or difficult?
+• Check if patient is awake and alert
+• Look for pale or yellow skin/eyes
+
+**DANGER SIGNS - STOP AND REFER IF YOU SEE:**
+
+• Cannot drink or breastfeed
+• Very weak, cannot sit up or wake up
+• Shaking/fitting (convulsions)
+• Vomiting everything
+• Difficulty breathing
+• Pale or yellow skin/eyes
+• Bleeding from any place
+
+**WHAT TO TELL THE FAMILY:**
+
+The symptoms can be managed at home with guidance. Follow the advice you were given. Come back if symptoms get worse.
+
+**REMEMBER AS A VHT:**
+
+• Always check for danger signs first
+• If you are unsure, it is better to refer
+• Record all patients you see
+• Keep your VHT kit and referral forms ready
+
+**FROM THE GUIDELINES:**
+
+• Uganda Clinical Guidelines 2023, Page 343: HIV/AIDS and Sexually Transmitted Infections
+• Uganda Clinical Guidelines 2023, Page 317: HIV/AIDS and Sexually Transmitted Infections
+• Uganda Clinical Guidelines 2023, Page 349: HIV/AIDS and Sexually Transmitted Infections
+```
+
+#### Referral note (`referral_note`)
+
+```
+**VHT REFERRAL NOTE**
+
+**Triage:** 🟢 GREEN (Manage at Community Level)
+**Reason:** Routine evidence retrieval from national guidelines
+
+**Actions taken:**
+• Assess patient carefully
+• Check for danger signs (see below)
+• If unsure, refer to health facility
+
+**Referral completed:** [ ]
+**Health worker received:** [ ]
+
+---
+_This is a VHT referral. Please assess patient promptly._
+```
+
+#### Quick summary (`quick_summary`)
+
+```
+MANAGE AT HOME
+Reason: Routine evidence retrieval from national guidelines
+Action: Follow advice below, monitor for changes
+```
+
+#### BM25 + guardrail evidence bundle (`response`)
 
 ```
 **Uganda Clinical Guidelines 2023**
@@ -2150,11 +3042,11 @@ Citations: Page 317, Page 343, Page 346, Page 349, Page 356
 
 ```
 
-**Guardrail**: passed=`True` | errors=0 | warnings=0
-
 ---
 
 ### 12. Query
+
+**Full query**
 
 > Cervical cancer screening VIA HPV
 
@@ -2165,7 +3057,89 @@ Citations: Page 317, Page 343, Page 346, Page 349, Page 356
 - Page 677: owing if using VIA as a screening method:
 - Page 676: Oncology
 
-**Response**
+**Metrics:** Triage `GREEN` | Guardrail passed=`True` | Confidence `0.90` | errors=0 | warnings=0
+
+#### VHT standard (`vht_response`)
+
+```
+**QUICK SUMMARY: GREEN (Manage at Community Level)**
+
+• What I see: Routine evidence retrieval from national guidelines
+• What to do: Follow advice below, monitor for changes
+• What NOT to do: Do NOT give medicine at home for danger signs
+
+**WHAT TO DO (step by step):**
+
+**Step 1:** Assess patient carefully
+**Step 2:** Check for danger signs (see below)
+**Step 3:** If unsure, refer to health facility
+**Step 4:** Record all findings
+
+**MONITORING:**
+
+• Check if patient can drink normally
+• Watch for convulsions or shaking
+• Monitor breathing – is it fast or difficult?
+• Check if patient is awake and alert
+• Look for pale or yellow skin/eyes
+
+**DANGER SIGNS - STOP AND REFER IF YOU SEE:**
+
+• Cannot drink or breastfeed
+• Very weak, cannot sit up or wake up
+• Shaking/fitting (convulsions)
+• Vomiting everything
+• Difficulty breathing
+• Pale or yellow skin/eyes
+• Bleeding from any place
+
+**WHAT TO TELL THE FAMILY:**
+
+The symptoms can be managed at home with guidance. Follow the advice you were given. Come back if symptoms get worse.
+
+**REMEMBER AS A VHT:**
+
+• Always check for danger signs first
+• If you are unsure, it is better to refer
+• Record all patients you see
+• Keep your VHT kit and referral forms ready
+
+**FROM THE GUIDELINES:**
+
+• Uganda Clinical Guidelines 2023, Page 677: Screening for Cervical Cancer
+• Uganda Clinical Guidelines 2023, Page 675: Prevention of Infections
+• Uganda Clinical Guidelines 2023, Page 674: Oncogenic Infections
+```
+
+#### Referral note (`referral_note`)
+
+```
+**VHT REFERRAL NOTE**
+
+**Triage:** 🟢 GREEN (Manage at Community Level)
+**Reason:** Routine evidence retrieval from national guidelines
+
+**Actions taken:**
+• Assess patient carefully
+• Check for danger signs (see below)
+• If unsure, refer to health facility
+
+**Referral completed:** [ ]
+**Health worker received:** [ ]
+
+---
+_This is a VHT referral. Please assess patient promptly._
+```
+
+#### Quick summary (`quick_summary`)
+
+```
+MANAGE AT HOME
+Reason: Routine evidence retrieval from national guidelines
+Action: Follow advice below, monitor for changes
+```
+
+#### BM25 + guardrail evidence bundle (`response`)
 
 ```
 **Uganda Clinical Guidelines 2023**
@@ -2332,11 +3306,11 @@ Citations: Page 674, Page 675, Page 676, Page 677
 
 ```
 
-**Guardrail**: passed=`True` | errors=0 | warnings=0
-
 ---
 
 ### 13. Query
+
+**Full query**
 
 > Routine immunization schedule infants Uganda
 
@@ -2347,7 +3321,89 @@ Citations: Page 674, Page 675, Page 676, Page 677
 - Page 889: Check immunization card and classify
 - Page 423: Prevention
 
-**Response**
+**Metrics:** Triage `GREEN` | Guardrail passed=`True` | Confidence `0.90` | errors=0 | warnings=0
+
+#### VHT standard (`vht_response`)
+
+```
+**QUICK SUMMARY: GREEN (Manage at Community Level)**
+
+• What I see: Routine evidence retrieval from national guidelines
+• What to do: Follow advice below, monitor for changes
+• What NOT to do: Do NOT give medicine at home for danger signs
+
+**WHAT TO DO (step by step):**
+
+**Step 1:** Assess patient carefully
+**Step 2:** Check for danger signs (see below)
+**Step 3:** If unsure, refer to health facility
+**Step 4:** Record all findings
+
+**MONITORING:**
+
+• Check if patient can drink normally
+• Watch for convulsions or shaking
+• Monitor breathing – is it fast or difficult?
+• Check if patient is awake and alert
+• Look for pale or yellow skin/eyes
+
+**DANGER SIGNS - STOP AND REFER IF YOU SEE:**
+
+• Cannot drink or breastfeed
+• Very weak, cannot sit up or wake up
+• Shaking/fitting (convulsions)
+• Vomiting everything
+• Difficulty breathing
+• Pale or yellow skin/eyes
+• Bleeding from any place
+
+**WHAT TO TELL THE FAMILY:**
+
+The symptoms can be managed at home with guidance. Follow the advice you were given. Come back if symptoms get worse.
+
+**REMEMBER AS A VHT:**
+
+• Always check for danger signs first
+• If you are unsure, it is better to refer
+• Record all patients you see
+• Keep your VHT kit and referral forms ready
+
+**FROM THE GUIDELINES:**
+
+• Uganda Clinical Guidelines 2023, Page 16: 18.1  Routine Childhood Vaccination...............................................875
+• Uganda Clinical Guidelines 2023, Page 305: HIV/AIDS and Sexually Transmitted Infections
+• Uganda Clinical Guidelines 2023, Page 305: 3.1.9.2 HIV-exposed infant care services
+```
+
+#### Referral note (`referral_note`)
+
+```
+**VHT REFERRAL NOTE**
+
+**Triage:** 🟢 GREEN (Manage at Community Level)
+**Reason:** Routine evidence retrieval from national guidelines
+
+**Actions taken:**
+• Assess patient carefully
+• Check for danger signs (see below)
+• If unsure, refer to health facility
+
+**Referral completed:** [ ]
+**Health worker received:** [ ]
+
+---
+_This is a VHT referral. Please assess patient promptly._
+```
+
+#### Quick summary (`quick_summary`)
+
+```
+MANAGE AT HOME
+Reason: Routine evidence retrieval from national guidelines
+Action: Follow advice below, monitor for changes
+```
+
+#### BM25 + guardrail evidence bundle (`response`)
 
 ```
 **Uganda Clinical Guidelines 2023**
@@ -2568,11 +3624,11 @@ Citations: Page 16, Page 305, Page 423, Page 889
 
 ```
 
-**Guardrail**: passed=`True` | errors=0 | warnings=0
-
 ---
 
 ### 14. Query
+
+**Full query**
 
 > Severe acute malnutrition inpatient management
 
@@ -2583,7 +3639,89 @@ Citations: Page 16, Page 305, Page 423, Page 889
 - Page 934: Weight for-Height/Length
 - Page 963: 19.2.2.1   Management of Moderate Acute Malnutrition
 
-**Response**
+**Metrics:** Triage `GREEN` | Guardrail passed=`True` | Confidence `0.90` | errors=0 | warnings=0
+
+#### VHT standard (`vht_response`)
+
+```
+**QUICK SUMMARY: GREEN (Manage at Community Level)**
+
+• What I see: Routine evidence retrieval from national guidelines
+• What to do: Follow advice below, monitor for changes
+• What NOT to do: Do NOT give medicine at home for danger signs
+
+**WHAT TO DO (step by step):**
+
+**Step 1:** Assess patient carefully
+**Step 2:** Check for danger signs (see below)
+**Step 3:** If unsure, refer to health facility
+**Step 4:** Record all findings
+
+**MONITORING:**
+
+• Check if patient can drink normally
+• Watch for convulsions or shaking
+• Monitor breathing – is it fast or difficult?
+• Check if patient is awake and alert
+• Look for pale or yellow skin/eyes
+
+**DANGER SIGNS - STOP AND REFER IF YOU SEE:**
+
+• Cannot drink or breastfeed
+• Very weak, cannot sit up or wake up
+• Shaking/fitting (convulsions)
+• Vomiting everything
+• Difficulty breathing
+• Pale or yellow skin/eyes
+• Bleeding from any place
+
+**WHAT TO TELL THE FAMILY:**
+
+The symptoms can be managed at home with guidance. Follow the advice you were given. Come back if symptoms get worse.
+
+**REMEMBER AS A VHT:**
+
+• Always check for danger signs first
+• If you are unsure, it is better to refer
+• Record all patients you see
+• Keep your VHT kit and referral forms ready
+
+**FROM THE GUIDELINES:**
+
+• Uganda Clinical Guidelines 2023, Page 17: 19.2  Malnutrition.........................................................................890
+• Uganda Clinical Guidelines 2023, Page 959: 19.2.1.2  Assessing Malnutrition in Children 6 months to 5 years
+• Uganda Clinical Guidelines 2023, Page 963: 19.2.2   Management of Acute Malnutrition in Children
+```
+
+#### Referral note (`referral_note`)
+
+```
+**VHT REFERRAL NOTE**
+
+**Triage:** 🟢 GREEN (Manage at Community Level)
+**Reason:** Routine evidence retrieval from national guidelines
+
+**Actions taken:**
+• Assess patient carefully
+• Check for danger signs (see below)
+• If unsure, refer to health facility
+
+**Referral completed:** [ ]
+**Health worker received:** [ ]
+
+---
+_This is a VHT referral. Please assess patient promptly._
+```
+
+#### Quick summary (`quick_summary`)
+
+```
+MANAGE AT HOME
+Reason: Routine evidence retrieval from national guidelines
+Action: Follow advice below, monitor for changes
+```
+
+#### BM25 + guardrail evidence bundle (`response`)
 
 ```
 **Uganda Clinical Guidelines 2023**
@@ -2712,11 +3850,11 @@ Citations: Page 17, Page 934, Page 959, Page 963
 
 ```
 
-**Guardrail**: passed=`True` | errors=0 | warnings=0
-
 ---
 
 ### 15. Query
+
+**Full query**
 
 > Tuberculosis preventive therapy isoniazid
 
@@ -2727,7 +3865,89 @@ Citations: Page 17, Page 934, Page 959, Page 963
 - Page 454: 5.3.2.5	 TB Preventive Treatment Dosing Chart
 - Page 264: TPT (TB Preventive treatment)
 
-**Response**
+**Metrics:** Triage `GREEN` | Guardrail passed=`True` | Confidence `0.90` | errors=0 | warnings=0
+
+#### VHT standard (`vht_response`)
+
+```
+**QUICK SUMMARY: GREEN (Manage at Community Level)**
+
+• What I see: Routine evidence retrieval from national guidelines
+• What to do: Follow advice below, monitor for changes
+• What NOT to do: Do NOT give medicine at home for danger signs
+
+**WHAT TO DO (step by step):**
+
+**Step 1:** Assess patient carefully
+**Step 2:** Check for danger signs (see below)
+**Step 3:** If unsure, refer to health facility
+**Step 4:** Record all findings
+
+**MONITORING:**
+
+• Check if patient can drink normally
+• Watch for convulsions or shaking
+• Monitor breathing – is it fast or difficult?
+• Check if patient is awake and alert
+• Look for pale or yellow skin/eyes
+
+**DANGER SIGNS - STOP AND REFER IF YOU SEE:**
+
+• Cannot drink or breastfeed
+• Very weak, cannot sit up or wake up
+• Shaking/fitting (convulsions)
+• Vomiting everything
+• Difficulty breathing
+• Pale or yellow skin/eyes
+• Bleeding from any place
+
+**WHAT TO TELL THE FAMILY:**
+
+The symptoms can be managed at home with guidance. Follow the advice you were given. Come back if symptoms get worse.
+
+**REMEMBER AS A VHT:**
+
+• Always check for danger signs first
+• If you are unsure, it is better to refer
+• Record all patients you see
+• Keep your VHT kit and referral forms ready
+
+**FROM THE GUIDELINES:**
+
+• Uganda Clinical Guidelines 2023, Page 37: IPT
+• Uganda Clinical Guidelines 2023, Page 316: TB preventive therapy (TPT)
+• Uganda Clinical Guidelines 2023, Page 452: 5.3.2.3	 Tuberculosis Preventive Treatment
+```
+
+#### Referral note (`referral_note`)
+
+```
+**VHT REFERRAL NOTE**
+
+**Triage:** 🟢 GREEN (Manage at Community Level)
+**Reason:** Routine evidence retrieval from national guidelines
+
+**Actions taken:**
+• Assess patient carefully
+• Check for danger signs (see below)
+• If unsure, refer to health facility
+
+**Referral completed:** [ ]
+**Health worker received:** [ ]
+
+---
+_This is a VHT referral. Please assess patient promptly._
+```
+
+#### Quick summary (`quick_summary`)
+
+```
+MANAGE AT HOME
+Reason: Routine evidence retrieval from national guidelines
+Action: Follow advice below, monitor for changes
+```
+
+#### BM25 + guardrail evidence bundle (`response`)
 
 ```
 **Uganda Clinical Guidelines 2023**
@@ -2994,11 +4214,11 @@ Citations: Page 37, Page 264, Page 316, Page 452, Page 454
 
 ```
 
-**Guardrail**: passed=`True` | errors=0 | warnings=0
-
 ---
 
 ### 16. Query
+
+**Full query**
 
 > Depression screening and management primary care
 
@@ -3009,7 +4229,89 @@ Citations: Page 37, Page 264, Page 316, Page 452, Page 454
 - Page 357: Investigations
 - Page 759: 16.1  ANTENATAL CARE (ANC)
 
-**Response**
+**Metrics:** Triage `GREEN` | Guardrail passed=`True` | Confidence `0.90` | errors=0 | warnings=0
+
+#### VHT standard (`vht_response`)
+
+```
+**QUICK SUMMARY: GREEN (Manage at Community Level)**
+
+• What I see: Routine evidence retrieval from national guidelines
+• What to do: Follow advice below, monitor for changes
+• What NOT to do: Do NOT give medicine at home for danger signs
+
+**WHAT TO DO (step by step):**
+
+**Step 1:** Assess patient carefully
+**Step 2:** Check for danger signs (see below)
+**Step 3:** If unsure, refer to health facility
+**Step 4:** Record all findings
+
+**MONITORING:**
+
+• Check if patient can drink normally
+• Watch for convulsions or shaking
+• Monitor breathing – is it fast or difficult?
+• Check if patient is awake and alert
+• Look for pale or yellow skin/eyes
+
+**DANGER SIGNS - STOP AND REFER IF YOU SEE:**
+
+• Cannot drink or breastfeed
+• Very weak, cannot sit up or wake up
+• Shaking/fitting (convulsions)
+• Vomiting everything
+• Difficulty breathing
+• Pale or yellow skin/eyes
+• Bleeding from any place
+
+**WHAT TO TELL THE FAMILY:**
+
+The symptoms can be managed at home with guidance. Follow the advice you were given. Come back if symptoms get worse.
+
+**REMEMBER AS A VHT:**
+
+• Always check for danger signs first
+• If you are unsure, it is better to refer
+• Record all patients you see
+• Keep your VHT kit and referral forms ready
+
+**FROM THE GUIDELINES:**
+
+• Uganda Clinical Guidelines 2023, Page 719: ceive
+• Uganda Clinical Guidelines 2023, Page 676: Screening for Breast Cancer
+• Uganda Clinical Guidelines 2023, Page 214: COVID-19 screening and triage process at health facilities
+```
+
+#### Referral note (`referral_note`)
+
+```
+**VHT REFERRAL NOTE**
+
+**Triage:** 🟢 GREEN (Manage at Community Level)
+**Reason:** Routine evidence retrieval from national guidelines
+
+**Actions taken:**
+• Assess patient carefully
+• Check for danger signs (see below)
+• If unsure, refer to health facility
+
+**Referral completed:** [ ]
+**Health worker received:** [ ]
+
+---
+_This is a VHT referral. Please assess patient promptly._
+```
+
+#### Quick summary (`quick_summary`)
+
+```
+MANAGE AT HOME
+Reason: Routine evidence retrieval from national guidelines
+Action: Follow advice below, monitor for changes
+```
+
+#### BM25 + guardrail evidence bundle (`response`)
 
 ```
 **Uganda Clinical Guidelines 2023**
@@ -3190,11 +4492,11 @@ Citations: Page 214, Page 357, Page 676, Page 719, Page 759
 
 ```
 
-**Guardrail**: passed=`True` | errors=0 | warnings=0
-
 ---
 
 ### 17. Query
+
+**Full query**
 
 > Asthma chronic management inhaler technique
 
@@ -3205,7 +4507,89 @@ Citations: Page 214, Page 357, Page 676, Page 719, Page 759
 - Page 403: STEP 1: Intermittent asthma
 - Page 405: Caution
 
-**Response**
+**Metrics:** Triage `GREEN` | Guardrail passed=`True` | Confidence `0.90` | errors=0 | warnings=0
+
+#### VHT standard (`vht_response`)
+
+```
+**QUICK SUMMARY: GREEN (Manage at Community Level)**
+
+• What I see: Routine evidence retrieval from national guidelines
+• What to do: Follow advice below, monitor for changes
+• What NOT to do: Do NOT give medicine at home for danger signs
+
+**WHAT TO DO (step by step):**
+
+**Step 1:** Assess patient carefully
+**Step 2:** Check for danger signs (see below)
+**Step 3:** If unsure, refer to health facility
+**Step 4:** Record all findings
+
+**MONITORING:**
+
+• Check if patient can drink normally
+• Watch for convulsions or shaking
+• Monitor breathing – is it fast or difficult?
+• Check if patient is awake and alert
+• Look for pale or yellow skin/eyes
+
+**DANGER SIGNS - STOP AND REFER IF YOU SEE:**
+
+• Cannot drink or breastfeed
+• Very weak, cannot sit up or wake up
+• Shaking/fitting (convulsions)
+• Vomiting everything
+• Difficulty breathing
+• Pale or yellow skin/eyes
+• Bleeding from any place
+
+**WHAT TO TELL THE FAMILY:**
+
+The symptoms can be managed at home with guidance. Follow the advice you were given. Come back if symptoms get worse.
+
+**REMEMBER AS A VHT:**
+
+• Always check for danger signs first
+• If you are unsure, it is better to refer
+• Record all patients you see
+• Keep your VHT kit and referral forms ready
+
+**FROM THE GUIDELINES:**
+
+• Uganda Clinical Guidelines 2023, Page 403: Chronic Asthma
+• Uganda Clinical Guidelines 2023, Page 403: General principles of management
+• Uganda Clinical Guidelines 2023, Page 402: Respiratory Diseases
+```
+
+#### Referral note (`referral_note`)
+
+```
+**VHT REFERRAL NOTE**
+
+**Triage:** 🟢 GREEN (Manage at Community Level)
+**Reason:** Routine evidence retrieval from national guidelines
+
+**Actions taken:**
+• Assess patient carefully
+• Check for danger signs (see below)
+• If unsure, refer to health facility
+
+**Referral completed:** [ ]
+**Health worker received:** [ ]
+
+---
+_This is a VHT referral. Please assess patient promptly._
+```
+
+#### Quick summary (`quick_summary`)
+
+```
+MANAGE AT HOME
+Reason: Routine evidence retrieval from national guidelines
+Action: Follow advice below, monitor for changes
+```
+
+#### BM25 + guardrail evidence bundle (`response`)
 
 ```
 **Uganda Clinical Guidelines 2023**
@@ -3358,11 +4742,11 @@ Citations: Page 402, Page 403, Page 405
 
 ```
 
-**Guardrail**: passed=`True` | errors=0 | warnings=0
-
 ---
 
 ### 18. Query
+
+**Full query**
 
 > Chronic kidney disease staging referral
 
@@ -3373,7 +4757,89 @@ Citations: Page 402, Page 403, Page 405
 - Page 1120: Surgery, Radiology and Anaesthesia
 - Page 10: 7.1 Renal Diseases........................................................................448
 
-**Response**
+**Metrics:** Triage `GREEN` | Guardrail passed=`True` | Confidence `0.90` | errors=0 | warnings=0
+
+#### VHT standard (`vht_response`)
+
+```
+**QUICK SUMMARY: GREEN (Manage at Community Level)**
+
+• What I see: Routine evidence retrieval from national guidelines
+• What to do: Follow advice below, monitor for changes
+• What NOT to do: Do NOT give medicine at home for danger signs
+
+**WHAT TO DO (step by step):**
+
+**Step 1:** Assess patient carefully
+**Step 2:** Check for danger signs (see below)
+**Step 3:** If unsure, refer to health facility
+**Step 4:** Record all findings
+
+**MONITORING:**
+
+• Check if patient can drink normally
+• Watch for convulsions or shaking
+• Monitor breathing – is it fast or difficult?
+• Check if patient is awake and alert
+• Look for pale or yellow skin/eyes
+
+**DANGER SIGNS - STOP AND REFER IF YOU SEE:**
+
+• Cannot drink or breastfeed
+• Very weak, cannot sit up or wake up
+• Shaking/fitting (convulsions)
+• Vomiting everything
+• Difficulty breathing
+• Pale or yellow skin/eyes
+• Bleeding from any place
+
+**WHAT TO TELL THE FAMILY:**
+
+The symptoms can be managed at home with guidance. Follow the advice you were given. Come back if symptoms get worse.
+
+**REMEMBER AS A VHT:**
+
+• Always check for danger signs first
+• If you are unsure, it is better to refer
+• Record all patients you see
+• Keep your VHT kit and referral forms ready
+
+**FROM THE GUIDELINES:**
+
+• Uganda Clinical Guidelines 2023, Page 516: Chronic Kidney Disease (CKD)
+• Uganda Clinical Guidelines 2023, Page 253: 3.1.1 Clinical Features of HIV
+• Uganda Clinical Guidelines 2023, Page 382: Risk Factor
+```
+
+#### Referral note (`referral_note`)
+
+```
+**VHT REFERRAL NOTE**
+
+**Triage:** 🟢 GREEN (Manage at Community Level)
+**Reason:** Routine evidence retrieval from national guidelines
+
+**Actions taken:**
+• Assess patient carefully
+• Check for danger signs (see below)
+• If unsure, refer to health facility
+
+**Referral completed:** [ ]
+**Health worker received:** [ ]
+
+---
+_This is a VHT referral. Please assess patient promptly._
+```
+
+#### Quick summary (`quick_summary`)
+
+```
+MANAGE AT HOME
+Reason: Routine evidence retrieval from national guidelines
+Action: Follow advice below, monitor for changes
+```
+
+#### BM25 + guardrail evidence bundle (`response`)
 
 ```
 **Uganda Clinical Guidelines 2023**
@@ -3522,11 +4988,11 @@ Citations: Page 10, Page 253, Page 382, Page 516, Page 1120
 
 ```
 
-**Guardrail**: passed=`True` | errors=0 | warnings=0
-
 ---
 
 ### 19. Query
+
+**Full query**
 
 > Exclusive breastfeeding six months
 
@@ -3537,7 +5003,89 @@ Citations: Page 10, Page 253, Page 382, Page 516, Page 1120
 - Page 825: If breastfeeding difficult:
 - Page 920: HC2
 
-**Response**
+**Metrics:** Triage `GREEN` | Guardrail passed=`True` | Confidence `0.90` | errors=0 | warnings=0
+
+#### VHT standard (`vht_response`)
+
+```
+**QUICK SUMMARY: GREEN (Manage at Community Level)**
+
+• What I see: Routine evidence retrieval from national guidelines
+• What to do: Follow advice below, monitor for changes
+• What NOT to do: Do NOT give medicine at home for danger signs
+
+**WHAT TO DO (step by step):**
+
+**Step 1:** Assess patient carefully
+**Step 2:** Check for danger signs (see below)
+**Step 3:** If unsure, refer to health facility
+**Step 4:** Record all findings
+
+**MONITORING:**
+
+• Check if patient can drink normally
+• Watch for convulsions or shaking
+• Monitor breathing – is it fast or difficult?
+• Check if patient is awake and alert
+• Look for pale or yellow skin/eyes
+
+**DANGER SIGNS - STOP AND REFER IF YOU SEE:**
+
+• Cannot drink or breastfeed
+• Very weak, cannot sit up or wake up
+• Shaking/fitting (convulsions)
+• Vomiting everything
+• Difficulty breathing
+• Pale or yellow skin/eyes
+• Bleeding from any place
+
+**WHAT TO TELL THE FAMILY:**
+
+The symptoms can be managed at home with guidance. Follow the advice you were given. Come back if symptoms get worse.
+
+**REMEMBER AS A VHT:**
+
+• Always check for danger signs first
+• If you are unsure, it is better to refer
+• Record all patients you see
+• Keep your VHT kit and referral forms ready
+
+**FROM THE GUIDELINES:**
+
+• Uganda Clinical Guidelines 2023, Page 317: Counselling on infant feeding choice
+• Uganda Clinical Guidelines 2023, Page 317: If mother chooses breastfeeding
+• Uganda Clinical Guidelines 2023, Page 953: 19.1.1  Infant and Young Child Feeding (IYCF)
+```
+
+#### Referral note (`referral_note`)
+
+```
+**VHT REFERRAL NOTE**
+
+**Triage:** 🟢 GREEN (Manage at Community Level)
+**Reason:** Routine evidence retrieval from national guidelines
+
+**Actions taken:**
+• Assess patient carefully
+• Check for danger signs (see below)
+• If unsure, refer to health facility
+
+**Referral completed:** [ ]
+**Health worker received:** [ ]
+
+---
+_This is a VHT referral. Please assess patient promptly._
+```
+
+#### Quick summary (`quick_summary`)
+
+```
+MANAGE AT HOME
+Reason: Routine evidence retrieval from national guidelines
+Action: Follow advice below, monitor for changes
+```
+
+#### BM25 + guardrail evidence bundle (`response`)
 
 ```
 **Uganda Clinical Guidelines 2023**
@@ -3672,11 +5220,11 @@ Citations: Page 317, Page 825, Page 920, Page 953
 
 ```
 
-**Guardrail**: passed=`True` | errors=0 | warnings=0
-
 ---
 
 ### 20. Query
+
+**Full query**
 
 > Pre-eclampsia severe features magnesium sulfate
 
@@ -3687,7 +5235,89 @@ Citations: Page 317, Page 825, Page 920, Page 953
 - Page 797: Mild to moderate pre-eclampsia
 - Page 835: Blood pressure
 
-**Response**
+**Metrics:** Triage `GREEN` | Guardrail passed=`True` | Confidence `0.90` | errors=0 | warnings=0
+
+#### VHT standard (`vht_response`)
+
+```
+**QUICK SUMMARY: GREEN (Manage at Community Level)**
+
+• What I see: Routine evidence retrieval from national guidelines
+• What to do: Follow advice below, monitor for changes
+• What NOT to do: Do NOT give medicine at home for danger signs
+
+**WHAT TO DO (step by step):**
+
+**Step 1:** Assess patient carefully
+**Step 2:** Check for danger signs (see below)
+**Step 3:** If unsure, refer to health facility
+**Step 4:** Record all findings
+
+**MONITORING:**
+
+• Check if patient can drink normally
+• Watch for convulsions or shaking
+• Monitor breathing – is it fast or difficult?
+• Check if patient is awake and alert
+• Look for pale or yellow skin/eyes
+
+**DANGER SIGNS - STOP AND REFER IF YOU SEE:**
+
+• Cannot drink or breastfeed
+• Very weak, cannot sit up or wake up
+• Shaking/fitting (convulsions)
+• Vomiting everything
+• Difficulty breathing
+• Pale or yellow skin/eyes
+• Bleeding from any place
+
+**WHAT TO TELL THE FAMILY:**
+
+The symptoms can be managed at home with guidance. Follow the advice you were given. Come back if symptoms get worse.
+
+**REMEMBER AS A VHT:**
+
+• Always check for danger signs first
+• If you are unsure, it is better to refer
+• Record all patients you see
+• Keep your VHT kit and referral forms ready
+
+**FROM THE GUIDELINES:**
+
+• Uganda Clinical Guidelines 2023, Page 795: Clinical features of severe pre-eclampsia
+• Uganda Clinical Guidelines 2023, Page 795: 16.3.7      Pre-Eclampsia
+• Uganda Clinical Guidelines 2023, Page 835: Obstetric Conditions
+```
+
+#### Referral note (`referral_note`)
+
+```
+**VHT REFERRAL NOTE**
+
+**Triage:** 🟢 GREEN (Manage at Community Level)
+**Reason:** Routine evidence retrieval from national guidelines
+
+**Actions taken:**
+• Assess patient carefully
+• Check for danger signs (see below)
+• If unsure, refer to health facility
+
+**Referral completed:** [ ]
+**Health worker received:** [ ]
+
+---
+_This is a VHT referral. Please assess patient promptly._
+```
+
+#### Quick summary (`quick_summary`)
+
+```
+MANAGE AT HOME
+Reason: Routine evidence retrieval from national guidelines
+Action: Follow advice below, monitor for changes
+```
+
+#### BM25 + guardrail evidence bundle (`response`)
 
 ```
 **Uganda Clinical Guidelines 2023**
@@ -3878,11 +5508,11 @@ Citations: Page 795, Page 797, Page 835
 
 ```
 
-**Guardrail**: passed=`True` | errors=0 | warnings=0
-
 ---
 
 ### 21. Query
+
+**Full query**
 
 > Sepsis empirical antibiotics adults
 
@@ -3893,7 +5523,89 @@ Citations: Page 795, Page 797, Page 835
 - Page 792: 16.3.6       Antepartum Haemorrhage (APH) – Abruptio Placentae
 - Page 792: If the woman has a Caesarean section
 
-**Response**
+**Metrics:** Triage `GREEN` | Guardrail passed=`True` | Confidence `0.90` | errors=0 | warnings=0
+
+#### VHT standard (`vht_response`)
+
+```
+**QUICK SUMMARY: GREEN (Manage at Community Level)**
+
+• What I see: Routine evidence retrieval from national guidelines
+• What to do: Follow advice below, monitor for changes
+• What NOT to do: Do NOT give medicine at home for danger signs
+
+**WHAT TO DO (step by step):**
+
+**Step 1:** Assess patient carefully
+**Step 2:** Check for danger signs (see below)
+**Step 3:** If unsure, refer to health facility
+**Step 4:** Record all findings
+
+**MONITORING:**
+
+• Check if patient can drink normally
+• Watch for convulsions or shaking
+• Monitor breathing – is it fast or difficult?
+• Check if patient is awake and alert
+• Look for pale or yellow skin/eyes
+
+**DANGER SIGNS - STOP AND REFER IF YOU SEE:**
+
+• Cannot drink or breastfeed
+• Very weak, cannot sit up or wake up
+• Shaking/fitting (convulsions)
+• Vomiting everything
+• Difficulty breathing
+• Pale or yellow skin/eyes
+• Bleeding from any place
+
+**WHAT TO TELL THE FAMILY:**
+
+The symptoms can be managed at home with guidance. Follow the advice you were given. Come back if symptoms get worse.
+
+**REMEMBER AS A VHT:**
+
+• Always check for danger signs first
+• If you are unsure, it is better to refer
+• Record all patients you see
+• Keep your VHT kit and referral forms ready
+
+**FROM THE GUIDELINES:**
+
+• Uganda Clinical Guidelines 2023, Page 792: Newborn
+• Uganda Clinical Guidelines 2023, Page 701: Medicines
+• Uganda Clinical Guidelines 2023, Page 785: Post-abortal Sepsis
+```
+
+#### Referral note (`referral_note`)
+
+```
+**VHT REFERRAL NOTE**
+
+**Triage:** 🟢 GREEN (Manage at Community Level)
+**Reason:** Routine evidence retrieval from national guidelines
+
+**Actions taken:**
+• Assess patient carefully
+• Check for danger signs (see below)
+• If unsure, refer to health facility
+
+**Referral completed:** [ ]
+**Health worker received:** [ ]
+
+---
+_This is a VHT referral. Please assess patient promptly._
+```
+
+#### Quick summary (`quick_summary`)
+
+```
+MANAGE AT HOME
+Reason: Routine evidence retrieval from national guidelines
+Action: Follow advice below, monitor for changes
+```
+
+#### BM25 + guardrail evidence bundle (`response`)
 
 ```
 **Uganda Clinical Guidelines 2023**
@@ -4048,11 +5760,11 @@ Citations: Page 701, Page 785, Page 792
 
 ```
 
-**Guardrail**: passed=`True` | errors=0 | warnings=0
-
 ---
 
 ### 22. Query
+
+**Full query**
 
 > Rabies post-exposure prophylaxis dog bite
 
@@ -4063,7 +5775,89 @@ Citations: Page 701, Page 785, Page 792
 - Page 204: 2.3.5 Rabies
 - Page 102: Unit, Community Health Dept, Ministry of Health, September 2001
 
-**Response**
+**Metrics:** Triage `GREEN` | Guardrail passed=`True` | Confidence `0.90` | errors=0 | warnings=0
+
+#### VHT standard (`vht_response`)
+
+```
+**QUICK SUMMARY: GREEN (Manage at Community Level)**
+
+• What I see: Routine evidence retrieval from national guidelines
+• What to do: Follow advice below, monitor for changes
+• What NOT to do: Do NOT give medicine at home for danger signs
+
+**WHAT TO DO (step by step):**
+
+**Step 1:** Assess patient carefully
+**Step 2:** Check for danger signs (see below)
+**Step 3:** If unsure, refer to health facility
+**Step 4:** Record all findings
+
+**MONITORING:**
+
+• Check if patient can drink normally
+• Watch for convulsions or shaking
+• Monitor breathing – is it fast or difficult?
+• Check if patient is awake and alert
+• Look for pale or yellow skin/eyes
+
+**DANGER SIGNS - STOP AND REFER IF YOU SEE:**
+
+• Cannot drink or breastfeed
+• Very weak, cannot sit up or wake up
+• Shaking/fitting (convulsions)
+• Vomiting everything
+• Difficulty breathing
+• Pale or yellow skin/eyes
+• Bleeding from any place
+
+**WHAT TO TELL THE FAMILY:**
+
+The symptoms can be managed at home with guidance. Follow the advice you were given. Come back if symptoms get worse.
+
+**REMEMBER AS A VHT:**
+
+• Always check for danger signs first
+• If you are unsure, it is better to refer
+• Record all patients you see
+• Keep your VHT kit and referral forms ready
+
+**FROM THE GUIDELINES:**
+
+• Uganda Clinical Guidelines 2023, Page 102: 1.2.1.4  Rabies Post Exposure Prophylaxis
+• Uganda Clinical Guidelines 2023, Page 4: 1.2 Trauma and Injuries..................................................................26
+• Uganda Clinical Guidelines 2023, Page 205: Caution: the patient may bite
+```
+
+#### Referral note (`referral_note`)
+
+```
+**VHT REFERRAL NOTE**
+
+**Triage:** 🟢 GREEN (Manage at Community Level)
+**Reason:** Routine evidence retrieval from national guidelines
+
+**Actions taken:**
+• Assess patient carefully
+• Check for danger signs (see below)
+• If unsure, refer to health facility
+
+**Referral completed:** [ ]
+**Health worker received:** [ ]
+
+---
+_This is a VHT referral. Please assess patient promptly._
+```
+
+#### Quick summary (`quick_summary`)
+
+```
+MANAGE AT HOME
+Reason: Routine evidence retrieval from national guidelines
+Action: Follow advice below, monitor for changes
+```
+
+#### BM25 + guardrail evidence bundle (`response`)
 
 ```
 **Uganda Clinical Guidelines 2023**
@@ -4164,11 +5958,11 @@ Citations: Page 4, Page 102, Page 204, Page 205
 
 ```
 
-**Guardrail**: passed=`True` | errors=0 | warnings=0
-
 ---
 
 ### 23. Query
+
+**Full query**
 
 > Burns initial wound care and referral
 
@@ -4179,7 +5973,89 @@ Citations: Page 4, Page 102, Page 204, Page 205
 - Page 116: Severe burns
 - Page 115: At health facility
 
-**Response**
+**Metrics:** Triage `GREEN` | Guardrail passed=`True` | Confidence `0.90` | errors=0 | warnings=0
+
+#### VHT standard (`vht_response`)
+
+```
+**QUICK SUMMARY: GREEN (Manage at Community Level)**
+
+• What I see: Routine evidence retrieval from national guidelines
+• What to do: Follow advice below, monitor for changes
+• What NOT to do: Do NOT give medicine at home for danger signs
+
+**WHAT TO DO (step by step):**
+
+**Step 1:** Assess patient carefully
+**Step 2:** Check for danger signs (see below)
+**Step 3:** If unsure, refer to health facility
+**Step 4:** Record all findings
+
+**MONITORING:**
+
+• Check if patient can drink normally
+• Watch for convulsions or shaking
+• Monitor breathing – is it fast or difficult?
+• Check if patient is awake and alert
+• Look for pale or yellow skin/eyes
+
+**DANGER SIGNS - STOP AND REFER IF YOU SEE:**
+
+• Cannot drink or breastfeed
+• Very weak, cannot sit up or wake up
+• Shaking/fitting (convulsions)
+• Vomiting everything
+• Difficulty breathing
+• Pale or yellow skin/eyes
+• Bleeding from any place
+
+**WHAT TO TELL THE FAMILY:**
+
+The symptoms can be managed at home with guidance. Follow the advice you were given. Come back if symptoms get worse.
+
+**REMEMBER AS A VHT:**
+
+• Always check for danger signs first
+• If you are unsure, it is better to refer
+• Record all patients you see
+• Keep your VHT kit and referral forms ready
+
+**FROM THE GUIDELINES:**
+
+• Uganda Clinical Guidelines 2023, Page 112: 2nd Degree burns or Partial thickness burns
+• Uganda Clinical Guidelines 2023, Page 112: Emergencies and Trauma
+• Uganda Clinical Guidelines 2023, Page 112: 4th Degree burns
+```
+
+#### Referral note (`referral_note`)
+
+```
+**VHT REFERRAL NOTE**
+
+**Triage:** 🟢 GREEN (Manage at Community Level)
+**Reason:** Routine evidence retrieval from national guidelines
+
+**Actions taken:**
+• Assess patient carefully
+• Check for danger signs (see below)
+• If unsure, refer to health facility
+
+**Referral completed:** [ ]
+**Health worker received:** [ ]
+
+---
+_This is a VHT referral. Please assess patient promptly._
+```
+
+#### Quick summary (`quick_summary`)
+
+```
+MANAGE AT HOME
+Reason: Routine evidence retrieval from national guidelines
+Action: Follow advice below, monitor for changes
+```
+
+#### BM25 + guardrail evidence bundle (`response`)
 
 ```
 **Uganda Clinical Guidelines 2023**
@@ -4365,11 +6241,11 @@ Citations: Page 112, Page 115, Page 116
 
 ```
 
-**Guardrail**: passed=`True` | errors=0 | warnings=0
-
 ---
 
 ### 24. Query
+
+**Full query**
 
 > Snake bite envenomation hospital referral
 
@@ -4380,7 +6256,89 @@ Citations: Page 112, Page 115, Page 116
 - Page 96: If local necrosis develops
 - Page 96: If signs of fang penetration
 
-**Response**
+**Metrics:** Triage `GREEN` | Guardrail passed=`True` | Confidence `0.90` | errors=0 | warnings=0
+
+#### VHT standard (`vht_response`)
+
+```
+**QUICK SUMMARY: GREEN (Manage at Community Level)**
+
+• What I see: Routine evidence retrieval from national guidelines
+• What to do: Follow advice below, monitor for changes
+• What NOT to do: Do NOT give medicine at home for danger signs
+
+**WHAT TO DO (step by step):**
+
+**Step 1:** Assess patient carefully
+**Step 2:** Check for danger signs (see below)
+**Step 3:** If unsure, refer to health facility
+**Step 4:** Record all findings
+
+**MONITORING:**
+
+• Check if patient can drink normally
+• Watch for convulsions or shaking
+• Monitor breathing – is it fast or difficult?
+• Check if patient is awake and alert
+• Look for pale or yellow skin/eyes
+
+**DANGER SIGNS - STOP AND REFER IF YOU SEE:**
+
+• Cannot drink or breastfeed
+• Very weak, cannot sit up or wake up
+• Shaking/fitting (convulsions)
+• Vomiting everything
+• Difficulty breathing
+• Pale or yellow skin/eyes
+• Bleeding from any place
+
+**WHAT TO TELL THE FAMILY:**
+
+The symptoms can be managed at home with guidance. Follow the advice you were given. Come back if symptoms get worse.
+
+**REMEMBER AS A VHT:**
+
+• Always check for danger signs first
+• If you are unsure, it is better to refer
+• Record all patients you see
+• Keep your VHT kit and referral forms ready
+
+**FROM THE GUIDELINES:**
+
+• Uganda Clinical Guidelines 2023, Page 96: without envenomation
+• Uganda Clinical Guidelines 2023, Page 96: Management
+• Uganda Clinical Guidelines 2023, Page 96: Emergencies and Trauma
+```
+
+#### Referral note (`referral_note`)
+
+```
+**VHT REFERRAL NOTE**
+
+**Triage:** 🟢 GREEN (Manage at Community Level)
+**Reason:** Routine evidence retrieval from national guidelines
+
+**Actions taken:**
+• Assess patient carefully
+• Check for danger signs (see below)
+• If unsure, refer to health facility
+
+**Referral completed:** [ ]
+**Health worker received:** [ ]
+
+---
+_This is a VHT referral. Please assess patient promptly._
+```
+
+#### Quick summary (`quick_summary`)
+
+```
+MANAGE AT HOME
+Reason: Routine evidence retrieval from national guidelines
+Action: Follow advice below, monitor for changes
+```
+
+#### BM25 + guardrail evidence bundle (`response`)
 
 ```
 **Uganda Clinical Guidelines 2023**
@@ -4523,11 +6481,11 @@ Citations: Page 96
 
 ```
 
-**Guardrail**: passed=`True` | errors=0 | warnings=0
-
 ---
 
 ### 25. Query
+
+**Full query**
 
 > Neonatal sepsis danger signs referral
 
@@ -4538,7 +6496,89 @@ Citations: Page 96
 - Page 863: If danger signs present, treat as below
 - Page 892: 17.3.21   Check for General Danger Signs
 
-**Response**
+**Metrics:** Triage `GREEN` | Guardrail passed=`True` | Confidence `0.90` | errors=0 | warnings=0
+
+#### VHT standard (`vht_response`)
+
+```
+**QUICK SUMMARY: GREEN (Manage at Community Level)**
+
+• What I see: Routine evidence retrieval from national guidelines
+• What to do: Follow advice below, monitor for changes
+• What NOT to do: Do NOT give medicine at home for danger signs
+
+**WHAT TO DO (step by step):**
+
+**Step 1:** Assess patient carefully
+**Step 2:** Check for danger signs (see below)
+**Step 3:** If unsure, refer to health facility
+**Step 4:** Record all findings
+
+**MONITORING:**
+
+• Check if patient can drink normally
+• Watch for convulsions or shaking
+• Monitor breathing – is it fast or difficult?
+• Check if patient is awake and alert
+• Look for pale or yellow skin/eyes
+
+**DANGER SIGNS - STOP AND REFER IF YOU SEE:**
+
+• Cannot drink or breastfeed
+• Very weak, cannot sit up or wake up
+• Shaking/fitting (convulsions)
+• Vomiting everything
+• Difficulty breathing
+• Pale or yellow skin/eyes
+• Bleeding from any place
+
+**WHAT TO TELL THE FAMILY:**
+
+The symptoms can be managed at home with guidance. Follow the advice you were given. Come back if symptoms get worse.
+
+**REMEMBER AS A VHT:**
+
+• Always check for danger signs first
+• If you are unsure, it is better to refer
+• Record all patients you see
+• Keep your VHT kit and referral forms ready
+
+**FROM THE GUIDELINES:**
+
+• Uganda Clinical Guidelines 2023, Page 792: Newborn
+• Uganda Clinical Guidelines 2023, Page 153: Causes
+• Uganda Clinical Guidelines 2023, Page 183: 2.1.7.1 Neonatal Septicaemia
+```
+
+#### Referral note (`referral_note`)
+
+```
+**VHT REFERRAL NOTE**
+
+**Triage:** 🟢 GREEN (Manage at Community Level)
+**Reason:** Routine evidence retrieval from national guidelines
+
+**Actions taken:**
+• Assess patient carefully
+• Check for danger signs (see below)
+• If unsure, refer to health facility
+
+**Referral completed:** [ ]
+**Health worker received:** [ ]
+
+---
+_This is a VHT referral. Please assess patient promptly._
+```
+
+#### Quick summary (`quick_summary`)
+
+```
+MANAGE AT HOME
+Reason: Routine evidence retrieval from national guidelines
+Action: Follow advice below, monitor for changes
+```
+
+#### BM25 + guardrail evidence bundle (`response`)
 
 ```
 **Uganda Clinical Guidelines 2023**
@@ -4706,7 +6746,5 @@ Citations: Page 153, Page 183, Page 792, Page 863, Page 892
 **🧪 Guardrail Brain Validation:** ✅ Passed
 
 ```
-
-**Guardrail**: passed=`True` | errors=0 | warnings=0
 
 ---

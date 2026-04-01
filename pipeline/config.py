@@ -20,6 +20,24 @@ class TriageLevel(Enum):
     GREEN = "🟢 GREEN (Manage at Community Level)"
 
 
+class MedicalSource(Enum):
+    """Canonical label for citation / VHT output (maps from active guideline preset)."""
+
+    WHO_MALARIA_NIH = "WHO Malaria Guidelines (NCBI Bookshelf)"
+    UGANDA_CLINICAL_2023 = "Uganda Clinical Guidelines 2023"
+    GENERIC = "Clinical guidelines"
+
+
+def medical_source_for_config(cfg: "ExtractionConfig") -> MedicalSource:
+    """Infer MedicalSource from ExtractionConfig.document_title."""
+    t = (cfg.document_title or "").lower()
+    if "uganda" in t:
+        return MedicalSource.UGANDA_CLINICAL_2023
+    if "malaria" in t or "ncbi" in t or "bookshelf" in t:
+        return MedicalSource.WHO_MALARIA_NIH
+    return MedicalSource.GENERIC
+
+
 class DangerSign(Enum):
     # Pediatric danger signs (under 5)
     UNABLE_TO_DRINK = "Unable to drink or breastfeed"

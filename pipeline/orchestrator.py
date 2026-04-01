@@ -17,6 +17,12 @@ from .extractor import MultiPassExtractor
 from .validator import ExtractionValidator
 from .chunker import SmartChunker
 from .guardrail import MedicalGuardrailBrain
+from .config import medical_source_for_config
+from .response import (
+    ResponseFormat,
+    ResponseOrchestrator,
+    infer_triage_from_query,
+)
 
 
 class MedicalQASystem:
@@ -56,6 +62,7 @@ class MedicalQASystem:
         self.chunks: List[Dict] | None = None
         self.search_index: Dict[str, Any] | None = None
         self.guardrail: MedicalGuardrailBrain | None = None
+        self._response_orchestrator: Optional[ResponseOrchestrator] = None
 
     def initialize(self) -> "MedicalQASystem":
         """Initialize or load existing knowledge base."""
@@ -184,29 +191,25 @@ class MedicalQASystem:
 
     def _guardrail_evidence_footer(self, sources: List[Dict], query: str) -> str:
         """
-        BM25 answers are evidence excerpts, not full triage. Append plain-text
-        sections required by MedicalGuardrailBrain (substring + triage regex).
-        Uses RED triage when the query matches danger-sign keywords (same list as
-        MedicalGuardrailBrain._validate_triage).
+        BM25 answers are evidence excerpts. Append sections required by
+        MedicalGuardrailBrain. Triage line uses infer_triage_from_query (RED /
+        YELLOW / GREEN) so it matches the response layer.
         """
+        from .config import TriageLevel as TL
+
         pages = sorted({int(s["page"]) for s in sources if "page" in s})
         pages_str = ", ".join(f"Page {p}" for p in pages) if pages else "N/A"
-        q = query.lower()
-        danger_kw = (
-            "unable to drink",
-            "cannot drink",
-            "convuls",
-            "seizure",
-            "unconscious",
-            "very weak",
-            "lethargic",
-            "bleeding",
-        )
-        if any(s in q for s in danger_kw):
+        level, _reasons = infer_triage_from_query(query)
+        if level == TL.RED:
             triage = (
                 "Triage Level: RED (query may indicate danger signs — urgent "
                 "assessment and referral per local protocol; excerpts are supportive "
                 "information only)\n\n"
+            )
+        elif level == TL.YELLOW:
+            triage = (
+                "Triage Level: YELLOW (time-sensitive symptoms — assess at health "
+                "facility today per local protocol; excerpts are supportive only)\n\n"
             )
         else:
             triage = (
@@ -225,28 +228,35 @@ class MedicalQASystem:
             f"Citations: {pages_str}\n"
         )
 
-    def answer(self, query: str) -> Dict:
-        """Answer a medical query with guardrail validation."""
+    def _retrieve_top_k(self, query: str, k: int = 5) -> tuple[List[int], List[Dict], List[Dict]]:
+        """BM25 top-k: indices, slim sources {page, heading}, full chunk dicts."""
         assert self.chunks is not None
         assert self.search_index is not None
-        assert self.guardrail is not None
-
         query_tokens = re.findall(r"[a-zA-Z0-9]+", query.lower())
         query_tokens = [t for t in query_tokens if len(t) > 1]
-
         scores = self.search_index["bm25"].get_scores(query_tokens)
-        top_indices = np.argsort(scores)[::-1][:5]
+        top_indices = np.argsort(scores)[::-1][:k]
+        sources: List[Dict] = []
+        chunk_dicts: List[Dict] = []
+        for idx in top_indices:
+            chunk = self.chunks[idx]
+            sources.append({"page": chunk["page"], "heading": chunk.get("heading", "")})
+            chunk_dicts.append(dict(chunk))
+        return list(top_indices), sources, chunk_dicts
+
+    def answer(self, query: str) -> Dict:
+        """Answer a medical query with guardrail validation."""
+        assert self.guardrail is not None
+
+        _, sources, chunks_top = self._retrieve_top_k(query, 5)
 
         response = f"**{self.config.document_title}**\n\n"
         response += f"**Question:** {query}\n\n"
 
-        sources: List[Dict] = []
-        for i, idx in enumerate(top_indices, 1):
-            chunk = self.chunks[idx]
-            response += f"### {i}. {chunk['heading']}\n\n"
+        for i, (s, chunk) in enumerate(zip(sources, chunks_top), 1):
+            response += f"### {i}. {s['heading']}\n\n"
             response += chunk["text"][:500] + "...\n\n"
-            response += f"📄 **Reference:** Page {chunk['page']}\n\n"
-            sources.append({"page": chunk["page"], "heading": chunk["heading"]})
+            response += f"📄 **Reference:** Page {s['page']}\n\n"
 
         response += self._guardrail_evidence_footer(sources, query)
 
@@ -276,4 +286,68 @@ class MedicalQASystem:
             "sources": sources,
             "validation": validation,
             "validation_passed": validation["passed"],
+        }
+
+    def _response_orch(self) -> ResponseOrchestrator:
+        if self._response_orchestrator is None:
+            self._response_orchestrator = ResponseOrchestrator()
+        return self._response_orchestrator
+
+    def answer_with_response(self, query: str) -> Dict[str, Any]:
+        """
+        Full pipeline output: BM25 + guardrail + VHT response layer (standard,
+        quick, referral note) + structured ResponseContent.
+        """
+        assert self.guardrail is not None
+
+        _, sources, retrieved_chunks = self._retrieve_top_k(query, 5)
+
+        response = f"**{self.config.document_title}**\n\n"
+        response += f"**Question:** {query}\n\n"
+        for i, (s, chunk) in enumerate(zip(sources, retrieved_chunks), 1):
+            response += f"### {i}. {s['heading']}\n\n"
+            response += chunk["text"][:500] + "...\n\n"
+            response += f"📄 **Reference:** Page {s['page']}\n\n"
+
+        response += self._guardrail_evidence_footer(sources, query)
+        validation = self.guardrail.validate_response(query, response)
+
+        if not validation["passed"] or validation["warnings"]:
+            response += "\n---\n**🧪 Guardrail Brain Validation:**\n\n"
+            if validation["errors"]:
+                response += "**❌ SAFETY ERRORS - DO NOT USE:**\n"
+                for e in validation["errors"]:
+                    response += f"• ⚠️ {e}\n"
+            if validation["warnings"]:
+                response += "**⚠️ Warnings:**\n"
+                for w in validation["warnings"]:
+                    response += f"• {w}\n"
+        elif validation["passed"]:
+            response += "\n---\n**🧪 Guardrail Brain Validation:** ✅ Passed\n"
+
+        triage, triage_reasons = infer_triage_from_query(query)
+        med_src = medical_source_for_config(self.config)
+        orch = self._response_orch()
+        structured = orch.create(
+            query=query,
+            triage=triage,
+            triage_reasons=triage_reasons,
+            guardrail_output=validation,
+            retrieved_chunks=retrieved_chunks,
+            source=med_src,
+            dosage_info=None,
+        )
+
+        return {
+            "query": query,
+            "response": response,
+            "sources": sources,
+            "validation": validation,
+            "validation_passed": validation["passed"],
+            "triage": triage,
+            "triage_reasons": triage_reasons,
+            "vht_response": structured.to_vht_format(),
+            "referral_note": orch.formatter.format(structured, ResponseFormat.REFERRAL),
+            "quick_summary": orch.formatter.format(structured, ResponseFormat.VHT_QUICK),
+            "structured": structured,
         }

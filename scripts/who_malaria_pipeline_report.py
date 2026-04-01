@@ -277,14 +277,23 @@ def searches_section(qa: MedicalQASystem, queries: List[str]) -> str:
     lines = [
         "## Stage 5: Search & Q&A (25 queries)",
         "",
-        "BM25 top-5 excerpts per query; guardrail summary below each.",
+        "For each query: **full query text**, BM25 sources, metrics, then **complete** outputs — ",
+        "VHT standard, referral note, quick summary, and BM25+guardrail evidence bundle (no truncation).",
         "",
     ]
     for i, q in enumerate(queries, 1):
-        result = qa.answer(q)
+        result = qa.answer_with_response(q)
         resp = result["response"]
         val = result["validation"]
+        tri = result["triage"].name
+        conf = result["structured"].confidence_score
+        vht = result.get("vht_response") or ""
+        ref = result.get("referral_note") or ""
+        quick = result.get("quick_summary") or ""
+
         lines.append(f"### {i}. Query")
+        lines.append("")
+        lines.append("**Full query**")
         lines.append("")
         lines.append(f"> {q}")
         lines.append("")
@@ -293,23 +302,28 @@ def searches_section(qa: MedicalQASystem, queries: List[str]) -> str:
             h = str(s.get("heading", ""))[:120]
             lines.append(f"- Page {s.get('page')}: {h}")
         lines.append("")
-        lines.append("**Response**")
-        lines.append("")
-        lines.append("```")
-        lines.append(resp[:4000])
-        if len(resp) > 4000:
-            lines.append("\n... [truncated for report length]")
-        lines.append("```")
-        lines.append("")
         lines.append(
-            f"**Guardrail**: passed=`{val.get('passed')}` | "
-            f"errors={len(val.get('errors', []))} | warnings={len(val.get('warnings', []))}"
+            f"**Metrics:** Triage `{tri}` | Guardrail passed=`{val.get('passed')}` | "
+            f"Confidence `{conf:.2f}` | errors={len(val.get('errors', []))} | "
+            f"warnings={len(val.get('warnings', []))}"
         )
         if val.get("errors"):
             lines.append(f"- Errors: `{val['errors']}`")
         if val.get("warnings"):
-            lines.append(f"- Warnings: `{val['warnings'][:5]}`")
+            lines.append(f"- Warnings: `{val['warnings']}`")
         lines.append("")
+        for title, body in (
+            ("VHT standard (`vht_response`)", vht),
+            ("Referral note (`referral_note`)", ref),
+            ("Quick summary (`quick_summary`)", quick),
+            ("BM25 + guardrail evidence bundle (`response`)", resp),
+        ):
+            lines.append(f"#### {title}")
+            lines.append("")
+            lines.append("```")
+            lines.append(body)
+            lines.append("```")
+            lines.append("")
         lines.append("---")
         lines.append("")
     return "\n".join(lines)

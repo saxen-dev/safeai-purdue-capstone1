@@ -28,6 +28,36 @@ python scripts/who_malaria_pipeline_report.py --preset who-malaria
 python scripts/who_malaria_pipeline_report.py --preset uganda --reuse-kb
 ```
 
+## Response layer (VHT output)
+
+After **indexing → guardrail**, the **output layer** formats community-facing text:
+
+| Module | Role |
+|--------|------|
+| `response.py` | `ResponseOrchestrator`, `VHTResponseFormatter`, `ResponseContent`, `infer_triage_from_query` |
+| `orchestrator.py` | `MedicalQASystem.answer_with_response()` — BM25 + guardrail + structured VHT + referral note |
+
+`MedicalSource` and `medical_source_for_config()` in `config.py` label citations (WHO malaria vs Uganda CG).
+
+```python
+from pipeline import MedicalQASystem, extraction_config_who_malaria_nih
+
+qa = MedicalQASystem(config=extraction_config_who_malaria_nih())
+qa.initialize()
+out = qa.answer_with_response("What is ACT dosing for children?")
+print(out["vht_response"])
+print(out["referral_note"])
+print(out["quick_summary"])
+```
+
+**Validate 25 test queries × both PDFs** (requires built KBs under default output dirs):
+
+```bash
+python scripts/response_layer_validation_report.py
+```
+
+Writes `reports/response_layer_validation.md` (and a timestamped copy): summary table plus **full query text** and **complete** `vht_response`, `referral_note`, `quick_summary`, and BM25 evidence bundle per query.
+
 ## Structure
 
 | Module | Purpose |

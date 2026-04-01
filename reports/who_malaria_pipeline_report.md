@@ -1,35 +1,22 @@
 # WHO Malaria pipeline run report
 
-- **Generated (UTC)**: 2026-03-19T23:56:20.427900+00:00
+- **Generated (UTC)**: 2026-04-01T05:00:55.885855+00:00
 - **Preset**: who-malaria (NIH Bookshelf)
 - **PDF**: `C:\temp\capstone\Bookshelf_NBK588130.pdf`
 - **KB output directory**: `C:\temp\capstone\medical_kb_who_malaria`
-- **Reuse KB flag**: `False`
+- **Reuse KB flag**: `True`
 
 ---
 ## Stage 1: Multi-pass extraction
 
+_Loaded from existing `knowledge_base.json` (pass-level log not in memory)._
+
 | Metric | Value |
 |--------|-------|
-| PDF path | `C:\temp\capstone\Bookshelf_NBK588130.pdf` |
-| Extraction timestamp | 2026-03-19T18:56:03.587250 |
-| Total pages extracted | 478 |
-| Tables extracted | 200 |
-| Embedded images saved | 2 |
-| OCR / manual-review flags | 0 |
-| Cross-validation method | pdfplumber |
-| Cross-validation consistency score | 0.8272014394238952 |
-| Passes logged | 5 |
-
-### Extraction passes
-
-| Pass | Strategy | Details |
-|------|----------|---------|
-| 0 | `analysis` | `{"pass": 0, "strategy": "analysis", "profile_pages_sample": "[{'page': 1, 'text_length': 0, 'has_images': False, 'has_vector_graphics': True}"}` |
-| 1 | `text_extraction` | `{"pass": 1, "strategy": "text_extraction", "pages": 478}` |
-| 2 | `table_extraction` | `{"pass": 2, "strategy": "table_extraction", "tables_found": 200}` |
-| 4 | `cross_validation` | `{"pass": 4, "strategy": "cross_validation", "results": {"method": "pdfplumber", "page_matches": [{"page": 2, "similarity": 0.9791284403669723}, {"page": 3, "similarity": 0.983258352385869}, {"page": 4, "similarity": 0.9833528722157092}, {"p` |
-| images | `embedded_raster` | `{"pass": "images", "strategy": "embedded_raster", "images_saved": 2}` |
+| Pages (summary) | 478 |
+| Tables (summary) | 200 |
+| Images (summary) | 2 |
+| Extraction passes (summary) | 5 |
 
 ## Stage 2: Validation
 
@@ -321,9 +308,12 @@
 
 ## Stage 5: Search & Q&A (25 queries)
 
-BM25 top-5 excerpts per query; guardrail summary below each.
+For each query: **full query text**, BM25 sources, metrics, then **complete** outputs — 
+VHT standard, referral note, quick summary, and BM25+guardrail evidence bundle (no truncation).
 
 ### 1. Query
+
+**Full query**
 
 > What is the treatment for uncomplicated Plasmodium falciparum malaria?
 
@@ -334,7 +324,89 @@ BM25 top-5 excerpts per query; guardrail summary below each.
 - Page 190: knowlesi
 - Page 310: Untitled
 
-**Response**
+**Metrics:** Triage `GREEN` | Guardrail passed=`True` | Confidence `0.90` | errors=0 | warnings=0
+
+#### VHT standard (`vht_response`)
+
+```
+**QUICK SUMMARY: GREEN (Manage at Community Level)**
+
+• What I see: Routine evidence retrieval from national guidelines
+• What to do: Follow advice below, monitor for changes
+• What NOT to do: Do NOT give medicine at home for danger signs
+
+**WHAT TO DO (step by step):**
+
+**Step 1:** Assess patient carefully
+**Step 2:** Check for danger signs (see below)
+**Step 3:** If unsure, refer to health facility
+**Step 4:** Record all findings
+
+**MONITORING:**
+
+• Check if patient can drink normally
+• Watch for convulsions or shaking
+• Monitor breathing – is it fast or difficult?
+• Check if patient is awake and alert
+• Look for pale or yellow skin/eyes
+
+**DANGER SIGNS - STOP AND REFER IF YOU SEE:**
+
+• Cannot drink or breastfeed
+• Very weak, cannot sit up or wake up
+• Shaking/fitting (convulsions)
+• Vomiting everything
+• Difficulty breathing
+• Pale or yellow skin/eyes
+• Bleeding from any place
+
+**WHAT TO TELL THE FAMILY:**
+
+The symptoms can be managed at home with guidance. Follow the advice you were given. Come back if symptoms get worse.
+
+**REMEMBER AS A VHT:**
+
+• Always check for danger signs first
+• If you are unsure, it is better to refer
+• Record all patients you see
+• Keep your VHT kit and referral forms ready
+
+**FROM THE GUIDELINES:**
+
+• WHO Malaria Guidelines (NCBI Bookshelf), Page 437: References
+• WHO Malaria Guidelines (NCBI Bookshelf), Page 308: Untitled
+• WHO Malaria Guidelines (NCBI Bookshelf), Page 435: References
+```
+
+#### Referral note (`referral_note`)
+
+```
+**VHT REFERRAL NOTE**
+
+**Triage:** 🟢 GREEN (Manage at Community Level)
+**Reason:** Routine evidence retrieval from national guidelines
+
+**Actions taken:**
+• Assess patient carefully
+• Check for danger signs (see below)
+• If unsure, refer to health facility
+
+**Referral completed:** [ ]
+**Health worker received:** [ ]
+
+---
+_This is a VHT referral. Please assess patient promptly._
+```
+
+#### Quick summary (`quick_summary`)
+
+```
+MANAGE AT HOME
+Reason: Routine evidence retrieval from national guidelines
+Action: Follow advice below, monitor for changes
+```
+
+#### BM25 + guardrail evidence bundle (`response`)
 
 ```
 **WHO Malaria Guidelines (NCBI Bookshelf)**
@@ -433,11 +505,11 @@ Citations: Page 190, Page 308, Page 310, Page 435, Page 437
 
 ```
 
-**Guardrail**: passed=`True` | errors=0 | warnings=0
-
 ---
 
 ### 2. Query
+
+**Full query**
 
 > Dosing artemisinin-based combination therapy in children under 5
 
@@ -448,7 +520,89 @@ Citations: Page 190, Page 308, Page 310, Page 435, Page 437
 - Page 443: High
 - Page 443: High
 
-**Response**
+**Metrics:** Triage `GREEN` | Guardrail passed=`True` | Confidence `0.90` | errors=0 | warnings=0
+
+#### VHT standard (`vht_response`)
+
+```
+**QUICK SUMMARY: GREEN (Manage at Community Level)**
+
+• What I see: Routine evidence retrieval from national guidelines
+• What to do: Follow advice below, monitor for changes
+• What NOT to do: Do NOT give medicine at home for danger signs
+
+**WHAT TO DO (step by step):**
+
+**Step 1:** Assess patient carefully
+**Step 2:** Check for danger signs (see below)
+**Step 3:** If unsure, refer to health facility
+**Step 4:** Record all findings
+
+**MONITORING:**
+
+• Check if patient can drink normally
+• Watch for convulsions or shaking
+• Monitor breathing – is it fast or difficult?
+• Check if patient is awake and alert
+• Look for pale or yellow skin/eyes
+
+**DANGER SIGNS - STOP AND REFER IF YOU SEE:**
+
+• Cannot drink or breastfeed
+• Very weak, cannot sit up or wake up
+• Shaking/fitting (convulsions)
+• Vomiting everything
+• Difficulty breathing
+• Pale or yellow skin/eyes
+• Bleeding from any place
+
+**WHAT TO TELL THE FAMILY:**
+
+The symptoms can be managed at home with guidance. Follow the advice you were given. Come back if symptoms get worse.
+
+**REMEMBER AS A VHT:**
+
+• Always check for danger signs first
+• If you are unsure, it is better to refer
+• Record all patients you see
+• Keep your VHT kit and referral forms ready
+
+**FROM THE GUIDELINES:**
+
+• WHO Malaria Guidelines (NCBI Bookshelf), Page 226: Considerations in use of artemisinin-based combination therapy
+• WHO Malaria Guidelines (NCBI Bookshelf), Page 443: Intervention:
+• WHO Malaria Guidelines (NCBI Bookshelf), Page 443: h
+```
+
+#### Referral note (`referral_note`)
+
+```
+**VHT REFERRAL NOTE**
+
+**Triage:** 🟢 GREEN (Manage at Community Level)
+**Reason:** Routine evidence retrieval from national guidelines
+
+**Actions taken:**
+• Assess patient carefully
+• Check for danger signs (see below)
+• If unsure, refer to health facility
+
+**Referral completed:** [ ]
+**Health worker received:** [ ]
+
+---
+_This is a VHT referral. Please assess patient promptly._
+```
+
+#### Quick summary (`quick_summary`)
+
+```
+MANAGE AT HOME
+Reason: Routine evidence retrieval from national guidelines
+Action: Follow advice below, monitor for changes
+```
+
+#### BM25 + guardrail evidence bundle (`response`)
 
 ```
 **WHO Malaria Guidelines (NCBI Bookshelf)**
@@ -521,11 +675,11 @@ Citations: Page 226, Page 443
 
 ```
 
-**Guardrail**: passed=`True` | errors=0 | warnings=0
-
 ---
 
 ### 3. Query
+
+**Full query**
 
 > Severe malaria definition and management
 
@@ -536,7 +690,89 @@ Citations: Page 226, Page 443
 - Page 210: 5.2.2 Treating severe malaria
 - Page 402: Intervention
 
-**Response**
+**Metrics:** Triage `GREEN` | Guardrail passed=`True` | Confidence `0.90` | errors=0 | warnings=0
+
+#### VHT standard (`vht_response`)
+
+```
+**QUICK SUMMARY: GREEN (Manage at Community Level)**
+
+• What I see: Routine evidence retrieval from national guidelines
+• What to do: Follow advice below, monitor for changes
+• What NOT to do: Do NOT give medicine at home for danger signs
+
+**WHAT TO DO (step by step):**
+
+**Step 1:** Assess patient carefully
+**Step 2:** Check for danger signs (see below)
+**Step 3:** If unsure, refer to health facility
+**Step 4:** Record all findings
+
+**MONITORING:**
+
+• Check if patient can drink normally
+• Watch for convulsions or shaking
+• Monitor breathing – is it fast or difficult?
+• Check if patient is awake and alert
+• Look for pale or yellow skin/eyes
+
+**DANGER SIGNS - STOP AND REFER IF YOU SEE:**
+
+• Cannot drink or breastfeed
+• Very weak, cannot sit up or wake up
+• Shaking/fitting (convulsions)
+• Vomiting everything
+• Difficulty breathing
+• Pale or yellow skin/eyes
+• Bleeding from any place
+
+**WHAT TO TELL THE FAMILY:**
+
+The symptoms can be managed at home with guidance. Follow the advice you were given. Come back if symptoms get worse.
+
+**REMEMBER AS A VHT:**
+
+• Always check for danger signs first
+• If you are unsure, it is better to refer
+• Record all patients you see
+• Keep your VHT kit and referral forms ready
+
+**FROM THE GUIDELINES:**
+
+• WHO Malaria Guidelines (NCBI Bookshelf), Page 403: Publication bias: no serious.
+• WHO Malaria Guidelines (NCBI Bookshelf), Page 402: 167
+• WHO Malaria Guidelines (NCBI Bookshelf), Page 404: Publication bias: no serious.
+```
+
+#### Referral note (`referral_note`)
+
+```
+**VHT REFERRAL NOTE**
+
+**Triage:** 🟢 GREEN (Manage at Community Level)
+**Reason:** Routine evidence retrieval from national guidelines
+
+**Actions taken:**
+• Assess patient carefully
+• Check for danger signs (see below)
+• If unsure, refer to health facility
+
+**Referral completed:** [ ]
+**Health worker received:** [ ]
+
+---
+_This is a VHT referral. Please assess patient promptly._
+```
+
+#### Quick summary (`quick_summary`)
+
+```
+MANAGE AT HOME
+Reason: Routine evidence retrieval from national guidelines
+Action: Follow advice below, monitor for changes
+```
+
+#### BM25 + guardrail evidence bundle (`response`)
 
 ```
 **WHO Malaria Guidelines (NCBI Bookshelf)**
@@ -647,11 +883,11 @@ Citations: Page 210, Page 402, Page 403, Page 404
 
 ```
 
-**Guardrail**: passed=`True` | errors=0 | warnings=0
-
 ---
 
 ### 4. Query
+
+**Full query**
 
 > When to refer a patient with malaria to hospital?
 
@@ -662,7 +898,89 @@ Citations: Page 210, Page 402, Page 403, Page 404
 - Page 177: 5.2.1.2 Recurrent falciparum malaria
 - Page 211: Follow-on treatment
 
-**Response**
+**Metrics:** Triage `GREEN` | Guardrail passed=`True` | Confidence `0.90` | errors=0 | warnings=0
+
+#### VHT standard (`vht_response`)
+
+```
+**QUICK SUMMARY: GREEN (Manage at Community Level)**
+
+• What I see: Routine evidence retrieval from national guidelines
+• What to do: Follow advice below, monitor for changes
+• What NOT to do: Do NOT give medicine at home for danger signs
+
+**WHAT TO DO (step by step):**
+
+**Step 1:** Assess patient carefully
+**Step 2:** Check for danger signs (see below)
+**Step 3:** If unsure, refer to health facility
+**Step 4:** Record all findings
+
+**MONITORING:**
+
+• Check if patient can drink normally
+• Watch for convulsions or shaking
+• Monitor breathing – is it fast or difficult?
+• Check if patient is awake and alert
+• Look for pale or yellow skin/eyes
+
+**DANGER SIGNS - STOP AND REFER IF YOU SEE:**
+
+• Cannot drink or breastfeed
+• Very weak, cannot sit up or wake up
+• Shaking/fitting (convulsions)
+• Vomiting everything
+• Difficulty breathing
+• Pale or yellow skin/eyes
+• Bleeding from any place
+
+**WHAT TO TELL THE FAMILY:**
+
+The symptoms can be managed at home with guidance. Follow the advice you were given. Come back if symptoms get worse.
+
+**REMEMBER AS A VHT:**
+
+• Always check for danger signs first
+• If you are unsure, it is better to refer
+• Record all patients you see
+• Keep your VHT kit and referral forms ready
+
+**FROM THE GUIDELINES:**
+
+• WHO Malaria Guidelines (NCBI Bookshelf), Page 220: Follow-on treatment
+• WHO Malaria Guidelines (NCBI Bookshelf), Page 128: Research needs
+• WHO Malaria Guidelines (NCBI Bookshelf), Page 163: 4. Appropriate weight-based dosing
+```
+
+#### Referral note (`referral_note`)
+
+```
+**VHT REFERRAL NOTE**
+
+**Triage:** 🟢 GREEN (Manage at Community Level)
+**Reason:** Routine evidence retrieval from national guidelines
+
+**Actions taken:**
+• Assess patient carefully
+• Check for danger signs (see below)
+• If unsure, refer to health facility
+
+**Referral completed:** [ ]
+**Health worker received:** [ ]
+
+---
+_This is a VHT referral. Please assess patient promptly._
+```
+
+#### Quick summary (`quick_summary`)
+
+```
+MANAGE AT HOME
+Reason: Routine evidence retrieval from national guidelines
+Action: Follow advice below, monitor for changes
+```
+
+#### BM25 + guardrail evidence bundle (`response`)
 
 ```
 **WHO Malaria Guidelines (NCBI Bookshelf)**
@@ -769,11 +1087,11 @@ Citations: Page 128, Page 163, Page 177, Page 211, Page 220
 
 ```
 
-**Guardrail**: passed=`True` | errors=0 | warnings=0
-
 ---
 
 ### 5. Query
+
+**Full query**
 
 > Pregnancy and malaria treatment recommendations
 
@@ -784,7 +1102,89 @@ Citations: Page 128, Page 163, Page 177, Page 211, Page 220
 - Page 108: Implementation
 - Page 184: Untitled
 
-**Response**
+**Metrics:** Triage `GREEN` | Guardrail passed=`True` | Confidence `0.90` | errors=0 | warnings=0
+
+#### VHT standard (`vht_response`)
+
+```
+**QUICK SUMMARY: GREEN (Manage at Community Level)**
+
+• What I see: Routine evidence retrieval from national guidelines
+• What to do: Follow advice below, monitor for changes
+• What NOT to do: Do NOT give medicine at home for danger signs
+
+**WHAT TO DO (step by step):**
+
+**Step 1:** Assess patient carefully
+**Step 2:** Check for danger signs (see below)
+**Step 3:** If unsure, refer to health facility
+**Step 4:** Record all findings
+
+**MONITORING:**
+
+• Check if patient can drink normally
+• Watch for convulsions or shaking
+• Monitor breathing – is it fast or difficult?
+• Check if patient is awake and alert
+• Look for pale or yellow skin/eyes
+
+**DANGER SIGNS - STOP AND REFER IF YOU SEE:**
+
+• Cannot drink or breastfeed
+• Very weak, cannot sit up or wake up
+• Shaking/fitting (convulsions)
+• Vomiting everything
+• Difficulty breathing
+• Pale or yellow skin/eyes
+• Bleeding from any place
+
+**WHAT TO TELL THE FAMILY:**
+
+The symptoms can be managed at home with guidance. Follow the advice you were given. Come back if symptoms get worse.
+
+**REMEMBER AS A VHT:**
+
+• Always check for danger signs first
+• If you are unsure, it is better to refer
+• Record all patients you see
+• Keep your VHT kit and referral forms ready
+
+**FROM THE GUIDELINES:**
+
+• WHO Malaria Guidelines (NCBI Bookshelf), Page 185: Feasibility
+• WHO Malaria Guidelines (NCBI Bookshelf), Page 302: Untitled
+• WHO Malaria Guidelines (NCBI Bookshelf), Page 30: Scope
+```
+
+#### Referral note (`referral_note`)
+
+```
+**VHT REFERRAL NOTE**
+
+**Triage:** 🟢 GREEN (Manage at Community Level)
+**Reason:** Routine evidence retrieval from national guidelines
+
+**Actions taken:**
+• Assess patient carefully
+• Check for danger signs (see below)
+• If unsure, refer to health facility
+
+**Referral completed:** [ ]
+**Health worker received:** [ ]
+
+---
+_This is a VHT referral. Please assess patient promptly._
+```
+
+#### Quick summary (`quick_summary`)
+
+```
+MANAGE AT HOME
+Reason: Routine evidence retrieval from national guidelines
+Action: Follow advice below, monitor for changes
+```
+
+#### BM25 + guardrail evidence bundle (`response`)
 
 ```
 **WHO Malaria Guidelines (NCBI Bookshelf)**
@@ -891,11 +1291,11 @@ Citations: Page 30, Page 108, Page 184, Page 185, Page 302
 
 ```
 
-**Guardrail**: passed=`True` | errors=0 | warnings=0
-
 ---
 
 ### 6. Query
+
+**Full query**
 
 > Drug interactions with artemether lumefantrine
 
@@ -906,7 +1306,89 @@ Citations: Page 30, Page 108, Page 184, Page 185, Page 302
 - Page 173: Remarks
 - Page 173: 5.2.1.1.2 Dosing of ACTs
 
-**Response**
+**Metrics:** Triage `GREEN` | Guardrail passed=`True` | Confidence `0.90` | errors=0 | warnings=0
+
+#### VHT standard (`vht_response`)
+
+```
+**QUICK SUMMARY: GREEN (Manage at Community Level)**
+
+• What I see: Routine evidence retrieval from national guidelines
+• What to do: Follow advice below, monitor for changes
+• What NOT to do: Do NOT give medicine at home for danger signs
+
+**WHAT TO DO (step by step):**
+
+**Step 1:** Assess patient carefully
+**Step 2:** Check for danger signs (see below)
+**Step 3:** If unsure, refer to health facility
+**Step 4:** Record all findings
+
+**MONITORING:**
+
+• Check if patient can drink normally
+• Watch for convulsions or shaking
+• Monitor breathing – is it fast or difficult?
+• Check if patient is awake and alert
+• Look for pale or yellow skin/eyes
+
+**DANGER SIGNS - STOP AND REFER IF YOU SEE:**
+
+• Cannot drink or breastfeed
+• Very weak, cannot sit up or wake up
+• Shaking/fitting (convulsions)
+• Vomiting everything
+• Difficulty breathing
+• Pale or yellow skin/eyes
+• Bleeding from any place
+
+**WHAT TO TELL THE FAMILY:**
+
+The symptoms can be managed at home with guidance. Follow the advice you were given. Come back if symptoms get worse.
+
+**REMEMBER AS A VHT:**
+
+• Always check for danger signs first
+• If you are unsure, it is better to refer
+• Record all patients you see
+• Keep your VHT kit and referral forms ready
+
+**FROM THE GUIDELINES:**
+
+• WHO Malaria Guidelines (NCBI Bookshelf), Page 184: Untitled
+• WHO Malaria Guidelines (NCBI Bookshelf), Page 185: Acceptability
+• WHO Malaria Guidelines (NCBI Bookshelf), Page 118: Antimalarial medicine
+```
+
+#### Referral note (`referral_note`)
+
+```
+**VHT REFERRAL NOTE**
+
+**Triage:** 🟢 GREEN (Manage at Community Level)
+**Reason:** Routine evidence retrieval from national guidelines
+
+**Actions taken:**
+• Assess patient carefully
+• Check for danger signs (see below)
+• If unsure, refer to health facility
+
+**Referral completed:** [ ]
+**Health worker received:** [ ]
+
+---
+_This is a VHT referral. Please assess patient promptly._
+```
+
+#### Quick summary (`quick_summary`)
+
+```
+MANAGE AT HOME
+Reason: Routine evidence retrieval from national guidelines
+Action: Follow advice below, monitor for changes
+```
+
+#### BM25 + guardrail evidence bundle (`response`)
 
 ```
 **WHO Malaria Guidelines (NCBI Bookshelf)**
@@ -1016,11 +1498,11 @@ Citations: Page 118, Page 173, Page 184, Page 185
 
 ```
 
-**Guardrail**: passed=`True` | errors=0 | warnings=0
-
 ---
 
 ### 7. Query
+
+**Full query**
 
 > Prophylaxis for travelers to endemic areas
 
@@ -1031,7 +1513,89 @@ Citations: Page 118, Page 173, Page 184, Page 185
 - Page 453: Intervention:
 - Page 453: Population:
 
-**Response**
+**Metrics:** Triage `GREEN` | Guardrail passed=`True` | Confidence `0.90` | errors=0 | warnings=0
+
+#### VHT standard (`vht_response`)
+
+```
+**QUICK SUMMARY: GREEN (Manage at Community Level)**
+
+• What I see: Routine evidence retrieval from national guidelines
+• What to do: Follow advice below, monitor for changes
+• What NOT to do: Do NOT give medicine at home for danger signs
+
+**WHAT TO DO (step by step):**
+
+**Step 1:** Assess patient carefully
+**Step 2:** Check for danger signs (see below)
+**Step 3:** If unsure, refer to health facility
+**Step 4:** Record all findings
+
+**MONITORING:**
+
+• Check if patient can drink normally
+• Watch for convulsions or shaking
+• Monitor breathing – is it fast or difficult?
+• Check if patient is awake and alert
+• Look for pale or yellow skin/eyes
+
+**DANGER SIGNS - STOP AND REFER IF YOU SEE:**
+
+• Cannot drink or breastfeed
+• Very weak, cannot sit up or wake up
+• Shaking/fitting (convulsions)
+• Vomiting everything
+• Difficulty breathing
+• Pale or yellow skin/eyes
+• Bleeding from any place
+
+**WHAT TO TELL THE FAMILY:**
+
+The symptoms can be managed at home with guidance. Follow the advice you were given. Come back if symptoms get worse.
+
+**REMEMBER AS A VHT:**
+
+• Always check for danger signs first
+• If you are unsure, it is better to refer
+• Record all patients you see
+• Keep your VHT kit and referral forms ready
+
+**FROM THE GUIDELINES:**
+
+• WHO Malaria Guidelines (NCBI Bookshelf), Page 453: Moderate
+• WHO Malaria Guidelines (NCBI Bookshelf), Page 453: Moderate
+• WHO Malaria Guidelines (NCBI Bookshelf), Page 453: Untitled
+```
+
+#### Referral note (`referral_note`)
+
+```
+**VHT REFERRAL NOTE**
+
+**Triage:** 🟢 GREEN (Manage at Community Level)
+**Reason:** Routine evidence retrieval from national guidelines
+
+**Actions taken:**
+• Assess patient carefully
+• Check for danger signs (see below)
+• If unsure, refer to health facility
+
+**Referral completed:** [ ]
+**Health worker received:** [ ]
+
+---
+_This is a VHT referral. Please assess patient promptly._
+```
+
+#### Quick summary (`quick_summary`)
+
+```
+MANAGE AT HOME
+Reason: Routine evidence retrieval from national guidelines
+Action: Follow advice below, monitor for changes
+```
+
+#### BM25 + guardrail evidence bundle (`response`)
 
 ```
 **WHO Malaria Guidelines (NCBI Bookshelf)**
@@ -1098,11 +1662,11 @@ Citations: Page 453
 
 ```
 
-**Guardrail**: passed=`True` | errors=0 | warnings=0
-
 ---
 
 ### 8. Query
+
+**Full query**
 
 > Rapid diagnostic test interpretation false positives
 
@@ -1113,7 +1677,89 @@ Citations: Page 453
 - Page 447: Untitled
 - Page 447: Summary
 
-**Response**
+**Metrics:** Triage `GREEN` | Guardrail passed=`True` | Confidence `0.90` | errors=0 | warnings=0
+
+#### VHT standard (`vht_response`)
+
+```
+**QUICK SUMMARY: GREEN (Manage at Community Level)**
+
+• What I see: Routine evidence retrieval from national guidelines
+• What to do: Follow advice below, monitor for changes
+• What NOT to do: Do NOT give medicine at home for danger signs
+
+**WHAT TO DO (step by step):**
+
+**Step 1:** Assess patient carefully
+**Step 2:** Check for danger signs (see below)
+**Step 3:** If unsure, refer to health facility
+**Step 4:** Record all findings
+
+**MONITORING:**
+
+• Check if patient can drink normally
+• Watch for convulsions or shaking
+• Monitor breathing – is it fast or difficult?
+• Check if patient is awake and alert
+• Look for pale or yellow skin/eyes
+
+**DANGER SIGNS - STOP AND REFER IF YOU SEE:**
+
+• Cannot drink or breastfeed
+• Very weak, cannot sit up or wake up
+• Shaking/fitting (convulsions)
+• Vomiting everything
+• Difficulty breathing
+• Pale or yellow skin/eyes
+• Bleeding from any place
+
+**WHAT TO TELL THE FAMILY:**
+
+The symptoms can be managed at home with guidance. Follow the advice you were given. Come back if symptoms get worse.
+
+**REMEMBER AS A VHT:**
+
+• Always check for danger signs first
+• If you are unsure, it is better to refer
+• Record all patients you see
+• Keep your VHT kit and referral forms ready
+
+**FROM THE GUIDELINES:**
+
+• WHO Malaria Guidelines (NCBI Bookshelf), Page 267: Untitled
+• WHO Malaria Guidelines (NCBI Bookshelf), Page 307: Untitled
+• WHO Malaria Guidelines (NCBI Bookshelf), Page 447: Target conditions
+```
+
+#### Referral note (`referral_note`)
+
+```
+**VHT REFERRAL NOTE**
+
+**Triage:** 🟢 GREEN (Manage at Community Level)
+**Reason:** Routine evidence retrieval from national guidelines
+
+**Actions taken:**
+• Assess patient carefully
+• Check for danger signs (see below)
+• If unsure, refer to health facility
+
+**Referral completed:** [ ]
+**Health worker received:** [ ]
+
+---
+_This is a VHT referral. Please assess patient promptly._
+```
+
+#### Quick summary (`quick_summary`)
+
+```
+MANAGE AT HOME
+Reason: Routine evidence retrieval from national guidelines
+Action: Follow advice below, monitor for changes
+```
+
+#### BM25 + guardrail evidence bundle (`response`)
 
 ```
 **WHO Malaria Guidelines (NCBI Bookshelf)**
@@ -1226,11 +1872,11 @@ Citations: Page 267, Page 307, Page 447
 
 ```
 
-**Guardrail**: passed=`True` | errors=0 | warnings=0
-
 ---
 
 ### 9. Query
+
+**Full query**
 
 > G6PD deficiency and primaquine
 
@@ -1241,7 +1887,89 @@ Citations: Page 267, Page 307, Page 447
 - Page 208: Benefits and harms
 - Page 195: Qualitative near-patient G6PD tests (2024)
 
-**Response**
+**Metrics:** Triage `GREEN` | Guardrail passed=`True` | Confidence `0.90` | errors=0 | warnings=0
+
+#### VHT standard (`vht_response`)
+
+```
+**QUICK SUMMARY: GREEN (Manage at Community Level)**
+
+• What I see: Routine evidence retrieval from national guidelines
+• What to do: Follow advice below, monitor for changes
+• What NOT to do: Do NOT give medicine at home for danger signs
+
+**WHAT TO DO (step by step):**
+
+**Step 1:** Assess patient carefully
+**Step 2:** Check for danger signs (see below)
+**Step 3:** If unsure, refer to health facility
+**Step 4:** Record all findings
+
+**MONITORING:**
+
+• Check if patient can drink normally
+• Watch for convulsions or shaking
+• Monitor breathing – is it fast or difficult?
+• Check if patient is awake and alert
+• Look for pale or yellow skin/eyes
+
+**DANGER SIGNS - STOP AND REFER IF YOU SEE:**
+
+• Cannot drink or breastfeed
+• Very weak, cannot sit up or wake up
+• Shaking/fitting (convulsions)
+• Vomiting everything
+• Difficulty breathing
+• Pale or yellow skin/eyes
+• Bleeding from any place
+
+**WHAT TO TELL THE FAMILY:**
+
+The symptoms can be managed at home with guidance. Follow the advice you were given. Come back if symptoms get worse.
+
+**REMEMBER AS A VHT:**
+
+• Always check for danger signs first
+• If you are unsure, it is better to refer
+• Record all patients you see
+• Keep your VHT kit and referral forms ready
+
+**FROM THE GUIDELINES:**
+
+• WHO Malaria Guidelines (NCBI Bookshelf), Page 208: Primaquine and glucose-6-phosphate dehydrogenase deficiency
+• WHO Malaria Guidelines (NCBI Bookshelf), Page 195: Practical info
+• WHO Malaria Guidelines (NCBI Bookshelf), Page 199: Untitled
+```
+
+#### Referral note (`referral_note`)
+
+```
+**VHT REFERRAL NOTE**
+
+**Triage:** 🟢 GREEN (Manage at Community Level)
+**Reason:** Routine evidence retrieval from national guidelines
+
+**Actions taken:**
+• Assess patient carefully
+• Check for danger signs (see below)
+• If unsure, refer to health facility
+
+**Referral completed:** [ ]
+**Health worker received:** [ ]
+
+---
+_This is a VHT referral. Please assess patient promptly._
+```
+
+#### Quick summary (`quick_summary`)
+
+```
+MANAGE AT HOME
+Reason: Routine evidence retrieval from national guidelines
+Action: Follow advice below, monitor for changes
+```
+
+#### BM25 + guardrail evidence bundle (`response`)
 
 ```
 **WHO Malaria Guidelines (NCBI Bookshelf)**
@@ -1366,11 +2094,11 @@ Citations: Page 195, Page 199, Page 208
 
 ```
 
-**Guardrail**: passed=`True` | errors=0 | warnings=0
-
 ---
 
 ### 10. Query
+
+**Full query**
 
 > Malaria vaccine recommendations RTS,S R21
 
@@ -1381,7 +2109,89 @@ Citations: Page 195, Page 199, Page 208
 - Page 386: RTS,S/AS01 vs
 - Page 386: Summary
 
-**Response**
+**Metrics:** Triage `GREEN` | Guardrail passed=`True` | Confidence `0.90` | errors=0 | warnings=0
+
+#### VHT standard (`vht_response`)
+
+```
+**QUICK SUMMARY: GREEN (Manage at Community Level)**
+
+• What I see: Routine evidence retrieval from national guidelines
+• What to do: Follow advice below, monitor for changes
+• What NOT to do: Do NOT give medicine at home for danger signs
+
+**WHAT TO DO (step by step):**
+
+**Step 1:** Assess patient carefully
+**Step 2:** Check for danger signs (see below)
+**Step 3:** If unsure, refer to health facility
+**Step 4:** Record all findings
+
+**MONITORING:**
+
+• Check if patient can drink normally
+• Watch for convulsions or shaking
+• Monitor breathing – is it fast or difficult?
+• Check if patient is awake and alert
+• Look for pale or yellow skin/eyes
+
+**DANGER SIGNS - STOP AND REFER IF YOU SEE:**
+
+• Cannot drink or breastfeed
+• Very weak, cannot sit up or wake up
+• Shaking/fitting (convulsions)
+• Vomiting everything
+• Difficulty breathing
+• Pale or yellow skin/eyes
+• Bleeding from any place
+
+**WHAT TO TELL THE FAMILY:**
+
+The symptoms can be managed at home with guidance. Follow the advice you were given. Come back if symptoms get worse.
+
+**REMEMBER AS A VHT:**
+
+• Always check for danger signs first
+• If you are unsure, it is better to refer
+• Record all patients you see
+• Keep your VHT kit and referral forms ready
+
+**FROM THE GUIDELINES:**
+
+• WHO Malaria Guidelines (NCBI Bookshelf), Page 159: Certainty of the evidence related to the safety of R21/Matrix-M
+• WHO Malaria Guidelines (NCBI Bookshelf), Page 386: Systematic review summary
+• WHO Malaria Guidelines (NCBI Bookshelf), Page 162: immunization systems.
+```
+
+#### Referral note (`referral_note`)
+
+```
+**VHT REFERRAL NOTE**
+
+**Triage:** 🟢 GREEN (Manage at Community Level)
+**Reason:** Routine evidence retrieval from national guidelines
+
+**Actions taken:**
+• Assess patient carefully
+• Check for danger signs (see below)
+• If unsure, refer to health facility
+
+**Referral completed:** [ ]
+**Health worker received:** [ ]
+
+---
+_This is a VHT referral. Please assess patient promptly._
+```
+
+#### Quick summary (`quick_summary`)
+
+```
+MANAGE AT HOME
+Reason: Routine evidence retrieval from national guidelines
+Action: Follow advice below, monitor for changes
+```
+
+#### BM25 + guardrail evidence bundle (`response`)
 
 ```
 **WHO Malaria Guidelines (NCBI Bookshelf)**
@@ -1480,11 +2290,11 @@ Citations: Page 159, Page 162, Page 386
 
 ```
 
-**Guardrail**: passed=`True` | errors=0 | warnings=0
-
 ---
 
 ### 11. Query
+
+**Full query**
 
 > Resistance to artemisinin in Southeast Asia
 
@@ -1495,7 +2305,89 @@ Citations: Page 159, Page 162, Page 386
 - Page 191: P. vivax
 - Page 192: P. vivax
 
-**Response**
+**Metrics:** Triage `GREEN` | Guardrail passed=`True` | Confidence `0.90` | errors=0 | warnings=0
+
+#### VHT standard (`vht_response`)
+
+```
+**QUICK SUMMARY: GREEN (Manage at Community Level)**
+
+• What I see: Routine evidence retrieval from national guidelines
+• What to do: Follow advice below, monitor for changes
+• What NOT to do: Do NOT give medicine at home for danger signs
+
+**WHAT TO DO (step by step):**
+
+**Step 1:** Assess patient carefully
+**Step 2:** Check for danger signs (see below)
+**Step 3:** If unsure, refer to health facility
+**Step 4:** Record all findings
+
+**MONITORING:**
+
+• Check if patient can drink normally
+• Watch for convulsions or shaking
+• Monitor breathing – is it fast or difficult?
+• Check if patient is awake and alert
+• Look for pale or yellow skin/eyes
+
+**DANGER SIGNS - STOP AND REFER IF YOU SEE:**
+
+• Cannot drink or breastfeed
+• Very weak, cannot sit up or wake up
+• Shaking/fitting (convulsions)
+• Vomiting everything
+• Difficulty breathing
+• Pale or yellow skin/eyes
+• Bleeding from any place
+
+**WHAT TO TELL THE FAMILY:**
+
+The symptoms can be managed at home with guidance. Follow the advice you were given. Come back if symptoms get worse.
+
+**REMEMBER AS A VHT:**
+
+• Always check for danger signs first
+• If you are unsure, it is better to refer
+• Record all patients you see
+• Keep your VHT kit and referral forms ready
+
+**FROM THE GUIDELINES:**
+
+• WHO Malaria Guidelines (NCBI Bookshelf), Page 226: Untitled
+• WHO Malaria Guidelines (NCBI Bookshelf), Page 222: Artemisinin-resistant falciparum malaria
+• WHO Malaria Guidelines (NCBI Bookshelf), Page 226: Considerations in use of artemisinin-based combination therapy
+```
+
+#### Referral note (`referral_note`)
+
+```
+**VHT REFERRAL NOTE**
+
+**Triage:** 🟢 GREEN (Manage at Community Level)
+**Reason:** Routine evidence retrieval from national guidelines
+
+**Actions taken:**
+• Assess patient carefully
+• Check for danger signs (see below)
+• If unsure, refer to health facility
+
+**Referral completed:** [ ]
+**Health worker received:** [ ]
+
+---
+_This is a VHT referral. Please assess patient promptly._
+```
+
+#### Quick summary (`quick_summary`)
+
+```
+MANAGE AT HOME
+Reason: Routine evidence retrieval from national guidelines
+Action: Follow advice below, monitor for changes
+```
+
+#### BM25 + guardrail evidence bundle (`response`)
 
 ```
 **WHO Malaria Guidelines (NCBI Bookshelf)**
@@ -1598,11 +2490,11 @@ Citations: Page 191, Page 192, Page 222, Page 226
 
 ```
 
-**Guardrail**: passed=`True` | errors=0 | warnings=0
-
 ---
 
 ### 12. Query
+
+**Full query**
 
 > Hypoglycemia in severe malaria
 
@@ -1613,7 +2505,89 @@ Citations: Page 191, Page 192, Page 222, Page 226
 - Page 386: Systematic review summary
 - Page 157: Benefits and harms
 
-**Response**
+**Metrics:** Triage `GREEN` | Guardrail passed=`True` | Confidence `0.90` | errors=0 | warnings=0
+
+#### VHT standard (`vht_response`)
+
+```
+**QUICK SUMMARY: GREEN (Manage at Community Level)**
+
+• What I see: Routine evidence retrieval from national guidelines
+• What to do: Follow advice below, monitor for changes
+• What NOT to do: Do NOT give medicine at home for danger signs
+
+**WHAT TO DO (step by step):**
+
+**Step 1:** Assess patient carefully
+**Step 2:** Check for danger signs (see below)
+**Step 3:** If unsure, refer to health facility
+**Step 4:** Record all findings
+
+**MONITORING:**
+
+• Check if patient can drink normally
+• Watch for convulsions or shaking
+• Monitor breathing – is it fast or difficult?
+• Check if patient is awake and alert
+• Look for pale or yellow skin/eyes
+
+**DANGER SIGNS - STOP AND REFER IF YOU SEE:**
+
+• Cannot drink or breastfeed
+• Very weak, cannot sit up or wake up
+• Shaking/fitting (convulsions)
+• Vomiting everything
+• Difficulty breathing
+• Pale or yellow skin/eyes
+• Bleeding from any place
+
+**WHAT TO TELL THE FAMILY:**
+
+The symptoms can be managed at home with guidance. Follow the advice you were given. Come back if symptoms get worse.
+
+**REMEMBER AS A VHT:**
+
+• Always check for danger signs first
+• If you are unsure, it is better to refer
+• Record all patients you see
+• Keep your VHT kit and referral forms ready
+
+**FROM THE GUIDELINES:**
+
+• WHO Malaria Guidelines (NCBI Bookshelf), Page 268: Untitled
+• WHO Malaria Guidelines (NCBI Bookshelf), Page 458: Population:
+• WHO Malaria Guidelines (NCBI Bookshelf), Page 211: Treatment of severe malaria
+```
+
+#### Referral note (`referral_note`)
+
+```
+**VHT REFERRAL NOTE**
+
+**Triage:** 🟢 GREEN (Manage at Community Level)
+**Reason:** Routine evidence retrieval from national guidelines
+
+**Actions taken:**
+• Assess patient carefully
+• Check for danger signs (see below)
+• If unsure, refer to health facility
+
+**Referral completed:** [ ]
+**Health worker received:** [ ]
+
+---
+_This is a VHT referral. Please assess patient promptly._
+```
+
+#### Quick summary (`quick_summary`)
+
+```
+MANAGE AT HOME
+Reason: Routine evidence retrieval from national guidelines
+Action: Follow advice below, monitor for changes
+```
+
+#### BM25 + guardrail evidence bundle (`response`)
 
 ```
 **WHO Malaria Guidelines (NCBI Bookshelf)**
@@ -1720,11 +2694,11 @@ Citations: Page 157, Page 211, Page 268, Page 386, Page 458
 
 ```
 
-**Guardrail**: passed=`True` | errors=0 | warnings=0
-
 ---
 
 ### 13. Query
+
+**Full query**
 
 > Fluid management in severe malaria adults
 
@@ -1735,7 +2709,89 @@ Citations: Page 157, Page 211, Page 268, Page 386, Page 458
 - Page 218: Benefits and harms
 - Page 404: Publication bias: no serious.
 
-**Response**
+**Metrics:** Triage `GREEN` | Guardrail passed=`True` | Confidence `0.90` | errors=0 | warnings=0
+
+#### VHT standard (`vht_response`)
+
+```
+**QUICK SUMMARY: GREEN (Manage at Community Level)**
+
+• What I see: Routine evidence retrieval from national guidelines
+• What to do: Follow advice below, monitor for changes
+• What NOT to do: Do NOT give medicine at home for danger signs
+
+**WHAT TO DO (step by step):**
+
+**Step 1:** Assess patient carefully
+**Step 2:** Check for danger signs (see below)
+**Step 3:** If unsure, refer to health facility
+**Step 4:** Record all findings
+
+**MONITORING:**
+
+• Check if patient can drink normally
+• Watch for convulsions or shaking
+• Monitor breathing – is it fast or difficult?
+• Check if patient is awake and alert
+• Look for pale or yellow skin/eyes
+
+**DANGER SIGNS - STOP AND REFER IF YOU SEE:**
+
+• Cannot drink or breastfeed
+• Very weak, cannot sit up or wake up
+• Shaking/fitting (convulsions)
+• Vomiting everything
+• Difficulty breathing
+• Pale or yellow skin/eyes
+• Bleeding from any place
+
+**WHAT TO TELL THE FAMILY:**
+
+The symptoms can be managed at home with guidance. Follow the advice you were given. Come back if symptoms get worse.
+
+**REMEMBER AS A VHT:**
+
+• Always check for danger signs first
+• If you are unsure, it is better to refer
+• Record all patients you see
+• Keep your VHT kit and referral forms ready
+
+**FROM THE GUIDELINES:**
+
+• WHO Malaria Guidelines (NCBI Bookshelf), Page 213: Additional aspects of management
+• WHO Malaria Guidelines (NCBI Bookshelf), Page 212: Management of complications
+• WHO Malaria Guidelines (NCBI Bookshelf), Page 211: Clinical assessment
+```
+
+#### Referral note (`referral_note`)
+
+```
+**VHT REFERRAL NOTE**
+
+**Triage:** 🟢 GREEN (Manage at Community Level)
+**Reason:** Routine evidence retrieval from national guidelines
+
+**Actions taken:**
+• Assess patient carefully
+• Check for danger signs (see below)
+• If unsure, refer to health facility
+
+**Referral completed:** [ ]
+**Health worker received:** [ ]
+
+---
+_This is a VHT referral. Please assess patient promptly._
+```
+
+#### Quick summary (`quick_summary`)
+
+```
+MANAGE AT HOME
+Reason: Routine evidence retrieval from national guidelines
+Action: Follow advice below, monitor for changes
+```
+
+#### BM25 + guardrail evidence bundle (`response`)
 
 ```
 **WHO Malaria Guidelines (NCBI Bookshelf)**
@@ -1848,11 +2904,11 @@ Citations: Page 211, Page 212, Page 213, Page 218, Page 404
 
 ```
 
-**Guardrail**: passed=`True` | errors=0 | warnings=0
-
 ---
 
 ### 14. Query
+
+**Full query**
 
 > Exchange transfusion malaria criteria
 
@@ -1863,7 +2919,89 @@ Citations: Page 211, Page 212, Page 213, Page 218, Page 404
 - Page 245: Research needs
 - Page 150: Research needs
 
-**Response**
+**Metrics:** Triage `GREEN` | Guardrail passed=`True` | Confidence `0.90` | errors=0 | warnings=0
+
+#### VHT standard (`vht_response`)
+
+```
+**QUICK SUMMARY: GREEN (Manage at Community Level)**
+
+• What I see: Routine evidence retrieval from national guidelines
+• What to do: Follow advice below, monitor for changes
+• What NOT to do: Do NOT give medicine at home for danger signs
+
+**WHAT TO DO (step by step):**
+
+**Step 1:** Assess patient carefully
+**Step 2:** Check for danger signs (see below)
+**Step 3:** If unsure, refer to health facility
+**Step 4:** Record all findings
+
+**MONITORING:**
+
+• Check if patient can drink normally
+• Watch for convulsions or shaking
+• Monitor breathing – is it fast or difficult?
+• Check if patient is awake and alert
+• Look for pale or yellow skin/eyes
+
+**DANGER SIGNS - STOP AND REFER IF YOU SEE:**
+
+• Cannot drink or breastfeed
+• Very weak, cannot sit up or wake up
+• Shaking/fitting (convulsions)
+• Vomiting everything
+• Difficulty breathing
+• Pale or yellow skin/eyes
+• Bleeding from any place
+
+**WHAT TO TELL THE FAMILY:**
+
+The symptoms can be managed at home with guidance. Follow the advice you were given. Come back if symptoms get worse.
+
+**REMEMBER AS A VHT:**
+
+• Always check for danger signs first
+• If you are unsure, it is better to refer
+• Record all patients you see
+• Keep your VHT kit and referral forms ready
+
+**FROM THE GUIDELINES:**
+
+• WHO Malaria Guidelines (NCBI Bookshelf), Page 213: Additional aspects of management
+• WHO Malaria Guidelines (NCBI Bookshelf), Page 128: Untitled
+• WHO Malaria Guidelines (NCBI Bookshelf), Page 235: Research needs
+```
+
+#### Referral note (`referral_note`)
+
+```
+**VHT REFERRAL NOTE**
+
+**Triage:** 🟢 GREEN (Manage at Community Level)
+**Reason:** Routine evidence retrieval from national guidelines
+
+**Actions taken:**
+• Assess patient carefully
+• Check for danger signs (see below)
+• If unsure, refer to health facility
+
+**Referral completed:** [ ]
+**Health worker received:** [ ]
+
+---
+_This is a VHT referral. Please assess patient promptly._
+```
+
+#### Quick summary (`quick_summary`)
+
+```
+MANAGE AT HOME
+Reason: Routine evidence retrieval from national guidelines
+Action: Follow advice below, monitor for changes
+```
+
+#### BM25 + guardrail evidence bundle (`response`)
 
 ```
 **WHO Malaria Guidelines (NCBI Bookshelf)**
@@ -1984,11 +3122,11 @@ Citations: Page 128, Page 150, Page 213, Page 235, Page 245
 
 ```
 
-**Guardrail**: passed=`True` | errors=0 | warnings=0
-
 ---
 
 ### 15. Query
+
+**Full query**
 
 > Cerebral malaria supportive care
 
@@ -1999,7 +3137,89 @@ Citations: Page 128, Page 150, Page 213, Page 235, Page 245
 - Page 211: Therapeutic objectives
 - Page 411: Publication bias: no serious.
 
-**Response**
+**Metrics:** Triage `GREEN` | Guardrail passed=`True` | Confidence `0.90` | errors=0 | warnings=0
+
+#### VHT standard (`vht_response`)
+
+```
+**QUICK SUMMARY: GREEN (Manage at Community Level)**
+
+• What I see: Routine evidence retrieval from national guidelines
+• What to do: Follow advice below, monitor for changes
+• What NOT to do: Do NOT give medicine at home for danger signs
+
+**WHAT TO DO (step by step):**
+
+**Step 1:** Assess patient carefully
+**Step 2:** Check for danger signs (see below)
+**Step 3:** If unsure, refer to health facility
+**Step 4:** Record all findings
+
+**MONITORING:**
+
+• Check if patient can drink normally
+• Watch for convulsions or shaking
+• Monitor breathing – is it fast or difficult?
+• Check if patient is awake and alert
+• Look for pale or yellow skin/eyes
+
+**DANGER SIGNS - STOP AND REFER IF YOU SEE:**
+
+• Cannot drink or breastfeed
+• Very weak, cannot sit up or wake up
+• Shaking/fitting (convulsions)
+• Vomiting everything
+• Difficulty breathing
+• Pale or yellow skin/eyes
+• Bleeding from any place
+
+**WHAT TO TELL THE FAMILY:**
+
+The symptoms can be managed at home with guidance. Follow the advice you were given. Come back if symptoms get worse.
+
+**REMEMBER AS A VHT:**
+
+• Always check for danger signs first
+• If you are unsure, it is better to refer
+• Record all patients you see
+• Keep your VHT kit and referral forms ready
+
+**FROM THE GUIDELINES:**
+
+• WHO Malaria Guidelines (NCBI Bookshelf), Page 210: 5.2.2 Treating severe malaria
+• WHO Malaria Guidelines (NCBI Bookshelf), Page 212: Continuing supportive care
+• WHO Malaria Guidelines (NCBI Bookshelf), Page 220: Continuing supportive care
+```
+
+#### Referral note (`referral_note`)
+
+```
+**VHT REFERRAL NOTE**
+
+**Triage:** 🟢 GREEN (Manage at Community Level)
+**Reason:** Routine evidence retrieval from national guidelines
+
+**Actions taken:**
+• Assess patient carefully
+• Check for danger signs (see below)
+• If unsure, refer to health facility
+
+**Referral completed:** [ ]
+**Health worker received:** [ ]
+
+---
+_This is a VHT referral. Please assess patient promptly._
+```
+
+#### Quick summary (`quick_summary`)
+
+```
+MANAGE AT HOME
+Reason: Routine evidence retrieval from national guidelines
+Action: Follow advice below, monitor for changes
+```
+
+#### BM25 + guardrail evidence bundle (`response`)
 
 ```
 **WHO Malaria Guidelines (NCBI Bookshelf)**
@@ -2108,11 +3328,11 @@ Citations: Page 210, Page 211, Page 212, Page 220, Page 411
 
 ```
 
-**Guardrail**: passed=`True` | errors=0 | warnings=0
-
 ---
 
 ### 16. Query
+
+**Full query**
 
 > Artesunate dose for severe malaria IV
 
@@ -2123,7 +3343,89 @@ Citations: Page 210, Page 211, Page 212, Page 220, Page 411
 - Page 217: Artemether
 - Page 220: Pre-referral treatment options (2015)
 
-**Response**
+**Metrics:** Triage `GREEN` | Guardrail passed=`True` | Confidence `0.90` | errors=0 | warnings=0
+
+#### VHT standard (`vht_response`)
+
+```
+**QUICK SUMMARY: GREEN (Manage at Community Level)**
+
+• What I see: Routine evidence retrieval from national guidelines
+• What to do: Follow advice below, monitor for changes
+• What NOT to do: Do NOT give medicine at home for danger signs
+
+**WHAT TO DO (step by step):**
+
+**Step 1:** Confirm patient weight before calculating dose
+**Step 2:** Explain dosing schedule to caregiver
+**Step 3:** Observe first dose if possible
+**Step 4:** Complete full course even if symptoms improve
+
+**MONITORING:**
+
+• Check if patient can drink normally
+• Watch for convulsions or shaking
+• Monitor breathing – is it fast or difficult?
+• Check if patient is awake and alert
+• Look for pale or yellow skin/eyes
+
+**DANGER SIGNS - STOP AND REFER IF YOU SEE:**
+
+• Cannot drink or breastfeed
+• Very weak, cannot sit up or wake up
+• Shaking/fitting (convulsions)
+• Vomiting everything
+• Difficulty breathing
+• Pale or yellow skin/eyes
+• Bleeding from any place
+
+**WHAT TO TELL THE FAMILY:**
+
+The symptoms can be managed at home with guidance. Follow the advice you were given. Come back if symptoms get worse.
+
+**REMEMBER AS A VHT:**
+
+• Always check for danger signs first
+• If you are unsure, it is better to refer
+• Record all patients you see
+• Keep your VHT kit and referral forms ready
+
+**FROM THE GUIDELINES:**
+
+• WHO Malaria Guidelines (NCBI Bookshelf), Page 155: Schedule
+• WHO Malaria Guidelines (NCBI Bookshelf), Page 211: Treatment of severe malaria
+• WHO Malaria Guidelines (NCBI Bookshelf), Page 22: Untitled
+```
+
+#### Referral note (`referral_note`)
+
+```
+**VHT REFERRAL NOTE**
+
+**Triage:** 🟢 GREEN (Manage at Community Level)
+**Reason:** Routine evidence retrieval from national guidelines
+
+**Actions taken:**
+• Confirm patient weight before calculating dose
+• Explain dosing schedule to caregiver
+• Observe first dose if possible
+
+**Referral completed:** [ ]
+**Health worker received:** [ ]
+
+---
+_This is a VHT referral. Please assess patient promptly._
+```
+
+#### Quick summary (`quick_summary`)
+
+```
+MANAGE AT HOME
+Reason: Routine evidence retrieval from national guidelines
+Action: Follow advice below, monitor for changes
+```
+
+#### BM25 + guardrail evidence bundle (`response`)
 
 ```
 **WHO Malaria Guidelines (NCBI Bookshelf)**
@@ -2230,11 +3532,11 @@ Citations: Page 22, Page 155, Page 211, Page 217, Page 220
 
 ```
 
-**Guardrail**: passed=`True` | errors=0 | warnings=0
-
 ---
 
 ### 17. Query
+
+**Full query**
 
 > Rectal artesunate pre-referral children
 
@@ -2245,7 +3547,89 @@ Citations: Page 22, Page 155, Page 211, Page 217, Page 220
 - Page 220: Pre-referral treatment options (2015)
 - Page 221: Other considerations
 
-**Response**
+**Metrics:** Triage `GREEN` | Guardrail passed=`True` | Confidence `0.90` | errors=0 | warnings=0
+
+#### VHT standard (`vht_response`)
+
+```
+**QUICK SUMMARY: GREEN (Manage at Community Level)**
+
+• What I see: Routine evidence retrieval from national guidelines
+• What to do: Follow advice below, monitor for changes
+• What NOT to do: Do NOT give medicine at home for danger signs
+
+**WHAT TO DO (step by step):**
+
+**Step 1:** Assess patient carefully
+**Step 2:** Check for danger signs (see below)
+**Step 3:** If unsure, refer to health facility
+**Step 4:** Record all findings
+
+**MONITORING:**
+
+• Check if patient can drink normally
+• Watch for convulsions or shaking
+• Monitor breathing – is it fast or difficult?
+• Check if patient is awake and alert
+• Look for pale or yellow skin/eyes
+
+**DANGER SIGNS - STOP AND REFER IF YOU SEE:**
+
+• Cannot drink or breastfeed
+• Very weak, cannot sit up or wake up
+• Shaking/fitting (convulsions)
+• Vomiting everything
+• Difficulty breathing
+• Pale or yellow skin/eyes
+• Bleeding from any place
+
+**WHAT TO TELL THE FAMILY:**
+
+The symptoms can be managed at home with guidance. Follow the advice you were given. Come back if symptoms get worse.
+
+**REMEMBER AS A VHT:**
+
+• Always check for danger signs first
+• If you are unsure, it is better to refer
+• Record all patients you see
+• Keep your VHT kit and referral forms ready
+
+**FROM THE GUIDELINES:**
+
+• WHO Malaria Guidelines (NCBI Bookshelf), Page 219: 5.2.2.3 Pre-referral treatment options
+• WHO Malaria Guidelines (NCBI Bookshelf), Page 221: GRADE
+• WHO Malaria Guidelines (NCBI Bookshelf), Page 187: Untitled
+```
+
+#### Referral note (`referral_note`)
+
+```
+**VHT REFERRAL NOTE**
+
+**Triage:** 🟢 GREEN (Manage at Community Level)
+**Reason:** Routine evidence retrieval from national guidelines
+
+**Actions taken:**
+• Assess patient carefully
+• Check for danger signs (see below)
+• If unsure, refer to health facility
+
+**Referral completed:** [ ]
+**Health worker received:** [ ]
+
+---
+_This is a VHT referral. Please assess patient promptly._
+```
+
+#### Quick summary (`quick_summary`)
+
+```
+MANAGE AT HOME
+Reason: Routine evidence retrieval from national guidelines
+Action: Follow advice below, monitor for changes
+```
+
+#### BM25 + guardrail evidence bundle (`response`)
 
 ```
 **WHO Malaria Guidelines (NCBI Bookshelf)**
@@ -2360,11 +3744,11 @@ Citations: Page 187, Page 219, Page 220, Page 221
 
 ```
 
-**Guardrail**: passed=`True` | errors=0 | warnings=0
-
 ---
 
 ### 18. Query
+
+**Full query**
 
 > Malaria in HIV coinfection
 
@@ -2375,7 +3759,89 @@ Citations: Page 187, Page 219, Page 220, Page 221
 - Page 443: 5.2.1.4.3. Patients co-infected with HIV
 - Page 164: Diagnosis of malaria
 
-**Response**
+**Metrics:** Triage `GREEN` | Guardrail passed=`True` | Confidence `0.90` | errors=0 | warnings=0
+
+#### VHT standard (`vht_response`)
+
+```
+**QUICK SUMMARY: GREEN (Manage at Community Level)**
+
+• What I see: Routine evidence retrieval from national guidelines
+• What to do: Follow advice below, monitor for changes
+• What NOT to do: Do NOT give medicine at home for danger signs
+
+**WHAT TO DO (step by step):**
+
+**Step 1:** Assess patient carefully
+**Step 2:** Check for danger signs (see below)
+**Step 3:** If unsure, refer to health facility
+**Step 4:** Record all findings
+
+**MONITORING:**
+
+• Check if patient can drink normally
+• Watch for convulsions or shaking
+• Monitor breathing – is it fast or difficult?
+• Check if patient is awake and alert
+• Look for pale or yellow skin/eyes
+
+**DANGER SIGNS - STOP AND REFER IF YOU SEE:**
+
+• Cannot drink or breastfeed
+• Very weak, cannot sit up or wake up
+• Shaking/fitting (convulsions)
+• Vomiting everything
+• Difficulty breathing
+• Pale or yellow skin/eyes
+• Bleeding from any place
+
+**WHAT TO TELL THE FAMILY:**
+
+The symptoms can be managed at home with guidance. Follow the advice you were given. Come back if symptoms get worse.
+
+**REMEMBER AS A VHT:**
+
+• Always check for danger signs first
+• If you are unsure, it is better to refer
+• Record all patients you see
+• Keep your VHT kit and referral forms ready
+
+**FROM THE GUIDELINES:**
+
+• WHO Malaria Guidelines (NCBI Bookshelf), Page 188: 5.2.1.4.3 Patients co-infected with HIV
+• WHO Malaria Guidelines (NCBI Bookshelf), Page 156: Vaccination of special populations
+• WHO Malaria Guidelines (NCBI Bookshelf), Page 230: Acceptability
+```
+
+#### Referral note (`referral_note`)
+
+```
+**VHT REFERRAL NOTE**
+
+**Triage:** 🟢 GREEN (Manage at Community Level)
+**Reason:** Routine evidence retrieval from national guidelines
+
+**Actions taken:**
+• Assess patient carefully
+• Check for danger signs (see below)
+• If unsure, refer to health facility
+
+**Referral completed:** [ ]
+**Health worker received:** [ ]
+
+---
+_This is a VHT referral. Please assess patient promptly._
+```
+
+#### Quick summary (`quick_summary`)
+
+```
+MANAGE AT HOME
+Reason: Routine evidence retrieval from national guidelines
+Action: Follow advice below, monitor for changes
+```
+
+#### BM25 + guardrail evidence bundle (`response`)
 
 ```
 **WHO Malaria Guidelines (NCBI Bookshelf)**
@@ -2476,11 +3942,11 @@ Citations: Page 156, Page 164, Page 188, Page 230, Page 443
 
 ```
 
-**Guardrail**: passed=`True` | errors=0 | warnings=0
-
 ---
 
 ### 19. Query
+
+**Full query**
 
 > Species Plasmodium vivax relapse treatment
 
@@ -2491,7 +3957,89 @@ Citations: Page 156, Page 164, Page 188, Page 230, Page 443
 - Page 311: Untitled
 - Page 153: Malaria vaccine pipeline
 
-**Response**
+**Metrics:** Triage `GREEN` | Guardrail passed=`True` | Confidence `0.90` | errors=0 | warnings=0
+
+#### VHT standard (`vht_response`)
+
+```
+**QUICK SUMMARY: GREEN (Manage at Community Level)**
+
+• What I see: Routine evidence retrieval from national guidelines
+• What to do: Follow advice below, monitor for changes
+• What NOT to do: Do NOT give medicine at home for danger signs
+
+**WHAT TO DO (step by step):**
+
+**Step 1:** Assess patient carefully
+**Step 2:** Check for danger signs (see below)
+**Step 3:** If unsure, refer to health facility
+**Step 4:** Record all findings
+
+**MONITORING:**
+
+• Check if patient can drink normally
+• Watch for convulsions or shaking
+• Monitor breathing – is it fast or difficult?
+• Check if patient is awake and alert
+• Look for pale or yellow skin/eyes
+
+**DANGER SIGNS - STOP AND REFER IF YOU SEE:**
+
+• Cannot drink or breastfeed
+• Very weak, cannot sit up or wake up
+• Shaking/fitting (convulsions)
+• Vomiting everything
+• Difficulty breathing
+• Pale or yellow skin/eyes
+• Bleeding from any place
+
+**WHAT TO TELL THE FAMILY:**
+
+The symptoms can be managed at home with guidance. Follow the advice you were given. Come back if symptoms get worse.
+
+**REMEMBER AS A VHT:**
+
+• Always check for danger signs first
+• If you are unsure, it is better to refer
+• Record all patients you see
+• Keep your VHT kit and referral forms ready
+
+**FROM THE GUIDELINES:**
+
+• WHO Malaria Guidelines (NCBI Bookshelf), Page 190: knowlesi
+• WHO Malaria Guidelines (NCBI Bookshelf), Page 310: Untitled
+• WHO Malaria Guidelines (NCBI Bookshelf), Page 34: Etiology
+```
+
+#### Referral note (`referral_note`)
+
+```
+**VHT REFERRAL NOTE**
+
+**Triage:** 🟢 GREEN (Manage at Community Level)
+**Reason:** Routine evidence retrieval from national guidelines
+
+**Actions taken:**
+• Assess patient carefully
+• Check for danger signs (see below)
+• If unsure, refer to health facility
+
+**Referral completed:** [ ]
+**Health worker received:** [ ]
+
+---
+_This is a VHT referral. Please assess patient promptly._
+```
+
+#### Quick summary (`quick_summary`)
+
+```
+MANAGE AT HOME
+Reason: Routine evidence retrieval from national guidelines
+Action: Follow advice below, monitor for changes
+```
+
+#### BM25 + guardrail evidence bundle (`response`)
 
 ```
 **WHO Malaria Guidelines (NCBI Bookshelf)**
@@ -2598,11 +4146,11 @@ Citations: Page 34, Page 153, Page 190, Page 310, Page 311
 
 ```
 
-**Guardrail**: passed=`True` | errors=0 | warnings=0
-
 ---
 
 ### 20. Query
+
+**Full query**
 
 > Monitoring after antimalarial treatment failure
 
@@ -2613,7 +4161,89 @@ Citations: Page 34, Page 153, Page 190, Page 310, Page 311
 - Page 22: National adaptation and implementation (2010)
 - Page 227: National adaptation and implementation (2010)
 
-**Response**
+**Metrics:** Triage `GREEN` | Guardrail passed=`True` | Confidence `0.90` | errors=0 | warnings=0
+
+#### VHT standard (`vht_response`)
+
+```
+**QUICK SUMMARY: GREEN (Manage at Community Level)**
+
+• What I see: Routine evidence retrieval from national guidelines
+• What to do: Follow advice below, monitor for changes
+• What NOT to do: Do NOT give medicine at home for danger signs
+
+**WHAT TO DO (step by step):**
+
+**Step 1:** Assess patient carefully
+**Step 2:** Check for danger signs (see below)
+**Step 3:** If unsure, refer to health facility
+**Step 4:** Record all findings
+
+**MONITORING:**
+
+• Check if patient can drink normally
+• Watch for convulsions or shaking
+• Monitor breathing – is it fast or difficult?
+• Check if patient is awake and alert
+• Look for pale or yellow skin/eyes
+
+**DANGER SIGNS - STOP AND REFER IF YOU SEE:**
+
+• Cannot drink or breastfeed
+• Very weak, cannot sit up or wake up
+• Shaking/fitting (convulsions)
+• Vomiting everything
+• Difficulty breathing
+• Pale or yellow skin/eyes
+• Bleeding from any place
+
+**WHAT TO TELL THE FAMILY:**
+
+The symptoms can be managed at home with guidance. Follow the advice you were given. Come back if symptoms get worse.
+
+**REMEMBER AS A VHT:**
+
+• Always check for danger signs first
+• If you are unsure, it is better to refer
+• Record all patients you see
+• Keep your VHT kit and referral forms ready
+
+**FROM THE GUIDELINES:**
+
+• WHO Malaria Guidelines (NCBI Bookshelf), Page 224: Therapeutic efficacy
+• WHO Malaria Guidelines (NCBI Bookshelf), Page 22: Monitoring efficacy and safety of antimalarial drugs and resistance (2010)
+• WHO Malaria Guidelines (NCBI Bookshelf), Page 224: Monitoring efficacy and safety of antimalarial drugs and resistance (2010)
+```
+
+#### Referral note (`referral_note`)
+
+```
+**VHT REFERRAL NOTE**
+
+**Triage:** 🟢 GREEN (Manage at Community Level)
+**Reason:** Routine evidence retrieval from national guidelines
+
+**Actions taken:**
+• Assess patient carefully
+• Check for danger signs (see below)
+• If unsure, refer to health facility
+
+**Referral completed:** [ ]
+**Health worker received:** [ ]
+
+---
+_This is a VHT referral. Please assess patient promptly._
+```
+
+#### Quick summary (`quick_summary`)
+
+```
+MANAGE AT HOME
+Reason: Routine evidence retrieval from national guidelines
+Action: Follow advice below, monitor for changes
+```
+
+#### BM25 + guardrail evidence bundle (`response`)
 
 ```
 **WHO Malaria Guidelines (NCBI Bookshelf)**
@@ -2720,11 +4350,11 @@ Citations: Page 22, Page 224, Page 227
 
 ```
 
-**Guardrail**: passed=`True` | errors=0 | warnings=0
-
 ---
 
 ### 21. Query
+
+**Full query**
 
 > Quality assurance microscopy
 
@@ -2735,7 +4365,89 @@ Citations: Page 22, Page 224, Page 227
 - Page 196: Guidance
 - Page 307: Untitled
 
-**Response**
+**Metrics:** Triage `GREEN` | Guardrail passed=`True` | Confidence `0.90` | errors=0 | warnings=0
+
+#### VHT standard (`vht_response`)
+
+```
+**QUICK SUMMARY: GREEN (Manage at Community Level)**
+
+• What I see: Routine evidence retrieval from national guidelines
+• What to do: Follow advice below, monitor for changes
+• What NOT to do: Do NOT give medicine at home for danger signs
+
+**WHAT TO DO (step by step):**
+
+**Step 1:** Assess patient carefully
+**Step 2:** Check for danger signs (see below)
+**Step 3:** If unsure, refer to health facility
+**Step 4:** Record all findings
+
+**MONITORING:**
+
+• Check if patient can drink normally
+• Watch for convulsions or shaking
+• Monitor breathing – is it fast or difficult?
+• Check if patient is awake and alert
+• Look for pale or yellow skin/eyes
+
+**DANGER SIGNS - STOP AND REFER IF YOU SEE:**
+
+• Cannot drink or breastfeed
+• Very weak, cannot sit up or wake up
+• Shaking/fitting (convulsions)
+• Vomiting everything
+• Difficulty breathing
+• Pale or yellow skin/eyes
+• Bleeding from any place
+
+**WHAT TO TELL THE FAMILY:**
+
+The symptoms can be managed at home with guidance. Follow the advice you were given. Come back if symptoms get worse.
+
+**REMEMBER AS A VHT:**
+
+• Always check for danger signs first
+• If you are unsure, it is better to refer
+• Record all patients you see
+• Keep your VHT kit and referral forms ready
+
+**FROM THE GUIDELINES:**
+
+• WHO Malaria Guidelines (NCBI Bookshelf), Page 165: Untitled
+• WHO Malaria Guidelines (NCBI Bookshelf), Page 225: General guiding principles for choosing a case management strategy and tools
+• WHO Malaria Guidelines (NCBI Bookshelf), Page 164: Parasitological diagnosis
+```
+
+#### Referral note (`referral_note`)
+
+```
+**VHT REFERRAL NOTE**
+
+**Triage:** 🟢 GREEN (Manage at Community Level)
+**Reason:** Routine evidence retrieval from national guidelines
+
+**Actions taken:**
+• Assess patient carefully
+• Check for danger signs (see below)
+• If unsure, refer to health facility
+
+**Referral completed:** [ ]
+**Health worker received:** [ ]
+
+---
+_This is a VHT referral. Please assess patient promptly._
+```
+
+#### Quick summary (`quick_summary`)
+
+```
+MANAGE AT HOME
+Reason: Routine evidence retrieval from national guidelines
+Action: Follow advice below, monitor for changes
+```
+
+#### BM25 + guardrail evidence bundle (`response`)
 
 ```
 **WHO Malaria Guidelines (NCBI Bookshelf)**
@@ -2858,11 +4570,11 @@ Citations: Page 164, Page 165, Page 196, Page 225, Page 307
 
 ```
 
-**Guardrail**: passed=`True` | errors=0 | warnings=0
-
 ---
 
 ### 22. Query
+
+**Full query**
 
 > Integrated community case management fever
 
@@ -2873,7 +4585,88 @@ Citations: Page 164, Page 165, Page 196, Page 225, Page 307
 - Page 37: Global vector control response 2017–2030
 - Page 28: Untitled
 
-**Response**
+**Metrics:** Triage `GREEN` | Guardrail passed=`True` | Confidence `0.90` | errors=0 | warnings=0
+
+#### VHT standard (`vht_response`)
+
+```
+**QUICK SUMMARY: GREEN (Manage at Community Level)**
+
+• What I see: Routine evidence retrieval from national guidelines
+• What to do: Follow advice below, monitor for changes
+• What NOT to do: Do NOT give medicine at home for danger signs
+
+**WHAT TO DO (step by step):**
+
+**Step 1:** Check temperature – feel child's body, hot to touch?
+**Step 2:** Remove extra clothing
+**Step 3:** Wipe with cool (not cold) cloth
+**Step 4:** Offer frequent small drinks if able to swallow
+**Step 5:** Continue breastfeeding if baby
+
+**MONITORING:**
+
+• Check temperature every 4 hours
+• Watch for danger signs (cannot drink, convulsions, lethargy)
+• If fever >3 days → refer immediately
+
+**DANGER SIGNS - STOP AND REFER IF YOU SEE:**
+
+• Cannot drink or breastfeed
+• Very weak, cannot sit up or wake up
+• Shaking/fitting (convulsions)
+• Vomiting everything
+• Difficulty breathing
+• Pale or yellow skin/eyes
+• Bleeding from any place
+
+**WHAT TO TELL THE FAMILY:**
+
+The symptoms can be managed at home with guidance. Follow the advice you were given. Come back if symptoms get worse.
+
+**REMEMBER AS A VHT:**
+
+• Always check for danger signs first
+• If you are unsure, it is better to refer
+• Record all patients you see
+• Keep your VHT kit and referral forms ready
+
+**FROM THE GUIDELINES:**
+
+• WHO Malaria Guidelines (NCBI Bookshelf), Page 164: Untitled
+• WHO Malaria Guidelines (NCBI Bookshelf), Page 227: Other operational issues in managing effective treatment
+• WHO Malaria Guidelines (NCBI Bookshelf), Page 225: General guiding principles for choosing a case management strategy and tools
+```
+
+#### Referral note (`referral_note`)
+
+```
+**VHT REFERRAL NOTE**
+
+**Triage:** 🟢 GREEN (Manage at Community Level)
+**Reason:** Routine evidence retrieval from national guidelines
+
+**Actions taken:**
+• Check temperature – feel child's body, hot to touch?
+• Remove extra clothing
+• Wipe with cool (not cold) cloth
+
+**Referral completed:** [ ]
+**Health worker received:** [ ]
+
+---
+_This is a VHT referral. Please assess patient promptly._
+```
+
+#### Quick summary (`quick_summary`)
+
+```
+MANAGE AT HOME
+Reason: Routine evidence retrieval from national guidelines
+Action: Follow advice below, monitor for changes
+```
+
+#### BM25 + guardrail evidence bundle (`response`)
 
 ```
 **WHO Malaria Guidelines (NCBI Bookshelf)**
@@ -3000,11 +4793,11 @@ Citations: Page 28, Page 37, Page 164, Page 225, Page 227
 
 ```
 
-**Guardrail**: passed=`True` | errors=0 | warnings=0
-
 ---
 
 ### 23. Query
+
+**Full query**
 
 > Ethics of placebo-controlled malaria trials
 
@@ -3015,7 +4808,89 @@ Citations: Page 28, Page 37, Page 164, Page 225, Page 227
 - Page 453: Anaemia in third
 - Page 128: Untitled
 
-**Response**
+**Metrics:** Triage `GREEN` | Guardrail passed=`True` | Confidence `0.90` | errors=0 | warnings=0
+
+#### VHT standard (`vht_response`)
+
+```
+**QUICK SUMMARY: GREEN (Manage at Community Level)**
+
+• What I see: Routine evidence retrieval from national guidelines
+• What to do: Follow advice below, monitor for changes
+• What NOT to do: Do NOT give medicine at home for danger signs
+
+**WHAT TO DO (step by step):**
+
+**Step 1:** Assess patient carefully
+**Step 2:** Check for danger signs (see below)
+**Step 3:** If unsure, refer to health facility
+**Step 4:** Record all findings
+
+**MONITORING:**
+
+• Check if patient can drink normally
+• Watch for convulsions or shaking
+• Monitor breathing – is it fast or difficult?
+• Check if patient is awake and alert
+• Look for pale or yellow skin/eyes
+
+**DANGER SIGNS - STOP AND REFER IF YOU SEE:**
+
+• Cannot drink or breastfeed
+• Very weak, cannot sit up or wake up
+• Shaking/fitting (convulsions)
+• Vomiting everything
+• Difficulty breathing
+• Pale or yellow skin/eyes
+• Bleeding from any place
+
+**WHAT TO TELL THE FAMILY:**
+
+The symptoms can be managed at home with guidance. Follow the advice you were given. Come back if symptoms get worse.
+
+**REMEMBER AS A VHT:**
+
+• Always check for danger signs first
+• If you are unsure, it is better to refer
+• Record all patients you see
+• Keep your VHT kit and referral forms ready
+
+**FROM THE GUIDELINES:**
+
+• WHO Malaria Guidelines (NCBI Bookshelf), Page 280: Untitled
+• WHO Malaria Guidelines (NCBI Bookshelf), Page 108: Untitled
+• WHO Malaria Guidelines (NCBI Bookshelf), Page 453: parasitaemia
+```
+
+#### Referral note (`referral_note`)
+
+```
+**VHT REFERRAL NOTE**
+
+**Triage:** 🟢 GREEN (Manage at Community Level)
+**Reason:** Routine evidence retrieval from national guidelines
+
+**Actions taken:**
+• Assess patient carefully
+• Check for danger signs (see below)
+• If unsure, refer to health facility
+
+**Referral completed:** [ ]
+**Health worker received:** [ ]
+
+---
+_This is a VHT referral. Please assess patient promptly._
+```
+
+#### Quick summary (`quick_summary`)
+
+```
+MANAGE AT HOME
+Reason: Routine evidence retrieval from national guidelines
+Action: Follow advice below, monitor for changes
+```
+
+#### BM25 + guardrail evidence bundle (`response`)
 
 ```
 **WHO Malaria Guidelines (NCBI Bookshelf)**
@@ -3128,11 +5003,11 @@ Citations: Page 108, Page 128, Page 280, Page 453
 
 ```
 
-**Guardrail**: passed=`True` | errors=0 | warnings=0
-
 ---
 
 ### 24. Query
+
+**Full query**
 
 > Vector control bed nets IRS
 
@@ -3143,7 +5018,89 @@ Citations: Page 108, Page 128, Page 280, Page 453
 - Page 68: Acceptability
 - Page 41: 4.1.1 Interventions recommended for large-scale deployment
 
-**Response**
+**Metrics:** Triage `GREEN` | Guardrail passed=`True` | Confidence `0.90` | errors=0 | warnings=0
+
+#### VHT standard (`vht_response`)
+
+```
+**QUICK SUMMARY: GREEN (Manage at Community Level)**
+
+• What I see: Routine evidence retrieval from national guidelines
+• What to do: Follow advice below, monitor for changes
+• What NOT to do: Do NOT give medicine at home for danger signs
+
+**WHAT TO DO (step by step):**
+
+**Step 1:** Assess patient carefully
+**Step 2:** Check for danger signs (see below)
+**Step 3:** If unsure, refer to health facility
+**Step 4:** Record all findings
+
+**MONITORING:**
+
+• Check if patient can drink normally
+• Watch for convulsions or shaking
+• Monitor breathing – is it fast or difficult?
+• Check if patient is awake and alert
+• Look for pale or yellow skin/eyes
+
+**DANGER SIGNS - STOP AND REFER IF YOU SEE:**
+
+• Cannot drink or breastfeed
+• Very weak, cannot sit up or wake up
+• Shaking/fitting (convulsions)
+• Vomiting everything
+• Difficulty breathing
+• Pale or yellow skin/eyes
+• Bleeding from any place
+
+**WHAT TO TELL THE FAMILY:**
+
+The symptoms can be managed at home with guidance. Follow the advice you were given. Come back if symptoms get worse.
+
+**REMEMBER AS A VHT:**
+
+• Always check for danger signs first
+• If you are unsure, it is better to refer
+• Record all patients you see
+• Keep your VHT kit and referral forms ready
+
+**FROM THE GUIDELINES:**
+
+• WHO Malaria Guidelines (NCBI Bookshelf), Page 297: Untitled
+• WHO Malaria Guidelines (NCBI Bookshelf), Page 298: Untitled
+• WHO Malaria Guidelines (NCBI Bookshelf), Page 338: measurements
+```
+
+#### Referral note (`referral_note`)
+
+```
+**VHT REFERRAL NOTE**
+
+**Triage:** 🟢 GREEN (Manage at Community Level)
+**Reason:** Routine evidence retrieval from national guidelines
+
+**Actions taken:**
+• Assess patient carefully
+• Check for danger signs (see below)
+• If unsure, refer to health facility
+
+**Referral completed:** [ ]
+**Health worker received:** [ ]
+
+---
+_This is a VHT referral. Please assess patient promptly._
+```
+
+#### Quick summary (`quick_summary`)
+
+```
+MANAGE AT HOME
+Reason: Routine evidence retrieval from national guidelines
+Action: Follow advice below, monitor for changes
+```
+
+#### BM25 + guardrail evidence bundle (`response`)
 
 ```
 **WHO Malaria Guidelines (NCBI Bookshelf)**
@@ -3250,11 +5207,11 @@ Citations: Page 41, Page 68, Page 297, Page 298, Page 338
 
 ```
 
-**Guardrail**: passed=`True` | errors=0 | warnings=0
-
 ---
 
 ### 25. Query
+
+**Full query**
 
 > Elimination strategies and surveillance
 
@@ -3265,7 +5222,89 @@ Citations: Page 41, Page 68, Page 297, Page 298, Page 338
 - Page 15: (2022)
 - Page 36: Untitled
 
-**Response**
+**Metrics:** Triage `GREEN` | Guardrail passed=`True` | Confidence `0.90` | errors=0 | warnings=0
+
+#### VHT standard (`vht_response`)
+
+```
+**QUICK SUMMARY: GREEN (Manage at Community Level)**
+
+• What I see: Routine evidence retrieval from national guidelines
+• What to do: Follow advice below, monitor for changes
+• What NOT to do: Do NOT give medicine at home for danger signs
+
+**WHAT TO DO (step by step):**
+
+**Step 1:** Assess patient carefully
+**Step 2:** Check for danger signs (see below)
+**Step 3:** If unsure, refer to health facility
+**Step 4:** Record all findings
+
+**MONITORING:**
+
+• Check if patient can drink normally
+• Watch for convulsions or shaking
+• Monitor breathing – is it fast or difficult?
+• Check if patient is awake and alert
+• Look for pale or yellow skin/eyes
+
+**DANGER SIGNS - STOP AND REFER IF YOU SEE:**
+
+• Cannot drink or breastfeed
+• Very weak, cannot sit up or wake up
+• Shaking/fitting (convulsions)
+• Vomiting everything
+• Difficulty breathing
+• Pale or yellow skin/eyes
+• Bleeding from any place
+
+**WHAT TO TELL THE FAMILY:**
+
+The symptoms can be managed at home with guidance. Follow the advice you were given. Come back if symptoms get worse.
+
+**REMEMBER AS A VHT:**
+
+• Always check for danger signs first
+• If you are unsure, it is better to refer
+• Record all patients you see
+• Keep your VHT kit and referral forms ready
+
+**FROM THE GUIDELINES:**
+
+• WHO Malaria Guidelines (NCBI Bookshelf), Page 228: 6. Interventions in the final phase of elimination and prevention of re-establishment
+• WHO Malaria Guidelines (NCBI Bookshelf), Page 30: Scope
+• WHO Malaria Guidelines (NCBI Bookshelf), Page 146: (2022)
+```
+
+#### Referral note (`referral_note`)
+
+```
+**VHT REFERRAL NOTE**
+
+**Triage:** 🟢 GREEN (Manage at Community Level)
+**Reason:** Routine evidence retrieval from national guidelines
+
+**Actions taken:**
+• Assess patient carefully
+• Check for danger signs (see below)
+• If unsure, refer to health facility
+
+**Referral completed:** [ ]
+**Health worker received:** [ ]
+
+---
+_This is a VHT referral. Please assess patient promptly._
+```
+
+#### Quick summary (`quick_summary`)
+
+```
+MANAGE AT HOME
+Reason: Routine evidence retrieval from national guidelines
+Action: Follow advice below, monitor for changes
+```
+
+#### BM25 + guardrail evidence bundle (`response`)
 
 ```
 **WHO Malaria Guidelines (NCBI Bookshelf)**
@@ -3375,7 +5414,5 @@ Citations: Page 15, Page 30, Page 36, Page 146, Page 228
 **🧪 Guardrail Brain Validation:** ✅ Passed
 
 ```
-
-**Guardrail**: passed=`True` | errors=0 | warnings=0
 
 ---

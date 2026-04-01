@@ -18,6 +18,8 @@ from .config import (
     ValidationReport,
     TriageLevel,
     DangerSign,
+    MedicalSource,
+    medical_source_for_config,
     DEFAULT_UGANDA_CLINICAL_2023_PDF,
     DEFAULT_WHO_MALARIA_NIH_PDF,
     GENERAL_CLINICAL_CRITICAL_TERMS,
@@ -32,6 +34,8 @@ __all__: List[str] = [
     "ValidationReport",
     "TriageLevel",
     "DangerSign",
+    "MedicalSource",
+    "medical_source_for_config",
     "DEFAULT_WHO_MALARIA_NIH_PDF",
     "DEFAULT_UGANDA_CLINICAL_2023_PDF",
     "GENERAL_CLINICAL_CRITICAL_TERMS",
@@ -44,6 +48,10 @@ __all__: List[str] = [
     "SmartChunker",
     "MedicalGuardrailBrain",
     "MedicalQASystem",
+    "ResponseOrchestrator",
+    "ResponseContent",
+    "ResponseFormat",
+    "infer_triage_from_query",
 ]
 
 _LAZY_EXPORTS = {
@@ -52,6 +60,10 @@ _LAZY_EXPORTS = {
     "SmartChunker": ("chunker", "SmartChunker"),
     "MedicalGuardrailBrain": ("guardrail", "MedicalGuardrailBrain"),
     "MedicalQASystem": ("orchestrator", "MedicalQASystem"),
+    "ResponseOrchestrator": ("response", "ResponseOrchestrator"),
+    "ResponseContent": ("response", "ResponseContent"),
+    "ResponseFormat": ("response", "ResponseFormat"),
+    "infer_triage_from_query": ("response", "infer_triage_from_query"),
 }
 
 
