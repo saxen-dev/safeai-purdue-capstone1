@@ -8,7 +8,16 @@ from typing import Dict, List, Optional, Any
 
 from rank_bm25 import BM25Okapi
 
-from .config import ExtractionConfig
+from .config import ExtractionConfig, PreservationLevel
+
+# Keywords used to infer section_type from heading text.
+# Short tokens (mg, kg) use word-boundary matching to avoid false substring hits
+# (e.g. "kg" inside "background").  Longer tokens use plain substring matching.
+_DOSING_KEYWORDS_LONG = {"dose", "dosing", "dosage", "regimen", "schedule", "tablet"}
+_DOSING_KEYWORDS_SHORT = {"mg", "kg"}  # matched as whole words only
+_DIAGNOSIS_KEYWORDS = {"diagnosis", "diagnostic", "symptom", "sign", "test", "laboratory", "criteria"}
+_TREATMENT_KEYWORDS = {"treatment", "management", "therapy", "protocol", "intervention", "prophylaxis"}
+_CONTRAINDICATION_KEYWORDS = {"contraindication", "warning", "caution", "adverse", "side effect", "precaution"}
 
 
 class SmartChunker:
@@ -22,6 +31,40 @@ class SmartChunker:
         self.config = config
         self.chunks: List[Dict] = []
         self.chunk_index: Dict[str, Any] = {}
+
+    # ------------------------------------------------------------------
+    # Metadata inference helpers
+    # ------------------------------------------------------------------
+
+    @staticmethod
+    def _infer_section_type(heading: str, is_table_only: bool = False) -> str:
+        """Infer a coarse section type from heading text."""
+        if is_table_only:
+            return "table"
+        h = heading.lower()
+        # Use substring matching so plurals/suffixes (e.g. "contraindications") still match.
+        # Short tokens use word-boundary matching to avoid false hits (e.g. "kg" in "background").
+        _short_word_match = bool(re.search(r"\b(?:mg|kg)\b", h))
+        if any(kw in h for kw in _DOSING_KEYWORDS_LONG) or _short_word_match:
+            return "dosing"
+        if any(kw in h for kw in _CONTRAINDICATION_KEYWORDS):
+            return "contraindication"
+        if any(kw in h for kw in _DIAGNOSIS_KEYWORDS):
+            return "diagnosis"
+        if any(kw in h for kw in _TREATMENT_KEYWORDS):
+            return "treatment"
+        return "background"
+
+    @staticmethod
+    def _infer_preservation_level(
+        section_type: str, has_tables: bool
+    ) -> PreservationLevel:
+        """Infer how faithfully this chunk's text must be preserved in responses."""
+        if section_type in ("table", "dosing"):
+            return PreservationLevel.VERBATIM
+        if has_tables or section_type in ("contraindication", "treatment"):
+            return PreservationLevel.HIGH
+        return PreservationLevel.STANDARD
 
     def chunk_by_headings(self) -> List[Dict]:
         """Create chunks based on document headings."""
@@ -110,6 +153,10 @@ class SmartChunker:
         ):
             return None
 
+        has_tables = len(section_tables) > 0
+        section_type = self._infer_section_type(section["heading"])
+        preservation_level = self._infer_preservation_level(section_type, has_tables)
+
         return {
             "chunk_id": f"chunk_{len(self.chunks):06d}",
             "page": page_num,
@@ -117,9 +164,13 @@ class SmartChunker:
             "level": section["level"],
             "text": chunk_text,
             "tables": section_tables,
-            "has_tables": len(section_tables) > 0,
+            "has_tables": has_tables,
             "char_count": len(chunk_text),
             "word_count": len(chunk_text.split()),
+            "section_type": section_type,
+            "preservation_level": preservation_level.value,
+            # Populated during parent-child migration (future PR).
+            "related_chunk_ids": [],
         }
 
     def _add_table_chunks(self) -> None:
@@ -145,6 +196,9 @@ class SmartChunker:
                     "char_count": len(table.get("markdown", "")),
                     "word_count": len(table.get("markdown", "").split()),
                     "is_table_only": True,
+                    "section_type": "table",
+                    "preservation_level": PreservationLevel.VERBATIM.value,
+                    "related_chunk_ids": [],
                 }
                 self.chunks.append(table_chunk)
 
