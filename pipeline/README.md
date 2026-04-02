@@ -62,14 +62,25 @@ Writes `reports/response_layer_validation.md` (and a timestamped copy): summary 
 
 | Module | Purpose |
 |--------|---------|
-| `config.py` | `ExtractionConfig`, `ValidationReport`, `TriageLevel`, `DangerSign` |
-| `extractor.py` | `MultiPassExtractor` — PDF analysis, text/table/OCR extraction, cross-validation |
-| `validator.py` | `ExtractionValidator` — structure, tables, cross-consistency, medical content, human-review flags |
-| `chunker.py` | `SmartChunker` — semantic chunks by headings, BM25 search index |
+| `config.py` | `ExtractionConfig`, `ValidationReport`, `TriageLevel`, `DangerSign`, `MedicalSource`, `PreservationLevel` |
+| `extractor.py` | `MultiPassExtractor` — 6-pass PDF extraction (analyze, text, tables, OCR, cross-validate, images) |
+| `validator.py` | `ExtractionValidator` — 5-stage validation (structure, tables, cross-consistency, medical content, human-review flagging) |
+| `chunker.py` | `SmartChunker` — heading-based chunks (13-field schema), BM25 search index |
 | `guardrail.py` | `MedicalGuardrailBrain` — triage, dangerous advice, citations |
-| `orchestrator.py` | `MedicalQASystem` — runs pipeline, saves/loads KB, `answer()` |
+| `orchestrator.py` | `MedicalQASystem` — runs pipeline, saves/loads KB, `answer()`, `answer_with_response()` |
+| `response.py` | `ResponseOrchestrator`, `VHTResponseFormatter`, `infer_triage_from_query` |
 | `cli.py` | Interactive Q&A entry point |
 | `__main__.py` | Enables `python -m pipeline` |
+
+## Stage documentation
+
+Detailed docs for each pipeline stage live in `docs/`:
+
+| Doc | Covers |
+|-----|--------|
+| [`docs/pipeline_extraction.md`](../docs/pipeline_extraction.md) | `MultiPassExtractor` — all 6 passes, config fields, output schema |
+| [`docs/pipeline_validation.md`](../docs/pipeline_validation.md) | `ExtractionValidator` — all 5 stages, confidence scoring, human-review flags |
+| [`docs/pipeline_chunking.md`](../docs/pipeline_chunking.md) | `SmartChunker` — 13-field chunk schema, section types, preservation levels |
 
 ## Usage
 
