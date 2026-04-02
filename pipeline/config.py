@@ -73,6 +73,160 @@ class DangerSign(Enum):
     DEHYDRATION = "Signs of severe dehydration"
 
 
+# ---------------------------------------------------------------------------
+# Table classification keyword sets
+# ---------------------------------------------------------------------------
+# Used by MultiPassExtractor._classify_table() to assign every extracted table
+# one of five types: dosing | evidence | clinical_management | structural | other
+#
+# DOSING_TABLE_KEYWORDS / CLINICAL_TABLE_KEYWORDS are the document-agnostic
+# base sets.  Per-document additions go in ExtractionConfig.dosing_table_keywords
+# and ExtractionConfig.clinical_table_keywords (see factory presets below).
+# EVIDENCE_TABLE_KEYWORDS and STRUCTURAL_TABLE_KEYWORDS are universal and not
+# overridable per-document.
+
+DOSING_TABLE_KEYWORDS: List[str] = [
+    "dose",
+    "dosage",
+    "dosing",
+    "mg",
+    "tablet",
+    "regimen",
+    "body weight",
+    "weight",
+    "twice daily",
+    "once daily",
+    "three times",
+    "per day",
+    "mg/kg",
+    "course",
+    "administration",
+]
+
+# GRADE / evidence quality table markers (universal across guideline documents)
+EVIDENCE_TABLE_KEYWORDS: List[str] = [
+    "certainty of evidence",
+    "quality of evidence",
+    "grade",
+    "relative effect",
+    "risk ratio",
+    "odds ratio",
+    "absolute effect",
+    "anticipated effects",
+    "moderate certainty",
+    "low certainty",
+    "high certainty",
+    "very low certainty",
+    "rr ",
+    "or ",
+    "ci ",
+    "confidence interval",
+]
+
+# Structural / non-clinical table markers (ToC, abbreviation lists)
+STRUCTURAL_TABLE_KEYWORDS: List[str] = [
+    "abbreviation",
+    "acronym",
+    "definition",
+    "table of contents",
+    "glossary",
+    "full name",
+    "meaning",
+]
+
+# General clinical management keywords (non-dosing safety-critical content)
+CLINICAL_TABLE_KEYWORDS: List[str] = [
+    "management",
+    "complication",
+    "severe",
+    "danger sign",
+    "referral",
+    "treatment failure",
+    "emergency",
+    "protocol",
+    "guideline",
+    "recommendation",
+]
+
+# Malaria-specific dosing table keywords (added to base set in who_malaria preset)
+MALARIA_DOSING_TABLE_KEYWORDS: List[str] = [
+    "artemether",
+    "lumefantrine",
+    "artesunate",
+    "amodiaquine",
+    "mefloquine",
+    "sulfadoxine",
+    "pyrimethamine",
+    "piperaquine",
+    "primaquine",
+    "dihydroartemisinin",
+    "dha",
+    "act",
+    "chloroquine",
+    "quinine",
+]
+
+# Uganda clinical guidelines dosing keywords (broader drug coverage)
+UGANDA_DOSING_TABLE_KEYWORDS: List[str] = [
+    "amoxicillin",
+    "cotrimoxazole",
+    "metronidazole",
+    "ciprofloxacin",
+    "doxycycline",
+    "penicillin",
+    "gentamicin",
+    "ampicillin",
+    "erythromycin",
+    "fluconazole",
+    "oral rehydration",
+    "zinc",
+    "vitamin a",
+    "paracetamol",
+    "ibuprofen",
+    "prednisolone",
+    "insulin",
+    "glibenclamide",
+    "metformin",
+    "salbutamol",
+]
+
+# Uganda clinical management keywords (broader specialties)
+UGANDA_CLINICAL_TABLE_KEYWORDS: List[str] = [
+    "management",
+    "complication",
+    "severe",
+    "danger sign",
+    "referral",
+    "treatment failure",
+    "emergency",
+    "protocol",
+    "guideline",
+    "recommendation",
+    "diagnosis",
+    "diagnostic criteria",
+    "classification",
+    "staging",
+    "level of care",
+    "hc2",
+    "hc3",
+    "hc4",
+    "hospital",
+    "outpatient",
+    "inpatient",
+    "antenatal",
+    "postnatal",
+    "immunisation",
+    "nutrition",
+    "hiv",
+    "tb",
+    "malaria",
+    "diarrhoea",
+    "pneumonia",
+    "sepsis",
+]
+
+
+# ---------------------------------------------------------------------------
 # Terms searched in extracted text for Stage 4 (medical plausibility heuristic).
 # WHO malaria PDF is expected to match MALARIA_*; Uganda broad guidelines use GENERAL_*.
 # Default locations for validated source PDFs (override with --pdf / env as needed).
@@ -136,7 +290,7 @@ class ExtractionConfig:
     # Scan every page for PyMuPDF tables (not only the Pass-0 sample); slower but catches tables after page ~20.
     full_document_table_scan: bool = True
     # Bump to invalidate extraction pickle cache after engine changes.
-    extraction_engine_version: int = 2
+    extraction_engine_version: int = 3
     min_chunk_size: int = 500
     max_chunk_size: int = 2000
     chunk_overlap: int = 200
@@ -148,6 +302,11 @@ class ExtractionConfig:
     document_title: str = "Clinical guidelines"
     # If None, validator uses GENERAL_CLINICAL_CRITICAL_TERMS
     critical_content_terms: Optional[List[str]] = None
+    # Extra dosing keywords added to DOSING_TABLE_KEYWORDS for table classification.
+    # Set per-document in factory presets (e.g., ACT drug names for malaria).
+    dosing_table_keywords: Optional[List[str]] = None
+    # Extra clinical management keywords added to CLINICAL_TABLE_KEYWORDS.
+    clinical_table_keywords: Optional[List[str]] = None
 
     def __post_init__(self) -> None:
         # Normalize path: expanduser, resolve for stable cache keys on absolute paths
@@ -176,6 +335,7 @@ def extraction_config_who_malaria_nih(
         output_dir=str(out),
         document_title="WHO Malaria Guidelines (NCBI Bookshelf)",
         critical_content_terms=list(MALARIA_GUIDELINE_CRITICAL_TERMS),
+        dosing_table_keywords=list(MALARIA_DOSING_TABLE_KEYWORDS),
     )
 
 
@@ -195,6 +355,8 @@ def extraction_config_uganda_clinical_2023(
         output_dir=str(out),
         document_title="Uganda Clinical Guidelines 2023",
         critical_content_terms=list(UGANDA_CLINICAL_CRITICAL_TERMS),
+        dosing_table_keywords=list(UGANDA_DOSING_TABLE_KEYWORDS),
+        clinical_table_keywords=list(UGANDA_CLINICAL_TABLE_KEYWORDS),
     )
 
 

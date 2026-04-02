@@ -4,6 +4,7 @@ Multi-pass PDF extraction engine.
 
 import os
 import json
+import re
 import hashlib
 import pickle
 from datetime import datetime
@@ -15,7 +16,13 @@ import fitz  # PyMuPDF
 import numpy as np
 from rapidfuzz import fuzz
 
-from .config import ExtractionConfig
+from .config import (
+    ExtractionConfig,
+    DOSING_TABLE_KEYWORDS,
+    EVIDENCE_TABLE_KEYWORDS,
+    STRUCTURAL_TABLE_KEYWORDS,
+    CLINICAL_TABLE_KEYWORDS,
+)
 
 try:
     import camelot
@@ -235,6 +242,68 @@ class MultiPassExtractor:
             doc.close()
         return pages_out
 
+    @staticmethod
+    def _classify_table(
+        table: Dict,
+        extra_dosing_keywords: List[str],
+        extra_clinical_keywords: List[str],
+    ) -> str:
+        """
+        Classify a table as one of five types:
+          dosing | evidence | clinical_management | structural | other
+
+        Classification is keyword-scored against the combined header + cell text.
+        Priority order: structural → evidence → dosing → clinical_management → other.
+        This matches the cascade used in the original stage2_cross_validation.py.
+        """
+        header_text = " ".join(str(h) for h in table.get("headers", [])).lower()
+        data_text = " ".join(
+            str(v)
+            for row in table.get("data", [])
+            for v in (row.values() if isinstance(row, dict) else row)
+        ).lower()
+        combined = header_text + " " + data_text
+
+        # --- structural check (abbreviation lists, ToC) ---
+        struct_hits = sum(1 for kw in STRUCTURAL_TABLE_KEYWORDS if kw in combined)
+        if struct_hits >= 1 and not re.search(r"\b\d+\s*mg\b|\bkg\b|\bbody weight\b", combined):
+            return "structural"
+
+        # --- evidence / GRADE quality tables ---
+        evidence_hits = sum(1 for kw in EVIDENCE_TABLE_KEYWORDS if kw in combined)
+        if evidence_hits >= 2:
+            return "evidence"
+
+        # --- dosing tables: base keywords + document-specific drug names ---
+        all_dosing_kws = DOSING_TABLE_KEYWORDS + extra_dosing_keywords
+        dosing_hits = sum(1 for kw in all_dosing_kws if kw in combined)
+        has_weight_pattern = bool(
+            re.search(
+                r"\b\d+\s*(to\s*<?|<|>|–|-)\s*\d+\s*kg\b"
+                r"|\bkg\b"
+                r"|\bbody weight\b"
+                r"|\bweight\s*\(",
+                combined,
+            )
+        )
+        has_dose_value = bool(
+            re.search(r"\b\d+\s*\+\s*\d+\s*mg\b|\b\d+\s*mg\b|\b\d+\s*mg/kg\b", combined)
+        )
+        if dosing_hits >= 2 or (dosing_hits >= 1 and (has_weight_pattern or has_dose_value)):
+            return "dosing"
+
+        # --- clinical management tables ---
+        all_clinical_kws = CLINICAL_TABLE_KEYWORDS + extra_clinical_keywords
+        clinical_hits = sum(1 for kw in all_clinical_kws if kw in combined)
+        if clinical_hits >= 1:
+            return "clinical_management"
+
+        # --- weak dosing signal (single keyword or pattern only) ---
+        if dosing_hits >= 1 or has_weight_pattern or has_dose_value:
+            return "dosing"
+
+        return "other"
+
     def pass_images_extraction(self) -> List[Dict[str, Any]]:
         """
         Rasterize embedded images per page to PNG under output_dir/images/.
@@ -285,8 +354,11 @@ class MultiPassExtractor:
         return inventory
 
     def pass2_table_extraction(self, pages_with_tables: List[int]) -> List[Dict]:
-        """Pass 2: Specialized table extraction."""
+        """Pass 2: Specialized table extraction with classification."""
         print(f"\n📊 [Pass 2] Table extraction on {len(pages_with_tables)} pages...")
+
+        extra_dosing = self.config.dosing_table_keywords or []
+        extra_clinical = self.config.clinical_table_keywords or []
 
         tables = []
         doc = fitz.open(self.config.pdf_path)
@@ -307,7 +379,7 @@ class MultiPassExtractor:
                         )
                         df.to_csv(table_file, index=False)
 
-                        tables.append({
+                        raw_table = {
                             "page": page_num,
                             "table_id": i,
                             "method": "pymupdf",
@@ -318,7 +390,11 @@ class MultiPassExtractor:
                             "num_cols": len(df.columns),
                             "file": table_file,
                             "confidence": 0.9,
-                        })
+                        }
+                        raw_table["classification"] = self._classify_table(
+                            raw_table, extra_dosing, extra_clinical
+                        )
+                        tables.append(raw_table)
             except Exception as e:
                 print(f"  Warning: Table extraction on page {page_num} failed: {e}")
 
@@ -331,26 +407,30 @@ class MultiPassExtractor:
                     lattice_tables = camelot.read_pdf(temp_pdf, pages="1", flavor="lattice")
                     for table in lattice_tables:
                         df = table.df
-                        tables.append({
+                        t = {
                             "page": page_num,
                             "method": "camelot_lattice",
                             "data": df.to_dict(orient="records"),
                             "headers": df.iloc[0].tolist(),
                             "markdown": _dataframe_to_markdown(df),
                             "confidence": 0.95,
-                        })
+                        }
+                        t["classification"] = self._classify_table(t, extra_dosing, extra_clinical)
+                        tables.append(t)
 
                     stream_tables = camelot.read_pdf(temp_pdf, pages="1", flavor="stream")
                     for table in stream_tables:
                         df = table.df
-                        tables.append({
+                        t = {
                             "page": page_num,
                             "method": "camelot_stream",
                             "data": df.to_dict(orient="records"),
                             "headers": df.iloc[0].tolist(),
                             "markdown": _dataframe_to_markdown(df),
                             "confidence": 0.85,
-                        })
+                        }
+                        t["classification"] = self._classify_table(t, extra_dosing, extra_clinical)
+                        tables.append(t)
 
                     if os.path.exists(temp_pdf):
                         os.remove(temp_pdf)
@@ -359,11 +439,19 @@ class MultiPassExtractor:
 
         doc.close()
 
+        # Summarise classification distribution for the pass log
+        classification_counts: Dict[str, int] = {}
+        for t in tables:
+            c = t.get("classification", "other")
+            classification_counts[c] = classification_counts.get(c, 0) + 1
+
         self.passes.append({
             "pass": 2,
             "strategy": "table_extraction",
             "tables_found": len(tables),
+            "classification_counts": classification_counts,
         })
+        print(f"  Classifications: {classification_counts}")
 
         return tables
 
