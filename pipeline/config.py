@@ -38,6 +38,23 @@ def medical_source_for_config(cfg: "ExtractionConfig") -> MedicalSource:
     return MedicalSource.GENERIC
 
 
+class PreservationLevel(Enum):
+    """
+    How faithfully a chunk's text must be reproduced in a VHT response.
+
+    VERBATIM  — dosing tables, drug names, and quantities: must be copied
+                exactly; no paraphrasing allowed.
+    HIGH      — procedural steps and diagnostic criteria: minor rephrasing
+                acceptable but all clinical values must be preserved.
+    STANDARD  — background / context paragraphs: may be summarised for the
+                VHT audience while retaining clinical accuracy.
+    """
+
+    VERBATIM = "verbatim"
+    HIGH = "high"
+    STANDARD = "standard"
+
+
 class DangerSign(Enum):
     # Pediatric danger signs (under 5)
     UNABLE_TO_DRINK = "Unable to drink or breastfeed"
@@ -124,7 +141,9 @@ class ExtractionConfig:
     max_chunk_size: int = 2000
     chunk_overlap: int = 200
     confidence_threshold: float = 0.8
-    num_extraction_passes: int = 3
+    # Passes 0-4 always run (analyze, text, tables, OCR, cross-validate).
+    # A supplementary image-extraction pass also runs when enable_image_extraction=True.
+    num_extraction_passes: int = 5
     # Shown in Q&A responses and saved metadata
     document_title: str = "Clinical guidelines"
     # If None, validator uses GENERAL_CLINICAL_CRITICAL_TERMS
