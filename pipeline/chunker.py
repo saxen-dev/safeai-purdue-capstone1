@@ -107,6 +107,128 @@ def _normalize_loc(raw: str) -> str:
 
 
 # ---------------------------------------------------------------------------
+# Parent-child chunking — token budget constants
+# ---------------------------------------------------------------------------
+_TOKEN_MULTIPLIER = 1.3
+_CHILD_MAX_TOKENS = 512
+_CHILD_OVERLAP_TOKENS = 50
+_CHILD_MIN_TOKENS = 50
+
+
+def _estimate_tokens(text: str) -> int:
+    """Approximate token count from word count (1.3× multiplier)."""
+    return int(len(text.split()) * _TOKEN_MULTIPLIER)
+
+
+def _split_recursive_paragraph(
+    text: str,
+    max_tokens: int = _CHILD_MAX_TOKENS,
+    overlap_tokens: int = _CHILD_OVERLAP_TOKENS,
+    min_tokens: int = _CHILD_MIN_TOKENS,
+) -> List[str]:
+    """
+    Split text on paragraph → sentence → word boundaries.
+
+    Builds chunks up to max_tokens, flushes and starts a new chunk when
+    adding the next paragraph would exceed the limit.  Long single paragraphs
+    are further split at sentence boundaries.  Consecutive chunks receive an
+    overlap prefix taken from the tail of the previous chunk.
+    """
+    paragraphs = re.split(r"\n\n+", text.strip())
+    chunks: List[str] = []
+    current: List[str] = []
+    current_tokens = 0
+
+    for para in paragraphs:
+        pt = _estimate_tokens(para)
+        if current_tokens + pt <= max_tokens:
+            current.append(para)
+            current_tokens += pt
+        else:
+            if current:
+                chunks.append("\n\n".join(current))
+            if pt > max_tokens:
+                sentences = re.split(r"(?<=[.!?])\s+", para)
+                sent_chunk: List[str] = []
+                sent_tokens = 0
+                for sent in sentences:
+                    st = _estimate_tokens(sent)
+                    if sent_tokens + st <= max_tokens:
+                        sent_chunk.append(sent)
+                        sent_tokens += st
+                    else:
+                        if sent_chunk:
+                            chunks.append(" ".join(sent_chunk))
+                        sent_chunk = [sent]
+                        sent_tokens = st
+                if sent_chunk:
+                    current = [" ".join(sent_chunk)]
+                    current_tokens = _estimate_tokens(current[0])
+                else:
+                    current = []
+                    current_tokens = 0
+            else:
+                current = [para]
+                current_tokens = pt
+
+    if current:
+        chunks.append("\n\n".join(current))
+
+    chunks = [c for c in chunks if _estimate_tokens(c) >= min_tokens]
+
+    if overlap_tokens > 0 and len(chunks) > 1:
+        overlap_words = int(overlap_tokens / _TOKEN_MULTIPLIER)
+        overlapped = [chunks[0]]
+        for i in range(1, len(chunks)):
+            tail = " ".join(chunks[i - 1].split()[-overlap_words:])
+            overlapped.append(tail + " " + chunks[i])
+        chunks = overlapped
+
+    return chunks if chunks else [text]
+
+
+def _decompose_propositions(
+    text: str,
+    max_tokens: int = 200,
+    min_tokens: int = 30,
+) -> List[str]:
+    """
+    Sentence-level decomposition for verbatim-preservation chunks.
+
+    Each output proposition is independently retrievable — critical for
+    safety content (danger signs, referral criteria, dosing rules) where
+    a single sentence carries a complete clinical fact.
+    """
+    sentences = re.split(r"(?<=[.!?:;])\s+", text.strip())
+    propositions: List[str] = []
+    current: List[str] = []
+    current_tokens = 0
+
+    for sent in sentences:
+        st = _estimate_tokens(sent)
+        if current_tokens + st <= max_tokens:
+            current.append(sent)
+            current_tokens += st
+        else:
+            if current:
+                propositions.append(" ".join(current))
+            current = [sent]
+            current_tokens = st
+
+    if current:
+        propositions.append(" ".join(current))
+
+    merged: List[str] = []
+    for prop in propositions:
+        if merged and _estimate_tokens(prop) < min_tokens:
+            merged[-1] = merged[-1] + " " + prop
+        else:
+            merged.append(prop)
+
+    return merged if merged else [text]
+
+
+# ---------------------------------------------------------------------------
 # Keywords used to infer section_type from heading text.
 # Short tokens (mg, kg) use word-boundary matching to avoid false substring hits
 # (e.g. "kg" inside "background").  Longer tokens use plain substring matching.
@@ -127,6 +249,7 @@ class SmartChunker:
         self.extraction = extraction_result
         self.config = config
         self.chunks: List[Dict] = []
+        self.children: List[Dict] = []
         self.chunk_index: Dict[str, Any] = {}
         self._image_by_page: Dict[int, List[Dict]] = self._load_image_inventory()
 
@@ -464,6 +587,158 @@ class SmartChunker:
             ids.extend(rc["context_for_tables"])
             ids.extend(rc["section_siblings"])
             chunk["related_chunk_ids"] = list(dict.fromkeys(ids))
+
+    # ------------------------------------------------------------------
+    # Parent-child chunking Phase 2
+    # ------------------------------------------------------------------
+
+    @staticmethod
+    def _build_contextual_header(chunk: Dict, doc_title: str = "") -> str:
+        """
+        Build a retrieval context header from chunk metadata.
+
+        The header is prepended to each child's text to form
+        ``contextual_content`` — the string embedded and BM25-indexed so the
+        retriever sees both the clinical context (condition, drug, source) and
+        the raw content in a single unit.
+        """
+        parts: List[str] = []
+        heading = chunk.get("heading", "")
+        if heading and heading.lower() not in ("untitled", "image"):
+            parts.append(heading)
+        cm = chunk.get("clinical_metadata") or {}
+        condition = cm.get("condition")
+        if condition and condition != heading:
+            parts.append(condition)
+        drug = cm.get("drug_name")
+        if drug:
+            parts.append(drug)
+        src_parts: List[str] = []
+        if doc_title:
+            src_parts.append(doc_title)
+        page = chunk.get("page")
+        if page:
+            src_parts.append(f"p.{page}")
+        if src_parts:
+            parts.append(f"Source: {' '.join(src_parts)}")
+        return f"[Context: {' | '.join(parts)}]" if parts else ""
+
+    def create_child_chunks(self, doc_title: str = "") -> List[Dict]:
+        """
+        Split parent chunks into smaller child chunks for dense retrieval.
+
+        Three-layer contextual retrieval architecture:
+          1. Contextual header (metadata summary) prepended to every child.
+          2. Child content — routed by preservation level:
+               VERBATIM  → proposition decomposition (≤200 tokens each)
+               HIGH      → recursive paragraph split (≤400 tokens)
+               STANDARD  → recursive paragraph split (≤512 tokens)
+          3. Dosing-table parents get an extra NLL child for natural-language
+             search alongside the verbatim table child.
+
+        Image placeholders are skipped; OCR image chunks get a single child.
+
+        Populates ``self.children`` and returns it.
+        """
+        children: List[Dict] = []
+        counter = 0
+
+        def _make_child(
+            parent: Dict,
+            text: str,
+            *,
+            suffix: str = "",
+            is_nll: bool = False,
+        ) -> Dict:
+            nonlocal counter
+            counter += 1
+            header = self._build_contextual_header(parent, doc_title)
+            contextual = f"{header}\n\n{text}" if header else text
+            pid = parent["chunk_id"]
+            return {
+                "chunk_id": f"child_{pid}_{counter:04d}",
+                "parent_chunk_id": pid,
+                "text": text,
+                "contextual_content": contextual,
+                "page": parent.get("page", 0),
+                "heading": parent.get("heading", ""),
+                "section_type": parent.get("section_type", "background"),
+                "preservation_level": parent.get("preservation_level",
+                                                  PreservationLevel.STANDARD.value),
+                "tables": [],
+                "has_tables": False,
+                "is_table_only": False,
+                "is_nll": is_nll,
+                "content_type": parent.get("content_type"),
+                "image_path": parent.get("image_path", ""),
+                "char_count": len(text),
+                "word_count": len(text.split()),
+                "clinical_metadata": parent.get("clinical_metadata",
+                                                 self._empty_clinical_metadata()),
+                "related_chunk_ids": [],
+                "related_chunks": parent.get("related_chunks", {}),
+            }
+
+        for parent in self.chunks:
+            text = parent.get("text", "")
+            pres = parent.get("preservation_level", PreservationLevel.STANDARD.value)
+            content_type = parent.get("content_type")
+            is_table = parent.get("is_table_only", False)
+
+            # Image placeholders — skip entirely.
+            if content_type == "image_placeholder":
+                continue
+
+            # Image OCR — one child carrying the OCR text.
+            if content_type == "image_ocr":
+                if text.strip() and _estimate_tokens(text) >= _CHILD_MIN_TOKENS:
+                    children.append(_make_child(parent, text, suffix="ocr"))
+                continue
+
+            # Standalone table chunks.
+            if is_table:
+                children.append(_make_child(parent, text, suffix="table"))
+                # Extra NLL child for dosing tables (natural-language search).
+                if parent.get("section_type") in ("table", "dosing"):
+                    for t in parent.get("tables", []):
+                        nll = (t.get("nll") or "").strip()
+                        if nll:
+                            children.append(_make_child(parent, nll,
+                                                        suffix="nll", is_nll=True))
+                            break  # one NLL child per table chunk
+                continue
+
+            # Narrative chunks — route by preservation level.
+            token_est = _estimate_tokens(text)
+
+            if pres == PreservationLevel.VERBATIM.value:
+                for i, prop in enumerate(_decompose_propositions(text)):
+                    children.append(_make_child(parent, prop, suffix=f"prop{i}"))
+
+            elif pres == PreservationLevel.HIGH.value:
+                if token_est <= 400:
+                    children.append(_make_child(parent, text))
+                else:
+                    for i, part in enumerate(
+                        _split_recursive_paragraph(text, max_tokens=400,
+                                                   overlap_tokens=_CHILD_OVERLAP_TOKENS)
+                    ):
+                        children.append(_make_child(parent, part, suffix=f"part{i}"))
+
+            else:  # STANDARD
+                if token_est <= _CHILD_MAX_TOKENS:
+                    children.append(_make_child(parent, text))
+                else:
+                    for i, part in enumerate(
+                        _split_recursive_paragraph(text)
+                    ):
+                        children.append(_make_child(parent, part, suffix=f"part{i}"))
+
+        self.children = children
+        ratio = f"{len(children)}/{len(self.chunks)}" if self.chunks else "0/0"
+        print(f"  Created {len(children)} child chunks from {len(self.chunks)} parents"
+              f" ({ratio} ratio)")
+        return children
 
     def chunk_by_headings(self) -> List[Dict]:
         """Create chunks based on document headings."""
