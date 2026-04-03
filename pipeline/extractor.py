@@ -43,6 +43,90 @@ try:
 except ImportError:
     TABULATE_AVAILABLE = False
 
+try:
+    import pytesseract as _pytesseract
+    from PIL import Image as _PIL_Image
+    _PYTESSERACT_AVAILABLE = True
+except ImportError:
+    _pytesseract = None  # type: ignore[assignment]
+    _PIL_Image = None    # type: ignore[assignment]
+    _PYTESSERACT_AVAILABLE = False
+
+try:
+    import easyocr as _easyocr
+    _EASYOCR_AVAILABLE = True
+except ImportError:
+    _easyocr = None  # type: ignore[assignment]
+    _EASYOCR_AVAILABLE = False
+
+# Lazy-initialised easyocr Reader (expensive to construct; share across images).
+_easyocr_reader = None
+
+# Regex for identifying figure/chart caption text near an image.
+_CAPTION_PREFIX_RE = re.compile(
+    r"^\s*(figure|fig\.?|plate|chart|diagram|photograph|photo|image)\s*\d*\.?\s*",
+    re.IGNORECASE,
+)
+
+
+def _ocr_image_file(path: str) -> str:
+    """Run OCR on an image file and return the extracted text.
+
+    Tries pytesseract first, then easyocr.  Falls back gracefully to an
+    empty string if neither engine is installed or the call fails.
+    """
+    global _easyocr_reader
+
+    if _PYTESSERACT_AVAILABLE:
+        try:
+            img = _PIL_Image.open(path)
+            return _pytesseract.image_to_string(img, lang="eng").strip()
+        except Exception:
+            pass
+
+    if _EASYOCR_AVAILABLE:
+        try:
+            if _easyocr_reader is None:
+                _easyocr_reader = _easyocr.Reader(["en"], gpu=False, verbose=False)
+            result = _easyocr_reader.readtext(path, detail=0)
+            return " ".join(str(r) for r in result).strip()
+        except Exception:
+            pass
+
+    return ""
+
+
+def _extract_image_caption(page: Any, xref: int) -> str:
+    """Attempt to extract a caption from page text near the image.
+
+    Uses PyMuPDF to find the image's bounding box on the page, then
+    searches text blocks in an 80 pt band immediately below the image
+    for caption-like text (Figure X, Fig., Chart, Plate, …).
+
+    Returns the caption string (max 300 chars) or empty string.
+    """
+    try:
+        rects = page.get_image_rects(xref)
+        if not rects:
+            return ""
+        img_rect = rects[0]
+        band_bottom = img_rect.y1 + 80
+
+        best: str = ""
+        for block in page.get_text("blocks"):
+            bx0, by0, bx1, by1, text, *_ = block
+            if not isinstance(text, str) or not text.strip():
+                continue
+            text = text.strip()
+            # Block must start below (or at) the image bottom and within the band.
+            if by0 >= img_rect.y1 - 5 and by0 <= band_bottom:
+                # Prefer explicit caption patterns; otherwise take first match.
+                if _CAPTION_PREFIX_RE.match(text) or not best:
+                    best = text
+        return best[:300]
+    except Exception:
+        return ""
+
 
 def _dataframe_to_markdown(df) -> str:
     """Prefer pandas to_markdown (needs tabulate); fall back to CSV-like text."""
@@ -390,27 +474,43 @@ class MultiPassExtractor:
                             pix = fitz.Pixmap(fitz.csRGB, pix)
                         fname = f"page{page_no}_img{img_index + 1}.png"
                         out_path = os.path.join(img_dir, fname)
+                        img_width, img_height = pix.width, pix.height
                         pix.save(out_path)
+                        pix = None
+                        caption = _extract_image_caption(page, xref)
+                        ocr_text = _ocr_image_file(out_path)
                         inventory.append({
                             "page": page_no,
                             "image_index": img_index + 1,
                             "xref": xref,
-                            "width": pix.width,
-                            "height": pix.height,
+                            "width": img_width,
+                            "height": img_height,
                             "file": out_path,
+                            "ocr_text": ocr_text,
+                            "caption": caption,
                         })
-                        pix = None
                     except Exception as e:
                         print(f"  Warning: image xref {xref} page {page_no}: {e}")
         finally:
             doc.close()
 
+        images_with_ocr = sum(1 for i in inventory if i.get("ocr_text"))
+        images_with_caption = sum(1 for i in inventory if i.get("caption"))
         self.passes.append({
             "pass": "images",
             "strategy": "embedded_raster",
             "images_saved": len(inventory),
+            "images_with_ocr": images_with_ocr,
+            "images_with_caption": images_with_caption,
+            "ocr_engine": (
+                "pytesseract" if _PYTESSERACT_AVAILABLE
+                else ("easyocr" if _EASYOCR_AVAILABLE else "none")
+            ),
         })
-        print(f"  Saved {len(inventory)} image(s) to {img_dir}")
+        print(
+            f"  Saved {len(inventory)} image(s) to {img_dir} "
+            f"({images_with_ocr} with OCR text, {images_with_caption} with caption)"
+        )
         return inventory
 
     def pass2_table_extraction(self, pages_with_tables: List[int]) -> List[Dict]:
