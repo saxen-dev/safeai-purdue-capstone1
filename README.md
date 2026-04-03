@@ -1,0 +1,183 @@
+# SafeAI Medical Guidelines Pipeline
+
+A production-grade pipeline for extracting, validating, chunking, and querying clinical guideline PDFs — built for Village Health Team (VHT) workers in low-resource settings.
+
+Given a medical guideline PDF (WHO Malaria Guidelines, Uganda Clinical Guidelines 2023, or any clinical document), the pipeline:
+
+1. **Extracts** text, tables, and images across 6 specialized passes
+2. **Validates** extraction quality with 6 independent stages including dosing plausibility checks
+3. **Chunks** content into semantically coherent units with 17-field clinical metadata
+4. **Generates** a physician review package with SHA-256 audit hashes and a deployment gate
+5. **Indexes** chunks for hybrid BM25 + dense retrieval with reciprocal rank fusion
+6. **Answers** clinical questions with guardrail-validated, triage-aware structured responses
+
+## Quick start
+
+```bash
+# Install
+pip install -r requirements-pipeline.txt
+
+# Run with WHO Malaria preset
+python run_pipeline.py --preset who-malaria --pdf /path/to/Bookshelf_NBK588130.pdf
+
+# Run with Uganda Clinical Guidelines preset
+python run_pipeline.py --preset uganda --pdf /path/to/Uganda_Clinical_Guidelines_2023.pdf
+
+# Run with any clinical PDF (no preset)
+python run_pipeline.py --pdf /path/to/any_guideline.pdf
+```
+
+After processing, the system drops into an interactive Q&A session in your terminal. See [docs/setup_and_usage.md](docs/setup_and_usage.md) for full installation and usage instructions.
+
+## Pipeline architecture
+
+```
+PDF Input
+  |
+  [Stage 1] Multi-pass extraction     pipeline/extractor.py
+  |           Pass 0: Document profiling
+  |           Pass 1: Text + headings (PyMuPDF)
+  |           Pass 2: Table extraction + page-boundary stitching
+  |           Pass 4: Cross-validation (pdfplumber)
+  |           Pass images: OCR + caption extraction
+  |
+  [Stage 2] 6-stage validation         pipeline/validator.py
+  |           Structure, tables, cross-consistency,
+  |           medical content, dosing plausibility (6 checks),
+  |           human review flagging
+  |
+  [Stage 3] Semantic chunking           pipeline/chunker.py
+  |           Parent chunks (heading-based)
+  |           -> Child chunks (preservation-level-aware splitting)
+  |           -> Clinical metadata extraction (17 fields)
+  |           -> Related chunk linking (3 passes)
+  |
+  [Stage 4] Clinical verification       pipeline/clinical_verifier.py
+  |           5-tier triage, 5 verification checks,
+  |           SHA-256 audit hashes, deployment gate
+  |
+  [Stage 5] Hybrid retrieval            pipeline/retriever.py
+  |           BM25 + FAISS dense + RRF fusion
+  |           + optional cross-encoder reranking
+  |
+  [Stage 6] Guardrail + Response        pipeline/guardrail.py
+              Two-brain validation        pipeline/response.py
+              Triage-aware VHT formatting
+              4 output formats (VHT, Quick, Clinician, Referral)
+```
+
+## Folder layout
+
+```
+safeai-purdue-capstone/
+|
+|-- run_pipeline.py              Entry point (delegates to pipeline/cli.py)
+|-- requirements-pipeline.txt    All Python dependencies (numpy<2 pinned)
+|-- .gitignore                   Ignores PDFs, output dirs, venvs
+|
+|-- pipeline/                    Core pipeline package (10 modules, ~6,000 lines)
+|   |-- __init__.py              Lazy exports for all public classes
+|   |-- __main__.py              Enables `python -m pipeline`
+|   |-- cli.py                   CLI argument parsing, preset selection
+|   |-- config.py                ExtractionConfig dataclass, preset factories
+|   |-- extractor.py             Multi-pass PDF extraction engine
+|   |-- validator.py             6-stage extraction validation
+|   |-- chunker.py               Semantic chunking + clinical metadata
+|   |-- clinical_verifier.py     Physician review package + deployment gate
+|   |-- retriever.py             Hybrid BM25 + dense + RRF retrieval
+|   |-- guardrail.py             Medical safety guardrail brain
+|   |-- response.py              VHT response formatting + triage
+|   +-- README.md                Developer guide (module map, chunk schema)
+|
+|-- configs/                     JSON config files for guideline presets
+|   |-- malaria_who_2025.json    WHO Malaria (12 drug keywords)
+|   |-- uganda_clinical_2023.json Uganda Clinical (212 drug keywords)
+|   +-- README.md                Config file format + how to add a new guideline
+|
+|-- tests/                       417 unit tests
+|   |-- test_classify_table.py       Table classification taxonomy
+|   |-- test_clinical_metadata.py    Metadata extraction
+|   |-- test_clinical_verifier.py    Review package + deployment gate
+|   |-- test_config_presets.py       Config factory functions
+|   |-- test_dosing_plausibility.py  6 dosing plausibility checks
+|   |-- test_hybrid_retriever.py     BM25 + dense + RRF retrieval
+|   |-- test_image_ocr_enrichment.py Image OCR in chunker
+|   |-- test_image_ocr_extractor.py  Image extraction + OCR
+|   |-- test_nll_generation.py       Natural language table descriptions
+|   |-- test_parent_child_chunking.py Parent-child chunk splitting
+|   |-- test_preservation_level.py   Preservation level inference
+|   |-- test_related_chunk_linking.py Related chunk linking
+|   +-- test_stitch_tables.py        Page-boundary table stitching
+|
+|-- docs/                        Strategy, rationale, and reference docs
+|   |-- setup_and_usage.md       Full setup, CLI walkthrough, troubleshooting
+|   |-- extraction_strategy.md   Multi-pass extraction + alternatives considered
+|   |-- chunking_strategy.md     Hierarchical chunking + alternatives considered
+|   |-- retrieval_strategy.md    Hybrid retrieval + alternatives considered
+|   |-- response_layer.md        Two-brain response architecture + rationale
+|   |-- safety_and_guardrails.md Safety measures across all pipeline stages
+|   +-- benchmarking_and_validation.md  Validation stages, test results, metrics
+|
+|-- scripts/                     Report generation scripts
+|   |-- who_malaria_pipeline_report.py      Full pipeline report (25 queries)
+|   +-- response_layer_validation_report.py Response layer validation (50 queries)
+|
+|-- reports/                     Generated benchmark reports
+|   |-- who_malaria_pipeline_report.md
+|   |-- uganda_clinical_pipeline_report.md
+|   +-- response_layer_validation.md
+|
++-- archive/                     Original standalone scripts (replaced by pipeline/)
+    |-- README.md                What each file was and what replaced it
+    +-- (12 archived files)
+```
+
+## Documentation
+
+### Getting started
+- **[Setup and usage guide](docs/setup_and_usage.md)** — Installation, running the pipeline, CLI walkthrough, troubleshooting
+
+### Design strategy and rationale
+- **[Extraction strategy](docs/extraction_strategy.md)** — Multi-pass extraction design, why PyMuPDF, alternatives rejected (Docling, LLM-based extraction, OCR-first)
+- **[Chunking strategy](docs/chunking_strategy.md)** — Hierarchical parent-child chunking, preservation levels, metadata extraction, alternatives rejected (fixed-size windows, LLM propositions)
+- **[Retrieval strategy](docs/retrieval_strategy.md)** — Hybrid BM25 + dense + RRF + reranking, alternatives rejected (dense-only, ChromaDB, ColBERT, HyDE)
+- **[Response layer](docs/response_layer.md)** — Two-brain architecture, VHT formatting, triage inference, template-based actions
+- **[Safety and guardrails](docs/safety_and_guardrails.md)** — Defense-in-depth safety across all 6 stages
+
+### Testing and benchmarks
+- **[Benchmarking and validation](docs/benchmarking_and_validation.md)** — 6-stage validation, dosing plausibility, clinical verification, test results for both PDFs
+
+### Developer reference
+- **[Pipeline developer guide](pipeline/README.md)** — Module map, chunk schema, execution flow, how to extend
+- **[Config file format](configs/README.md)** — JSON schema, how to add a new guideline
+- **[Archive](archive/README.md)** — What the original standalone scripts were and what replaced them
+
+## Benchmark results
+
+Tested on two clinical guideline PDFs:
+
+| Metric | WHO Malaria (478 pages) | Uganda Clinical (1,161 pages) |
+|---|---|---|
+| Tables extracted | 203 | 950 |
+| Tables stitched across pages | 77 | 170 |
+| Images extracted | 2 | 43 |
+| Semantic chunks created | 3,867 | 3,753 |
+| Child chunks for retrieval | 4,003 | 3,754 |
+| Validation: Structure | 80% PASS | 80% PASS |
+| Validation: Tables | 100% PASS | 100% PASS |
+| Validation: Cross-consistency | 83% | 94% PASS |
+| Validation: Medical content | 100% PASS | 100% PASS |
+| Validation: Dosing plausibility | 42% (8/19) | 97% PASS (495/509) |
+| Guardrail pass rate (25 queries) | 100% | 100% |
+| Response confidence | 0.90 | 0.90 |
+
+## Running tests
+
+```bash
+python -m pytest tests/ -q
+# 417 passed in ~25s
+```
+
+## License
+
+Purdue University Capstone Project — SafeAI Team.
