@@ -110,7 +110,13 @@ class MedicalQASystem:
         chunker = SmartChunker(self.extraction_result, self.config)
         self.chunks = chunker.chunk_by_headings()
         self.search_index = chunker.create_search_index()
-        self._retriever = HybridRetriever(self.chunks)
+        children = chunker.create_child_chunks(
+            doc_title=getattr(self.config, "document_title", "")
+        )
+        # Use children for retrieval when available (richer contextual_content);
+        # fall back to parent chunks when child generation produces nothing.
+        retrieval_units = children if children else self.chunks
+        self._retriever = HybridRetriever(retrieval_units)
 
         print("\n" + "=" * 70)
         print("STEP 4: INITIALIZING GUARDRAIL BRAIN")
@@ -175,7 +181,11 @@ class MedicalQASystem:
         chunker = SmartChunker({}, self.config)
         chunker.chunks = self.chunks
         self.search_index = chunker.create_search_index()
-        self._retriever = HybridRetriever(self.chunks)
+        children = chunker.create_child_chunks(
+            doc_title=getattr(self.config, "document_title", "")
+        )
+        retrieval_units = children if children else self.chunks
+        self._retriever = HybridRetriever(retrieval_units)
 
         self.guardrail = MedicalGuardrailBrain(self.chunks)
 

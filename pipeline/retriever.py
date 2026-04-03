@@ -112,7 +112,17 @@ class HybridRetriever:
 
     @staticmethod
     def _chunk_text(chunk: Dict[str, Any]) -> str:
-        """Concatenate chunk text with table NLL sentences for indexing."""
+        """
+        Return the text to index/embed for a chunk.
+
+        Child chunks (from parent-child Phase 2) carry a ``contextual_content``
+        field that prepends a metadata header — use it when present so the
+        retriever sees both context and content in a single unit.  Parent chunks
+        fall back to text + table NLL concatenation.
+        """
+        cc = chunk.get("contextual_content", "")
+        if cc:
+            return cc
         parts = [chunk.get("text", "")]
         for t in chunk.get("tables", []):
             nll = t.get("nll", "")
