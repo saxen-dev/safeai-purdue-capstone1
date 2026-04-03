@@ -6,3 +6,7 @@ rank-bm25>=0.2.2
 rapidfuzz>=3.0
 tabulate>=0.9.0
 pdfplumber>=0.10.0
+# Dense retrieval (pipeline/retriever.py — merged from requirements-rag.txt)
+sentence-transformers>=2.2.0
+chromadb>=0.4.0
+faiss-cpu>=1.7.0
