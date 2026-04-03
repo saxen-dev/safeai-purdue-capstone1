@@ -1,9 +1,12 @@
 """
-Complete production pipeline for WHO Malaria Guidelines
-with multi-pass extraction, validation, chunking, and two-brain Q&A.
+Complete production pipeline for medical guidelines (WHO Malaria, Uganda Clinical
+Guidelines 2023, or any arbitrary PDF) with multi-pass extraction, validation,
+chunking, dense retrieval, clinical verification, and two-brain Q&A.
 
 Entry point: run from project root with:
-  python run_pipeline.py
+  python run_pipeline.py --preset who-malaria --pdf /path/to/Bookshelf_NBK588130.pdf
+  python run_pipeline.py --preset uganda --pdf /path/to/Uganda_Clinical_Guidelines_2023.pdf
+  python run_pipeline.py --pdf /path/to/any_guideline.pdf
   python -m pipeline   # alternative
 """
 
