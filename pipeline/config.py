@@ -8,6 +8,8 @@ so output directories do not collide and medical-content checks match the doc.
 
 from __future__ import annotations
 
+import json
+import os
 from dataclasses import dataclass
 from enum import Enum
 from pathlib import Path
@@ -225,12 +227,37 @@ UGANDA_CLINICAL_TABLE_KEYWORDS: List[str] = [
 
 
 # ---------------------------------------------------------------------------
-# Terms searched in extracted text for Stage 4 (medical plausibility heuristic).
-# WHO malaria PDF is expected to match MALARIA_*; Uganda broad guidelines use GENERAL_*.
-# Default locations for validated source PDFs (override with --pdf / env as needed).
-DEFAULT_WHO_MALARIA_NIH_PDF = Path(r"C:\temp\capstone\Bookshelf_NBK588130.pdf")
+# Directory containing document-specific JSON config files.
+_CONFIGS_DIR: Path = Path(__file__).parent.parent / "configs"
+
+
+def _load_json_config(path: Path) -> Dict[str, Any]:
+    """Load a document JSON config file.
+
+    Returns the parsed dict, or an empty dict if the file is missing or
+    cannot be parsed (so callers can safely use .get() without guarding).
+    """
+    try:
+        with open(path, "r", encoding="utf-8") as f:
+            return json.load(f)
+    except Exception:
+        return {}
+
+
+# Default PDF paths for the two validated source documents.
+# Resolved in order: MALARIA_PDF / UGANDA_PDF env var → legacy Windows path.
+# On macOS/Linux set the env var to avoid passing --pdf every time:
+#   export MALARIA_PDF=/path/to/Bookshelf_NBK588130.pdf
+#   export UGANDA_PDF=/path/to/Uganda_Clinical_Guidelines_2023.pdf
+DEFAULT_WHO_MALARIA_NIH_PDF = Path(
+    os.environ.get("MALARIA_PDF")
+    or os.environ.get("WHO_MALARIA_PDF")
+    or r"C:\temp\capstone\Bookshelf_NBK588130.pdf"
+)
 DEFAULT_UGANDA_CLINICAL_2023_PDF = Path(
-    r"C:\temp\capstone\Uganda Clinical Guidelines 2023.pdf"
+    os.environ.get("UGANDA_PDF")
+    or os.environ.get("UGANDA_CLINICAL_PDF")
+    or r"C:\temp\capstone\Uganda Clinical Guidelines 2023.pdf"
 )
 
 GENERAL_CLINICAL_CRITICAL_TERMS: List[str] = [
@@ -318,22 +345,46 @@ class ExtractionConfig:
 
 
 def extraction_config_who_malaria_nih(
-    pdf_path: str | Path = Path(r"C:\temp\capstone\Bookshelf_NBK588130.pdf"),
+    pdf_path: str | Path = DEFAULT_WHO_MALARIA_NIH_PDF,
     *,
     output_dir: Optional[str | Path] = None,
 ) -> ExtractionConfig:
+    """Preset for the WHO Malaria Guidelines PDF (NCBI Bookshelf NBK588130).
+
+    Vocabulary is loaded from configs/malaria_who_2025.json when present,
+    augmented by the hard-coded MALARIA_DOSING_TABLE_KEYWORDS constants.
+    Falls back gracefully to the constants-only vocabulary if the JSON is
+    absent (so the module works out-of-the-box from any working directory).
     """
-    Preset for Bookshelf NIH WHO malaria booklet (NCBI NBK588130).
-    """
+    doc = _load_json_config(_CONFIGS_DIR / "malaria_who_2025.json")
+
     pdf = Path(pdf_path).expanduser()
     base = pdf.parent
-    out = Path(output_dir) if output_dir else base / "medical_kb_who_malaria"
+    out_name: str = doc.get("output_dir") or "medical_kb_who_malaria"
+    out = Path(output_dir) if output_dir else base / out_name
+
+    # Dosing keywords: JSON drug_keywords + dosing_keywords + hard-coded constants
+    drug_kws: List[str] = doc.get("drug_keywords") or []
+    dosing_kws: List[str] = doc.get("dosing_keywords") or []
+    all_dosing: List[str] = list(dict.fromkeys(
+        drug_kws + dosing_kws + list(MALARIA_DOSING_TABLE_KEYWORDS)
+    )) or list(MALARIA_DOSING_TABLE_KEYWORDS)
+
+    # Clinical table keywords: malaria PDF has none in JSON (empty list is fine)
+    clinical_kws: List[str] = doc.get("clinical_table_keywords") or []
+
+    title: str = (
+        (doc.get("document") or {}).get("title")
+        or "WHO Malaria Guidelines (NCBI Bookshelf)"
+    )
+
     return ExtractionConfig(
         pdf_path=str(pdf),
         output_dir=str(out),
-        document_title="WHO Malaria Guidelines (NCBI Bookshelf)",
+        document_title=title,
         critical_content_terms=list(MALARIA_GUIDELINE_CRITICAL_TERMS),
-        dosing_table_keywords=list(MALARIA_DOSING_TABLE_KEYWORDS),
+        dosing_table_keywords=all_dosing,
+        clinical_table_keywords=clinical_kws or None,
     )
 
 
@@ -342,19 +393,45 @@ def extraction_config_uganda_clinical_2023(
     *,
     output_dir: Optional[str | Path] = None,
 ) -> ExtractionConfig:
+    """Preset for the Uganda Clinical Guidelines 2023 PDF (broad MoH content).
+
+    Vocabulary is loaded from configs/uganda_clinical_2023.json when present,
+    augmented by the hard-coded UGANDA_* constants.  The JSON carries 200+
+    drug names and 30+ clinical table keywords tuned for Uganda MoH content.
+    Falls back to constants-only vocabulary if the JSON file is absent.
     """
-    Preset for Uganda Clinical Guidelines 2023 (broad MoH content).
-    """
+    doc = _load_json_config(_CONFIGS_DIR / "uganda_clinical_2023.json")
+
     pdf = Path(pdf_path).expanduser()
     base = pdf.parent
-    out = Path(output_dir) if output_dir else base / "medical_kb_uganda_clinical_2023"
+    out_name: str = doc.get("output_dir") or "medical_kb_uganda_clinical_2023"
+    out = Path(output_dir) if output_dir else base / out_name
+
+    # Dosing keywords: JSON drug_keywords + dosing_keywords + hard-coded constants
+    drug_kws = doc.get("drug_keywords") or []
+    dosing_kws = doc.get("dosing_keywords") or []
+    all_dosing = list(dict.fromkeys(
+        drug_kws + dosing_kws + list(UGANDA_DOSING_TABLE_KEYWORDS)
+    )) or list(UGANDA_DOSING_TABLE_KEYWORDS)
+
+    # Clinical table keywords: JSON list is more comprehensive than the constant
+    clinical_kws = doc.get("clinical_table_keywords") or []
+    all_clinical = list(dict.fromkeys(
+        clinical_kws + list(UGANDA_CLINICAL_TABLE_KEYWORDS)
+    )) or list(UGANDA_CLINICAL_TABLE_KEYWORDS)
+
+    title = (
+        (doc.get("document") or {}).get("title")
+        or "Uganda Clinical Guidelines 2023"
+    )
+
     return ExtractionConfig(
         pdf_path=str(pdf),
         output_dir=str(out),
-        document_title="Uganda Clinical Guidelines 2023",
+        document_title=title,
         critical_content_terms=list(UGANDA_CLINICAL_CRITICAL_TERMS),
-        dosing_table_keywords=list(UGANDA_DOSING_TABLE_KEYWORDS),
-        clinical_table_keywords=list(UGANDA_CLINICAL_TABLE_KEYWORDS),
+        dosing_table_keywords=all_dosing,
+        clinical_table_keywords=all_clinical,
     )
 
 
