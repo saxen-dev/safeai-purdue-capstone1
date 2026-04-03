@@ -386,6 +386,85 @@ class SmartChunker:
 
         return meta
 
+    def _link_related_chunks(self) -> None:
+        """
+        Populate related_chunk_ids and related_chunks on every chunk.
+
+        Three passes — must run after all chunks (text, table, image) are built:
+
+        Pass 1 — sequential prev/next siblings (by array order).
+        Pass 2 — table/image ↔ nearest narrative: non-narrative chunks get
+                 preceding_narrative / following_narrative; narrative chunks
+                 accumulate context_for_tables for every non-narrative that
+                 points back at them.
+        Pass 3 — section siblings: all chunks sharing the same heading are
+                 listed in each other's section_siblings.
+        """
+        chunks = self.chunks
+        if not chunks:
+            return
+
+        def _is_non_narrative(c: Dict) -> bool:
+            return (
+                c.get("is_table_only", False)
+                or c.get("content_type") in ("image_ocr", "image_placeholder")
+            )
+
+        # Initialise related_chunks on every chunk (idempotent re-run safe).
+        for chunk in chunks:
+            chunk["related_chunks"] = {
+                "prev_sibling": None,
+                "next_sibling": None,
+                "preceding_narrative": None,
+                "following_narrative": None,
+                "context_for_tables": [],
+                "section_siblings": [],
+            }
+
+        # Pass 1: sequential prev / next.
+        for i, chunk in enumerate(chunks):
+            if i > 0:
+                chunk["related_chunks"]["prev_sibling"] = chunks[i - 1]["chunk_id"]
+            if i < len(chunks) - 1:
+                chunk["related_chunks"]["next_sibling"] = chunks[i + 1]["chunk_id"]
+
+        # Pass 2: table/image ↔ narrative proximity.
+        for i, chunk in enumerate(chunks):
+            if not _is_non_narrative(chunk):
+                continue
+            # Nearest preceding narrative (walk backward).
+            for j in range(i - 1, -1, -1):
+                if not _is_non_narrative(chunks[j]):
+                    chunk["related_chunks"]["preceding_narrative"] = chunks[j]["chunk_id"]
+                    chunks[j]["related_chunks"]["context_for_tables"].append(chunk["chunk_id"])
+                    break
+            # Nearest following narrative (walk forward).
+            for j in range(i + 1, len(chunks)):
+                if not _is_non_narrative(chunks[j]):
+                    chunk["related_chunks"]["following_narrative"] = chunks[j]["chunk_id"]
+                    break
+
+        # Pass 3: section siblings grouped by heading.
+        section_groups: Dict[str, List[str]] = defaultdict(list)
+        for chunk in chunks:
+            section_groups[chunk.get("heading", "")].append(chunk["chunk_id"])
+        for chunk in chunks:
+            key = chunk.get("heading", "")
+            chunk["related_chunks"]["section_siblings"] = [
+                cid for cid in section_groups[key] if cid != chunk["chunk_id"]
+            ]
+
+        # Sync flat related_chunk_ids (all related IDs, deduped, in order).
+        for chunk in chunks:
+            rc = chunk["related_chunks"]
+            ids: List[str] = []
+            for field in ("prev_sibling", "next_sibling", "preceding_narrative", "following_narrative"):
+                if rc[field]:
+                    ids.append(rc[field])
+            ids.extend(rc["context_for_tables"])
+            ids.extend(rc["section_siblings"])
+            chunk["related_chunk_ids"] = list(dict.fromkeys(ids))
+
     def chunk_by_headings(self) -> List[Dict]:
         """Create chunks based on document headings."""
         print("\n🧩 Creating semantic chunks...")
@@ -403,6 +482,7 @@ class SmartChunker:
                 self.chunks.append(self._build_image_chunk(page["page"], img_data))
 
         self._add_table_chunks()
+        self._link_related_chunks()
 
         enriched = sum(
             1 for c in self.chunks
