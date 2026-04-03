@@ -24,6 +24,7 @@ from .response import (
     infer_triage_from_query,
 )
 from .retriever import HybridRetriever
+from .clinical_verifier import ClinicalVerifier
 
 
 class MedicalQASystem:
@@ -65,6 +66,7 @@ class MedicalQASystem:
         self.guardrail: MedicalGuardrailBrain | None = None
         self._retriever: Optional[HybridRetriever] = None
         self._response_orchestrator: Optional[ResponseOrchestrator] = None
+        self._verifier: Optional[ClinicalVerifier] = None
 
     def initialize(self) -> "MedicalQASystem":
         """Initialize or load existing knowledge base."""
@@ -119,7 +121,18 @@ class MedicalQASystem:
         self._retriever = HybridRetriever(retrieval_units)
 
         print("\n" + "=" * 70)
-        print("STEP 4: INITIALIZING GUARDRAIL BRAIN")
+        print("STEP 4: STAGE 4b — CLINICAL VERIFICATION PACKAGE")
+        print("=" * 70)
+
+        self._verifier = ClinicalVerifier(self.chunks, self.config)
+        self._verifier.generate(
+            output_dir=self.output_dir,
+            doc_title=getattr(self.config, "document_title", ""),
+            source_pdf=getattr(self.config, "pdf_path", ""),
+        )
+
+        print("\n" + "=" * 70)
+        print("STEP 5: INITIALIZING GUARDRAIL BRAIN")
         print("=" * 70)
 
         self.guardrail = MedicalGuardrailBrain(self.chunks)
@@ -187,6 +200,7 @@ class MedicalQASystem:
         retrieval_units = children if children else self.chunks
         self._retriever = HybridRetriever(retrieval_units)
 
+        self._verifier = ClinicalVerifier(self.chunks, self.config)
         self.guardrail = MedicalGuardrailBrain(self.chunks)
 
         print(f"\n📚 Loaded {len(self.chunks)} chunks")
