@@ -10,6 +10,101 @@ from rank_bm25 import BM25Okapi
 
 from .config import ExtractionConfig, PreservationLevel
 
+# ---------------------------------------------------------------------------
+# Clinical metadata — drug name vocabulary
+# ---------------------------------------------------------------------------
+# Used to identify drug names in table headers and NLL text.
+_KNOWN_DRUG_NAMES = frozenset([
+    "artemether", "lumefantrine", "artesunate", "amodiaquine", "mefloquine",
+    "sulfadoxine", "pyrimethamine", "primaquine", "dihydroartemisinin",
+    "piperaquine", "quinine", "chloroquine", "amoxicillin", "cotrimoxazole",
+    "metronidazole", "ciprofloxacin", "doxycycline", "penicillin",
+    "gentamicin", "ampicillin", "erythromycin", "fluconazole",
+    "paracetamol", "ibuprofen", "prednisolone", "insulin",
+    "salbutamol", "metformin", "zinc",
+])
+
+# ---------------------------------------------------------------------------
+# Clinical metadata — compiled regex patterns
+# ---------------------------------------------------------------------------
+
+_FREQUENCY_RE = re.compile(
+    r'\b(once|twice|three\s+times|four\s+times)\s+(?:a\s+)?daily\b', re.I
+)
+_DURATION_RE = re.compile(r'\bfor\s+(\d+)\s+(days?|weeks?)\b', re.I)
+_ROUTE_RE = re.compile(
+    r'\b(oral(?:ly)?|intravenous(?:ly)?|IV|intramuscular(?:ly)?|IM'
+    r'|rectal(?:ly)?|subcutaneous(?:ly)?|topical(?:ly)?)\b', re.I
+)
+_LOC_RE = re.compile(
+    r'\b(HC\s*[IVX]{1,4}|HC\s*[2-5]|hospital|health\s+cent(?:er|re)'
+    r'|district\s+hospital|referral\s+hospital|outpatient|inpatient)\b', re.I
+)
+_CONTRAINDICATION_RE = re.compile(
+    r'contraindicated?\s+in\s+([^.;]{5,80})', re.I
+)
+_DO_NOT_GIVE_RE = re.compile(
+    r'(?:do\s+not\s+give|not\s+recommended\s+for)\s+([^.;]{5,80})', re.I
+)
+_DANGER_SIGN_RE = re.compile(
+    r'danger\s+signs?\s*[;:–-]\s*([^.;]{5,150})', re.I
+)
+_REFERRAL_RE = re.compile(
+    r'refer\s+(?:immediately|urgently|directly)?\s*(?:if|when|to|for)\s+([^.;]{5,100})',
+    re.I,
+)
+_CLINICAL_FEATURES_RE = re.compile(
+    r'(?:clinical\s+features?|signs?\s+and\s+symptoms?)\s*[:;–]\s*([^.]{10,200})',
+    re.I,
+)
+_SPECIAL_POP_RE = re.compile(
+    r'\b(pregnant\s+wom(?:an|en)|lactating\s+moth(?:er|ers?)'
+    r'|(?:infants?|neonates?|children)\s+(?:under|<|≤)\s*\d+\s*(?:kg|months?|years?)'
+    r'|HIV(?:\s+positive)?|immunocompromised)\b',
+    re.I,
+)
+_AGE_MIN_RE = re.compile(
+    r'(?:adults?|patients?)\s*[>≥]\s*(\d+)\s*(years?|months?)', re.I
+)
+_AGE_MAX_RE = re.compile(
+    r'(?:children|infants?|neonates?)\s*(?:under|<|≤)\s*(\d+)\s*(years?|months?)', re.I
+)
+_WEIGHT_RANGE_RE = [
+    re.compile(r'(\d+\.?\d*)\s*[-–to<≤]+\s*<?(\d+\.?\d*)\s*kg', re.I),
+    re.compile(r'[>≥]\s*=?\s*(\d+\.?\d*)\s*kg', re.I),
+    re.compile(r'^[<≤]\s*(\d+\.?\d*)\s*kg', re.I),
+]
+
+
+def _parse_weight_range_from_cell(cell: str):
+    """Return (lo_kg, hi_kg|None) from a weight cell string, or None."""
+    cell = cell.strip()
+    m = re.search(r'[>≥]\s*=?\s*(\d+\.?\d*)', cell)
+    if m:
+        return (float(m.group(1)), None)
+    m = re.search(r'(\d+\.?\d*)\s*[-–to<≤]+\s*<?(\d+\.?\d*)', cell)
+    if m:
+        return (float(m.group(1)), float(m.group(2)))
+    m = re.search(r'^[<≤]\s*(\d+\.?\d*)', cell)
+    if m:
+        return (0.0, float(m.group(1)))
+    return None
+
+
+def _normalize_loc(raw: str) -> str:
+    """Normalise level-of-care strings: 'HC III' → 'HC3', etc."""
+    raw = raw.strip()
+    roman = {"I": "1", "II": "2", "III": "3", "IV": "4", "V": "5"}
+    m = re.match(r'HC\s*([IVX]+)', raw, re.I)
+    if m:
+        return "HC" + roman.get(m.group(1).upper(), m.group(1))
+    m = re.match(r'HC\s*([2-5])', raw, re.I)
+    if m:
+        return "HC" + m.group(1)
+    return raw.strip()
+
+
+# ---------------------------------------------------------------------------
 # Keywords used to infer section_type from heading text.
 # Short tokens (mg, kg) use word-boundary matching to avoid false substring hits
 # (e.g. "kg" inside "background").  Longer tokens use plain substring matching.
@@ -65,6 +160,162 @@ class SmartChunker:
         if has_tables or section_type in ("contraindication", "treatment"):
             return PreservationLevel.HIGH
         return PreservationLevel.STANDARD
+
+    # ------------------------------------------------------------------
+    # Clinical metadata extraction
+    # ------------------------------------------------------------------
+
+    @staticmethod
+    def _empty_clinical_metadata() -> Dict:
+        """Return a blank 17-field clinical metadata dict."""
+        return {
+            "condition": None,
+            "drug_name": None,
+            "dosage_summary": None,
+            "patient_weight_min_kg": None,
+            "patient_weight_max_kg": None,
+            "patient_age_min": None,
+            "patient_age_max": None,
+            "route": None,
+            "frequency": None,
+            "duration": None,
+            "contraindications": [],
+            "special_populations": [],
+            "level_of_care": [],
+            "clinical_features": [],
+            "danger_signs": [],
+            "referral_criteria": [],
+            "clinical_section_type": None,
+        }
+
+    @staticmethod
+    def _extract_clinical_metadata(chunk: Dict) -> Dict:
+        """
+        Populate all 17 clinical metadata fields for a chunk.
+
+        Dispatches by table classification:
+          - dosing tables  → drug_name, weight min/max, frequency, duration, route
+          - clinical tables → level_of_care, danger_signs, referral_criteria
+        Narrative regex runs on combined text for all chunk types.
+        """
+        meta = SmartChunker._empty_clinical_metadata()
+        text = chunk.get("text", "")
+        tables = chunk.get("tables", [])
+        heading = chunk.get("heading", "")
+        section_type = chunk.get("section_type", "background")
+
+        meta["clinical_section_type"] = section_type
+
+        # Condition from heading (strip markdown #s)
+        heading_clean = re.sub(r'^#+\s*', '', heading).strip()
+        if heading_clean and heading_clean.lower() not in ("untitled", "table"):
+            meta["condition"] = heading_clean
+
+        # Build combined text corpus (chunk text + table markdown + NLL)
+        full_text = text
+        for t in tables:
+            full_text += " " + t.get("markdown", "") + " " + t.get("nll", "")
+
+        # --- dosing table fields ---
+        dosing_tables = [t for t in tables if t.get("classification") == "dosing"]
+        if dosing_tables:
+            # Drug name: scan headers + NLL for known drug names
+            for t in dosing_tables:
+                headers_str = " ".join(str(h).lower() for h in t.get("headers", []))
+                nll_lower = t.get("nll", "").lower()
+                combined = headers_str + " " + nll_lower
+                for drug in _KNOWN_DRUG_NAMES:
+                    if drug in combined:
+                        meta["drug_name"] = drug
+                        break
+                if meta["drug_name"]:
+                    break
+
+            # Weight min/max across all rows
+            weight_mins: List[float] = []
+            weight_maxes: List[float] = []
+            for t in dosing_tables:
+                headers = [str(h) for h in t.get("headers", [])]
+                weight_col_indices = [
+                    i for i, h in enumerate(headers)
+                    if any(kw in h.lower() for kw in ["weight", "body weight"])
+                ]
+                for row in t.get("data", []):
+                    cells: List[str] = []
+                    if isinstance(row, dict):
+                        cells = [str(row.get(h, "")) for h in headers]
+                    else:
+                        cells = [str(v) for v in row]
+                    for idx in weight_col_indices:
+                        if idx < len(cells):
+                            parsed = _parse_weight_range_from_cell(cells[idx])
+                            if parsed:
+                                lo, hi = parsed
+                                weight_mins.append(lo)
+                                if hi is not None:
+                                    weight_maxes.append(hi)
+            if weight_mins:
+                meta["patient_weight_min_kg"] = min(weight_mins)
+            if weight_maxes:
+                meta["patient_weight_max_kg"] = max(weight_maxes)
+
+        # --- frequency and duration ---
+        m = _FREQUENCY_RE.search(full_text)
+        if m:
+            meta["frequency"] = m.group(0).lower().strip()
+        m = _DURATION_RE.search(full_text)
+        if m:
+            meta["duration"] = f"for {m.group(1)} {m.group(2).lower()}"
+        if meta["frequency"] or meta["duration"]:
+            meta["dosage_summary"] = ", ".join(
+                p for p in [meta["frequency"], meta["duration"]] if p
+            )
+
+        # --- route ---
+        m = _ROUTE_RE.search(full_text)
+        if m:
+            meta["route"] = m.group(0).lower().strip()
+        elif dosing_tables:
+            meta["route"] = "oral"  # safe default for ACT / oral guideline drugs
+
+        # --- level of care ---
+        locs = [_normalize_loc(m.group(0)) for m in _LOC_RE.finditer(full_text)]
+        meta["level_of_care"] = list(dict.fromkeys(locs))
+
+        # --- danger signs ---
+        meta["danger_signs"] = [
+            m.group(1).strip() for m in _DANGER_SIGN_RE.finditer(full_text)
+        ]
+
+        # --- referral criteria ---
+        meta["referral_criteria"] = [
+            m.group(1).strip() for m in _REFERRAL_RE.finditer(full_text)
+        ]
+
+        # --- clinical features ---
+        meta["clinical_features"] = [
+            m.group(1).strip() for m in _CLINICAL_FEATURES_RE.finditer(full_text)
+        ]
+
+        # --- contraindications ---
+        ci = [m.group(1).strip() for m in _CONTRAINDICATION_RE.finditer(full_text)]
+        ci += [m.group(1).strip() for m in _DO_NOT_GIVE_RE.finditer(full_text)]
+        meta["contraindications"] = ci
+
+        # --- special populations ---
+        meta["special_populations"] = list(dict.fromkeys(
+            m.group(0).strip() for m in _SPECIAL_POP_RE.finditer(full_text)
+        ))
+
+        # --- patient age ---
+        m = _AGE_MIN_RE.search(full_text)
+        if m:
+            meta["patient_age_min"] = f"{m.group(1)} {m.group(2).lower()}"
+        m = _AGE_MAX_RE.search(full_text)
+        if m:
+            meta["patient_age_max"] = f"{m.group(1)} {m.group(2).lower()}"
+
+        return meta
 
     def chunk_by_headings(self) -> List[Dict]:
         """Create chunks based on document headings."""
@@ -157,7 +408,7 @@ class SmartChunker:
         section_type = self._infer_section_type(section["heading"])
         preservation_level = self._infer_preservation_level(section_type, has_tables)
 
-        return {
+        chunk = {
             "chunk_id": f"chunk_{len(self.chunks):06d}",
             "page": page_num,
             "heading": section["heading"],
@@ -172,6 +423,8 @@ class SmartChunker:
             # Populated during parent-child migration (future PR).
             "related_chunk_ids": [],
         }
+        chunk["clinical_metadata"] = self._extract_clinical_metadata(chunk)
+        return chunk
 
     def _add_table_chunks(self) -> None:
         """Add standalone chunks for important tables."""
@@ -200,6 +453,7 @@ class SmartChunker:
                     "preservation_level": PreservationLevel.VERBATIM.value,
                     "related_chunk_ids": [],
                 }
+                table_chunk["clinical_metadata"] = self._extract_clinical_metadata(table_chunk)
                 self.chunks.append(table_chunk)
 
     def create_search_index(self) -> Dict:
