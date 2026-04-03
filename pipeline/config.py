@@ -93,7 +93,6 @@ DOSING_TABLE_KEYWORDS: List[str] = [
     "tablet",
     "regimen",
     "body weight",
-    "weight",
     "twice daily",
     "once daily",
     "three times",
@@ -161,7 +160,6 @@ MALARIA_DOSING_TABLE_KEYWORDS: List[str] = [
     "primaquine",
     "dihydroartemisinin",
     "dha",
-    "act",
     "chloroquine",
     "quinine",
 ]

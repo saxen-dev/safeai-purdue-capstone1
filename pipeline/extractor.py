@@ -265,8 +265,14 @@ class MultiPassExtractor:
         combined = header_text + " " + data_text
 
         # --- structural check (abbreviation lists, ToC) ---
+        # Two or more structural signals override dosing patterns (handles abbreviation
+        # tables that define drug names with doses, e.g. "AL = 80+480 mg").
+        # A single structural signal is still blocked by dose/weight patterns to avoid
+        # misclassifying dosing tables that happen to define one abbreviation.
         struct_hits = sum(1 for kw in STRUCTURAL_TABLE_KEYWORDS if kw in combined)
-        if struct_hits >= 1 and not re.search(r"\b\d+\s*mg\b|\bkg\b|\bbody weight\b", combined):
+        if struct_hits >= 2:
+            return "structural"
+        if struct_hits == 1 and not re.search(r"\b\d+\s*mg\b|\bkg\b|\bbody weight\b", combined):
             return "structural"
 
         # --- evidence / GRADE quality tables ---
