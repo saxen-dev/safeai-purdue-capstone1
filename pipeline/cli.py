@@ -102,7 +102,11 @@ def main() -> None:
 
     while True:
         print("\n" + "-" * 50)
-        query = input("Your question: ").strip()
+        try:
+            query = input("Your question: ").strip()
+        except (EOFError, KeyboardInterrupt):
+            print("\nExiting.")
+            break
 
         if query.lower() in ("quit", "exit", "q"):
             break
