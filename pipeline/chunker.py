@@ -4,6 +4,8 @@ Smart chunking: semantic chunks from extracted content with BM25 index.
 
 import json
 import re
+from collections import defaultdict
+from pathlib import Path
 from typing import Dict, List, Optional, Any
 
 from rank_bm25 import BM25Okapi
@@ -126,6 +128,7 @@ class SmartChunker:
         self.config = config
         self.chunks: List[Dict] = []
         self.chunk_index: Dict[str, Any] = {}
+        self._image_by_page: Dict[int, List[Dict]] = self._load_image_inventory()
 
     # ------------------------------------------------------------------
     # Metadata inference helpers
@@ -160,6 +163,72 @@ class SmartChunker:
         if has_tables or section_type in ("contraindication", "treatment"):
             return PreservationLevel.HIGH
         return PreservationLevel.STANDARD
+
+    # ------------------------------------------------------------------
+    # Image OCR enrichment
+    # ------------------------------------------------------------------
+
+    def _load_image_inventory(self) -> Dict[int, List[Dict]]:
+        """
+        Build a page → [image_data, …] mapping from image_inventory.json.
+
+        Looks first in the extraction dict (key "image_inventory"), then in
+        config.output_dir/image_inventory.json.  Returns an empty dict when
+        no inventory is available — callers always use .get(page, []).
+        """
+        images: List[Dict] = self.extraction.get("image_inventory", [])
+        if not images and getattr(self.config, "output_dir", None):
+            img_path = Path(self.config.output_dir) / "image_inventory.json"
+            if img_path.exists():
+                with open(img_path, encoding="utf-8") as fh:
+                    images = json.load(fh)
+        by_page: Dict[int, List[Dict]] = defaultdict(list)
+        for img in images:
+            pg = img.get("page_no")
+            if pg is not None:
+                by_page[int(pg)].append(img)
+        return dict(by_page)
+
+    def _build_image_chunk(self, page_num: int, image_data: Dict) -> Dict:
+        """
+        Build a chunk for a single image.
+
+        When image_data carries OCR text or a caption (from Stage 1 extraction),
+        the chunk gets real content and content_type="image_ocr".  Otherwise it
+        is a placeholder so downstream code can still see the image exists.
+        """
+        ocr_text = (image_data.get("ocr_text") or "").strip()
+        caption = (image_data.get("caption") or "").strip()
+        parts: List[str] = []
+        if caption:
+            parts.append(f"[Image caption: {caption}]")
+        if ocr_text:
+            parts.append(ocr_text)
+        content = "\n".join(parts) if parts else "<!-- image -->"
+        content_type = "image_ocr" if parts else "image_placeholder"
+
+        chunk: Dict[str, Any] = {
+            "chunk_id": f"chunk_image_{len(self.chunks):06d}",
+            "page": page_num,
+            "heading": caption or "Image",
+            "level": 3,
+            "text": content,
+            "tables": [],
+            "has_tables": False,
+            "char_count": len(content),
+            "word_count": len(content.split()),
+            "section_type": "background",
+            "preservation_level": PreservationLevel.STANDARD.value,
+            "content_type": content_type,
+            "image_path": image_data.get("saved_path", ""),
+            "related_chunk_ids": [],
+        }
+        # Only run metadata extraction when there is real OCR text to parse.
+        if content_type == "image_ocr":
+            chunk["clinical_metadata"] = self._extract_clinical_metadata(chunk)
+        else:
+            chunk["clinical_metadata"] = self._empty_clinical_metadata()
+        return chunk
 
     # ------------------------------------------------------------------
     # Clinical metadata extraction
@@ -329,8 +398,22 @@ class SmartChunker:
                 if chunk:
                     self.chunks.append(chunk)
 
+            # Enrich image chunks for this page with Stage 1 OCR data.
+            for img_data in self._image_by_page.get(page["page"], []):
+                self.chunks.append(self._build_image_chunk(page["page"], img_data))
+
         self._add_table_chunks()
 
+        enriched = sum(
+            1 for c in self.chunks
+            if c.get("content_type") == "image_ocr"
+        )
+        placeholder = sum(
+            1 for c in self.chunks
+            if c.get("content_type") == "image_placeholder"
+        )
+        if enriched or placeholder:
+            print(f"  Image chunks: {enriched} with OCR text, {placeholder} placeholder(s)")
         print(f"  Created {len(self.chunks)} semantic chunks")
         return self.chunks
 
