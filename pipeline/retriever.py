@@ -155,6 +155,11 @@ class HybridRetriever:
             normalize_embeddings=True,
             show_progress_bar=False,
         ).astype(np.float32)
+        if embeddings.ndim < 2 or embeddings.shape[0] == 0:
+            # Empty chunk list: build a zero-vector index with the model's dimension
+            d = embed_model.get_sentence_embedding_dimension() or 768
+            index = faiss.IndexFlatIP(d)
+            return index
         d = embeddings.shape[1]
         index = faiss.IndexFlatIP(d)
         index.add(embeddings)

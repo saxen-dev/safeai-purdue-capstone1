@@ -702,6 +702,10 @@ class MultiPassExtractor:
                             if first_row == top_headers:
                                 df_bot = df_bot.iloc[1:]
 
+                        # Skip if continuation fragment is empty after header removal
+                        if len(df_bot) == 0 or len(df_bot.columns) == 0:
+                            continue
+
                         # Align columns and concatenate
                         df_bot.columns = df_top.columns[: len(df_bot.columns)]
                         df_stitched = pd.concat([df_top, df_bot], ignore_index=True)

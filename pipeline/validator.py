@@ -404,6 +404,10 @@ class ExtractionValidator:
             elif any(kw in h_lower for kw in ["dose", "mg", "tablet"] + list(_DRUG_DOSE_RANGES)):
                 dose_cols.append(ci)
 
+        # Track whether weight/dose cols were explicitly identified
+        explicit_weight_col = weight_col
+        using_fallback_cols = not dose_cols and bool(headers)
+
         # Fallback: treat first col as weight, rest as dose
         if not dose_cols and headers:
             weight_col = weight_col if weight_col is not None else 0
@@ -440,11 +444,16 @@ class ExtractionValidator:
                 "dose_values": dose_values,
             })
 
+        weight_band_count = sum(1 for r in rows if r["weight_range"] is not None)
+        has_weight_bands = explicit_weight_col is not None and weight_band_count >= 2
+
         return {
             "headers": headers,
             "weight_col": weight_col,
             "dose_cols": dose_cols,
             "rows": rows,
+            "has_weight_bands": has_weight_bands,
+            "using_fallback_cols": using_fallback_cols,
         }
 
     # ------------------------------------------------------------------
@@ -455,6 +464,10 @@ class ExtractionValidator:
     def _check_weight_contiguity(parsed: Dict) -> Dict:
         """Check 1: No gaps between consecutive weight bands."""
         issues: List[str] = []
+
+        if not parsed.get("has_weight_bands"):
+            return {"passed": True, "issues": ["no weight-band structure — skipped"]}
+
         weight_ranges = [r["weight_range"] for r in parsed["rows"] if r["weight_range"]]
 
         if len(weight_ranges) < 2:
@@ -482,6 +495,9 @@ class ExtractionValidator:
     def _check_dose_monotonicity(parsed: Dict) -> Dict:
         """Check 2: Each dose component must be non-decreasing across weight bands."""
         issues: List[str] = []
+
+        if not parsed.get("has_weight_bands"):
+            return {"passed": True, "issues": ["no weight-band structure — skipped"]}
 
         if not parsed["dose_cols"]:
             return {"passed": True, "issues": ["No dose columns found — skipped"]}
@@ -518,6 +534,11 @@ class ExtractionValidator:
     def _check_weight_coverage(parsed: Dict) -> Dict:
         """Check 3: Table covers from pediatric through adult weight bands."""
         issues: List[str] = []
+
+        if not parsed.get("has_weight_bands"):
+            return {"passed": True, "issues": ["no weight-band structure — skipped"],
+                    "range_low": None, "range_high": None}
+
         weight_ranges = [r["weight_range"] for r in parsed["rows"] if r["weight_range"]]
 
         if not weight_ranges:
@@ -636,6 +657,11 @@ class ExtractionValidator:
     def _check_positive_no_empty(parsed: Dict) -> Dict:
         """Check 6: All weight and dose cells are non-empty; all dose values > 0."""
         issues: List[str] = []
+
+        # Skip empty-cell check when columns were inferred via fallback — the
+        # first column may not be a weight column at all (e.g. drug name lists).
+        if parsed.get("using_fallback_cols") and not parsed.get("has_weight_bands"):
+            return {"passed": True, "issues": ["no explicit dose columns — skipped"]}
 
         for r_i, row in enumerate(parsed["rows"]):
             if not row["weight_cell"].strip():
