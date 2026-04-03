@@ -6,7 +6,7 @@ import json
 import os
 import re
 from datetime import datetime
-from typing import Dict, List, Any
+from typing import Dict, List, Any, Optional, Tuple
 
 import numpy as np
 from dataclasses import asdict
@@ -16,6 +16,105 @@ from .config import (
     GENERAL_CLINICAL_CRITICAL_TERMS,
     ValidationReport,
 )
+
+# ---------------------------------------------------------------------------
+# Dosing plausibility constants
+# ---------------------------------------------------------------------------
+
+# Weight-band population coverage thresholds (kg)
+_COVERAGE_PEDIATRIC_LOW: float = 10.0   # table should start at or below this
+_COVERAGE_ADULT_HIGH: float = 35.0      # table should reach at or above this
+
+# Multiplicative tolerance for clinical dose bounds (2.5× either side)
+_DOSE_BOUNDS_TOLERANCE: float = 2.5
+
+# Maximum fractional deviation from median ratio in combination drugs (35%)
+_RATIO_TOLERANCE: float = 0.35
+
+# Reference per-kg dose ranges for key guideline drugs [mg/kg, per single dose]
+# Sources: WHO malaria guidelines; Uganda Clinical Guidelines 2023
+_DRUG_DOSE_RANGES: Dict[str, Tuple[float, float]] = {
+    # WHO malaria ACT components
+    "artemether":       (1.0,  4.0),
+    "lumefantrine":     (6.0, 16.0),
+    "artesunate":       (2.0,  4.0),
+    "amodiaquine":      (7.5, 15.0),
+    "mefloquine":       (8.0, 25.0),
+    "sulfadoxine":      (20.0, 30.0),
+    "pyrimethamine":    (1.0,  2.0),
+    "primaquine":       (0.25, 0.75),
+    "dihydroartemisinin": (2.0, 4.0),
+    "piperaquine":      (15.0, 27.0),
+    "quinine":          (8.0, 15.0),
+    "chloroquine":      (5.0, 10.0),
+    # Uganda broad guideline common drugs
+    "amoxicillin":      (12.5, 25.0),
+    "cotrimoxazole":    (6.0, 12.0),
+    "metronidazole":    (7.5, 15.0),
+    "ciprofloxacin":    (10.0, 20.0),
+    "paracetamol":      (10.0, 15.0),
+}
+
+
+# ---------------------------------------------------------------------------
+# Module-level parsing helpers
+# ---------------------------------------------------------------------------
+
+def _parse_weight_range(cell: str) -> Optional[Tuple[float, Optional[float]]]:
+    """Extract (lo_kg, hi_kg) from a weight cell string.
+
+    hi_kg is None for open-ended bands (≥ / > patterns).
+    Returns None if no weight values can be parsed.
+    """
+    cell = cell.strip()
+
+    # Open-ended upper band: ">35 kg", "≥35", ">=35"
+    m = re.search(r'[>≥]\s*=?\s*(\d+\.?\d*)', cell)
+    if m:
+        return (float(m.group(1)), None)
+
+    # Range with explicit bounds: "5–14 kg", "5-<15 kg", "10 to 24 kg"
+    m = re.search(r'(\d+\.?\d*)\s*[-–to<≤]+\s*<?(\d+\.?\d*)', cell)
+    if m:
+        return (float(m.group(1)), float(m.group(2)))
+
+    # Upper-only: "<5 kg" → (0, 5)
+    m = re.search(r'^[<≤]\s*(\d+\.?\d*)', cell)
+    if m:
+        return (0.0, float(m.group(1)))
+
+    return None
+
+
+def _parse_dose_values(cell: str) -> List[float]:
+    """Extract numeric mg values from a dose cell.
+
+    Returns [] for pure tablet-count cells without mg values.
+    Handles combination patterns like "80 + 480 mg" → [80.0, 480.0].
+    """
+    if not cell.strip():
+        return []
+
+    # Pure tablet count with no mg value — skip (can't compute per-kg dose)
+    if "tablet" in cell.lower() and "mg" not in cell.lower():
+        return []
+
+    # Combination pattern: numbers separated by +
+    combo = re.findall(r'(\d+\.?\d*)\s*\+\s*(\d+\.?\d*)', cell)
+    if combo:
+        vals: List[float] = []
+        for pair in combo:
+            vals.extend(float(x) for x in pair)
+        return vals
+
+    # All standalone numbers — filter to plausible mg range
+    numbers = re.findall(r'\d+\.?\d*', cell)
+    result: List[float] = []
+    for n in numbers:
+        val = float(n)
+        if 1.0 <= val <= 5000.0:
+            result.append(val)
+    return result
 
 
 class ExtractionValidator:
@@ -57,6 +156,13 @@ class ExtractionValidator:
         print(
             f"  Stage 4 (Medical): {'✅' if validation_results['medical'].passed else '❌'} "
             f"conf={validation_results['medical'].confidence:.0%}"
+        )
+
+        validation_results["dosing_plausibility"] = self._validate_dosing_plausibility()
+        print(
+            f"  Stage 6 (Dosing Plausibility): "
+            f"{'✅' if validation_results['dosing_plausibility'].passed else '❌'} "
+            f"conf={validation_results['dosing_plausibility'].confidence:.0%}"
         )
 
         validation_results["human_review"] = self._flag_for_human_review()
@@ -260,6 +366,375 @@ class ExtractionValidator:
             metadata={
                 "terms_found": found_terms,
                 "terms_missing": missing_terms,
+            },
+        )
+
+    # ------------------------------------------------------------------
+    # Dosing plausibility — table parsing helper
+    # ------------------------------------------------------------------
+
+    @staticmethod
+    def _parse_dosing_table(table: Dict) -> Dict:
+        """Parse a dosing table dict into structured weight bands and dose columns.
+
+        Returns:
+          {
+            "headers": [str, ...],
+            "weight_col": int | None,
+            "dose_cols": [int, ...],
+            "rows": [
+              {"weight_cell": str, "weight_range": (lo, hi)|None,
+               "dose_cells": [str, ...], "dose_values": [[float, ...], ...]},
+              ...
+            ]
+          }
+        """
+        headers = [str(h).strip() for h in table.get("headers", [])]
+        data = table.get("data", [])
+
+        weight_col: Optional[int] = None
+        dose_cols: List[int] = []
+
+        for ci, h in enumerate(headers):
+            h_lower = h.lower()
+            if weight_col is None and any(
+                kw in h_lower for kw in ["body weight", "weight"]
+            ):
+                weight_col = ci
+            elif any(kw in h_lower for kw in ["dose", "mg", "tablet"] + list(_DRUG_DOSE_RANGES)):
+                dose_cols.append(ci)
+
+        # Fallback: treat first col as weight, rest as dose
+        if not dose_cols and headers:
+            weight_col = weight_col if weight_col is not None else 0
+            dose_cols = [i for i in range(len(headers)) if i != weight_col]
+
+        rows: List[Dict] = []
+        for row in data:
+            if isinstance(row, dict):
+                cells = [str(row.get(h, "")).strip() for h in headers]
+            else:
+                cells = [str(v).strip() for v in row]
+
+            weight_cell = (
+                cells[weight_col]
+                if weight_col is not None and weight_col < len(cells)
+                else ""
+            )
+            weight_range = _parse_weight_range(weight_cell) if weight_cell else None
+
+            dose_cells: List[str] = []
+            dose_values: List[List[float]] = []
+            for dc in dose_cols:
+                if dc < len(cells):
+                    dose_cells.append(cells[dc])
+                    dose_values.append(_parse_dose_values(cells[dc]))
+                else:
+                    dose_cells.append("")
+                    dose_values.append([])
+
+            rows.append({
+                "weight_cell": weight_cell,
+                "weight_range": weight_range,
+                "dose_cells": dose_cells,
+                "dose_values": dose_values,
+            })
+
+        return {
+            "headers": headers,
+            "weight_col": weight_col,
+            "dose_cols": dose_cols,
+            "rows": rows,
+        }
+
+    # ------------------------------------------------------------------
+    # Dosing plausibility — six checks
+    # ------------------------------------------------------------------
+
+    @staticmethod
+    def _check_weight_contiguity(parsed: Dict) -> Dict:
+        """Check 1: No gaps between consecutive weight bands."""
+        issues: List[str] = []
+        weight_ranges = [r["weight_range"] for r in parsed["rows"] if r["weight_range"]]
+
+        if len(weight_ranges) < 2:
+            return {"passed": True, "issues": ["<2 weight bands — skipped"]}
+
+        for i in range(len(weight_ranges) - 1):
+            lo_cur, hi_cur = weight_ranges[i]
+            lo_next, _ = weight_ranges[i + 1]
+
+            if hi_cur is None:
+                issues.append(
+                    f"Open-ended band (≥{lo_cur} kg) is not the last row"
+                )
+                continue
+
+            if lo_next is not None and abs(hi_cur - lo_next) > 1.0:
+                issues.append(
+                    f"Gap between band {i+1} ({hi_cur} kg) and band {i+2} "
+                    f"({lo_next} kg) — {abs(hi_cur - lo_next):.1f} kg"
+                )
+
+        return {"passed": len(issues) == 0, "issues": issues}
+
+    @staticmethod
+    def _check_dose_monotonicity(parsed: Dict) -> Dict:
+        """Check 2: Each dose component must be non-decreasing across weight bands."""
+        issues: List[str] = []
+
+        if not parsed["dose_cols"]:
+            return {"passed": True, "issues": ["No dose columns found — skipped"]}
+
+        for dc_idx in range(len(parsed["dose_cols"])):
+            header = (
+                parsed["headers"][parsed["dose_cols"][dc_idx]]
+                if dc_idx < len(parsed["dose_cols"]) and parsed["dose_cols"][dc_idx] < len(parsed["headers"])
+                else f"Col {dc_idx}"
+            )
+            col_vals = [
+                row["dose_values"][dc_idx]
+                if dc_idx < len(row["dose_values"]) else []
+                for row in parsed["rows"]
+            ]
+            max_comp = max((len(v) for v in col_vals), default=0)
+
+            for comp_idx in range(max_comp):
+                prev: Optional[float] = None
+                for r_i, vals in enumerate(col_vals):
+                    if comp_idx < len(vals):
+                        curr = vals[comp_idx]
+                        if prev is not None and curr < prev:
+                            comp_label = f" component {comp_idx+1}" if max_comp > 1 else ""
+                            issues.append(
+                                f"{header}{comp_label}: row {r_i+1} = {curr} < "
+                                f"row {r_i} = {prev} (not monotonic)"
+                            )
+                        prev = curr
+
+        return {"passed": len(issues) == 0, "issues": issues}
+
+    @staticmethod
+    def _check_weight_coverage(parsed: Dict) -> Dict:
+        """Check 3: Table covers from pediatric through adult weight bands."""
+        issues: List[str] = []
+        weight_ranges = [r["weight_range"] for r in parsed["rows"] if r["weight_range"]]
+
+        if not weight_ranges:
+            return {
+                "passed": True,
+                "issues": ["No weight bands found — skipped"],
+                "range_low": None,
+                "range_high": None,
+            }
+
+        range_low = weight_ranges[0][0]
+        range_high = weight_ranges[-1][1]
+        last_open_low = weight_ranges[-1][0]
+
+        if range_low > _COVERAGE_PEDIATRIC_LOW:
+            issues.append(
+                f"Table starts at {range_low} kg — may be missing infant doses "
+                f"(expected ≤ {_COVERAGE_PEDIATRIC_LOW} kg)"
+            )
+
+        if range_high is not None and range_high < _COVERAGE_ADULT_HIGH:
+            issues.append(
+                f"Table ends at {range_high} kg — may be missing adult doses "
+                f"(expected ≥ {_COVERAGE_ADULT_HIGH} kg or open-ended)"
+            )
+        elif range_high is None and last_open_low < _COVERAGE_ADULT_HIGH * 0.5:
+            issues.append(
+                f"Open-ended band starts at {last_open_low} kg — "
+                f"unusually low for adult dosing"
+            )
+
+        return {
+            "passed": len(issues) == 0,
+            "issues": issues,
+            "range_low": range_low,
+            "range_high": range_high,
+        }
+
+    @staticmethod
+    def _check_clinical_bounds(parsed: Dict) -> Dict:
+        """Check 4: Per-kg dose falls within plausible clinical reference ranges."""
+        issues: List[str] = []
+
+        for dc_idx, dc in enumerate(parsed["dose_cols"]):
+            header = parsed["headers"][dc] if dc < len(parsed["headers"]) else ""
+            h_lower = header.lower()
+            drugs = [drug for drug in _DRUG_DOSE_RANGES if drug in h_lower]
+
+            if not drugs:
+                continue
+
+            for r_i, row in enumerate(parsed["rows"]):
+                wr = row["weight_range"]
+                if wr is None:
+                    continue
+
+                lo, hi = wr
+                mid_weight = lo + 20.0 if hi is None else (lo + hi) / 2.0
+                if mid_weight <= 0:
+                    continue
+
+                dose_vals = row["dose_values"][dc_idx] if dc_idx < len(row["dose_values"]) else []
+
+                for drug, dose_val in zip(drugs, dose_vals):
+                    if dose_val <= 0:
+                        continue
+                    per_kg = dose_val / mid_weight
+                    ref_lo, ref_hi = _DRUG_DOSE_RANGES[drug]
+                    bound_lo = ref_lo / _DOSE_BOUNDS_TOLERANCE
+                    bound_hi = ref_hi * _DOSE_BOUNDS_TOLERANCE
+                    if per_kg < bound_lo or per_kg > bound_hi:
+                        issues.append(
+                            f"Row {r_i+1} ({row['weight_cell']}): {drug} "
+                            f"{dose_val} mg / {mid_weight:.0f} kg = {per_kg:.2f} mg/kg — "
+                            f"outside [{bound_lo:.2f}–{bound_hi:.1f}] mg/kg"
+                        )
+
+        return {"passed": len(issues) == 0, "issues": issues}
+
+    @staticmethod
+    def _check_combination_consistency(parsed: Dict) -> Dict:
+        """Check 5: Component ratios in combination drugs are stable across rows."""
+        issues: List[str] = []
+
+        for dc_idx in range(len(parsed["dose_cols"])):
+            multi_rows = [
+                (r_i, row["dose_values"][dc_idx])
+                for r_i, row in enumerate(parsed["rows"])
+                if dc_idx < len(row["dose_values"]) and len(row["dose_values"][dc_idx]) >= 2
+            ]
+
+            if len(multi_rows) < 2:
+                continue
+
+            ratios = [vals[1] / vals[0] for _, vals in multi_rows if vals[0] > 0]
+            if not ratios:
+                continue
+
+            median_ratio = sorted(ratios)[len(ratios) // 2]
+            if median_ratio <= 0:
+                continue
+
+            for (r_i, _), ratio in zip(multi_rows, ratios):
+                deviation = abs(ratio - median_ratio) / median_ratio
+                if deviation > _RATIO_TOLERANCE:
+                    row = parsed["rows"][r_i]
+                    issues.append(
+                        f"Row {r_i+1} ({row.get('weight_cell', '?')}): ratio = "
+                        f"{ratio:.2f} vs median {median_ratio:.2f} "
+                        f"(deviation {deviation*100:.0f}% > {_RATIO_TOLERANCE*100:.0f}%)"
+                    )
+
+        return {"passed": len(issues) == 0, "issues": issues}
+
+    @staticmethod
+    def _check_positive_no_empty(parsed: Dict) -> Dict:
+        """Check 6: All weight and dose cells are non-empty; all dose values > 0."""
+        issues: List[str] = []
+
+        for r_i, row in enumerate(parsed["rows"]):
+            if not row["weight_cell"].strip():
+                issues.append(f"Row {r_i+1}: empty weight cell")
+
+            for dc_idx, dose_cell in enumerate(row["dose_cells"]):
+                if not dose_cell.strip():
+                    issues.append(f"Row {r_i+1}, dose col {dc_idx+1}: empty dose cell")
+                    continue
+                for comp_idx, val in enumerate(
+                    row["dose_values"][dc_idx] if dc_idx < len(row["dose_values"]) else []
+                ):
+                    if val <= 0:
+                        issues.append(
+                            f"Row {r_i+1}, dose col {dc_idx+1}, "
+                            f"component {comp_idx+1}: non-positive value {val}"
+                        )
+
+        return {"passed": len(issues) == 0, "issues": issues}
+
+    # ------------------------------------------------------------------
+    # Dosing plausibility — orchestrator
+    # ------------------------------------------------------------------
+
+    def _validate_dosing_plausibility(self) -> ValidationReport:
+        """Stage 6: Run all six plausibility checks on every dosing-classified table."""
+        dosing_tables = [
+            t for t in self.result.get("tables", [])
+            if t.get("classification") == "dosing"
+        ]
+
+        if not dosing_tables:
+            return ValidationReport(
+                stage="dosing_plausibility",
+                passed=True,
+                issues=["No dosing-classified tables found — skipped"],
+                confidence=1.0,
+                suggestions=[],
+                metadata={"dosing_tables": 0},
+            )
+
+        all_issues: List[str] = []
+        table_results: List[Dict] = []
+        passed_count = 0
+
+        for i, table in enumerate(dosing_tables):
+            pages = table.get("pages", [table.get("page", "?")])
+            parsed = self._parse_dosing_table(table)
+
+            checks = {
+                "weight_contiguity":       self._check_weight_contiguity(parsed),
+                "dose_monotonicity":       self._check_dose_monotonicity(parsed),
+                "weight_coverage":         self._check_weight_coverage(parsed),
+                "clinical_bounds":         self._check_clinical_bounds(parsed),
+                "combination_consistency": self._check_combination_consistency(parsed),
+                "positive_no_empty":       self._check_positive_no_empty(parsed),
+            }
+
+            table_passed = all(c["passed"] for c in checks.values())
+            if table_passed:
+                passed_count += 1
+
+            table_issues = [
+                f"[table {i+1} p{pages} / {name}] {issue}"
+                for name, check in checks.items()
+                for issue in check["issues"]
+                if issue and "skipped" not in issue
+            ]
+            all_issues.extend(table_issues)
+
+            table_results.append({
+                "table_index": i + 1,
+                "pages": pages,
+                "classification": table.get("classification"),
+                "num_rows": table.get("num_rows", 0),
+                "overall_passed": table_passed,
+                "checks": checks,
+            })
+
+        confidence = passed_count / len(dosing_tables)
+
+        print(
+            f"  Stage 6 (Dosing Plausibility): "
+            f"{passed_count}/{len(dosing_tables)} tables passed"
+        )
+
+        return ValidationReport(
+            stage="dosing_plausibility",
+            passed=confidence >= 0.8,
+            issues=all_issues,
+            confidence=confidence,
+            suggestions=(
+                ["Review flagged dosing tables before deployment"]
+                if all_issues else []
+            ),
+            metadata={
+                "dosing_tables": len(dosing_tables),
+                "passed": passed_count,
+                "table_results": table_results,
             },
         )
 
