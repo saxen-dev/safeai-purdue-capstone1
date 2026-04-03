@@ -14,6 +14,7 @@ from dataclasses import asdict
 
 import fitz  # PyMuPDF
 import numpy as np
+import pandas as pd
 from rapidfuzz import fuzz
 
 from .config import (
@@ -396,6 +397,7 @@ class MultiPassExtractor:
                             "num_cols": len(df.columns),
                             "file": table_file,
                             "confidence": 0.9,
+                            "bbox": tuple(table.bbox),
                         }
                         raw_table["classification"] = self._classify_table(
                             raw_table, extra_dosing, extra_clinical
@@ -460,6 +462,160 @@ class MultiPassExtractor:
         print(f"  Classifications: {classification_counts}")
 
         return tables
+
+    def pass2b_stitch_page_boundary_tables(self, tables: List[Dict]) -> List[Dict]:
+        """Pass 2b: Detect and stitch tables split across page boundaries.
+
+        For each PyMuPDF table whose bottom edge exceeds 90% of its page height,
+        searches the next page for a table starting within the top 10% with a
+        matching column count.  Matching fragments are merged into a single stitched
+        table dict (method='pymupdf_stitched') and the two originals are removed.
+
+        Edge cases handled:
+          - 0-row continuation: PyMuPDF puts the data into column headers — those
+            headers are converted into a data row before merging.
+          - Duplicate header row: some PDFs repeat the header on continuation pages —
+            the duplicate first row is stripped from the bottom fragment.
+        """
+        BOTTOM_THRESHOLD = 0.90
+        TOP_THRESHOLD = 0.10
+
+        # Only PyMuPDF tables carry reliable bbox; Camelot tables are passed through.
+        pymupdf_tables = [t for t in tables if t.get("method") == "pymupdf" and "bbox" in t]
+        other_tables = [t for t in tables if not (t.get("method") == "pymupdf" and "bbox" in t)]
+
+        by_page: Dict[int, List[Dict]] = {}
+        for t in pymupdf_tables:
+            by_page.setdefault(t["page"], []).append(t)
+
+        extra_dosing = self.config.dosing_table_keywords or []
+        extra_clinical = self.config.clinical_table_keywords or []
+
+        doc = fitz.open(self.config.pdf_path)
+        stitched_tables: List[Dict] = []
+        fragment_ids: set = set()  # (page, table_id) pairs consumed by stitching
+
+        for page_num in sorted(by_page.keys()):
+            page_height = doc[page_num - 1].rect.height
+
+            for top_tbl in by_page[page_num]:
+                if (top_tbl["page"], top_tbl.get("table_id")) in fragment_ids:
+                    continue
+
+                bbox = top_tbl["bbox"]
+                if bbox[3] / page_height < BOTTOM_THRESHOLD:
+                    continue
+
+                next_page_tables = by_page.get(page_num + 1, [])
+                if not next_page_tables:
+                    continue
+
+                next_page_height = doc[page_num].rect.height  # 0-indexed: page_num+1-1
+
+                for bot_tbl in next_page_tables:
+                    if (bot_tbl["page"], bot_tbl.get("table_id")) in fragment_ids:
+                        continue
+
+                    next_bbox = bot_tbl["bbox"]
+                    if next_bbox[1] / next_page_height > TOP_THRESHOLD:
+                        continue
+
+                    if top_tbl["num_cols"] != bot_tbl["num_cols"]:
+                        print(
+                            f"  Pass 2b: column mismatch page {page_num}→{page_num+1} "
+                            f"({top_tbl['num_cols']} vs {bot_tbl['num_cols']}) — skipping"
+                        )
+                        continue
+
+                    try:
+                        df_top = pd.DataFrame(top_tbl["data"])
+                        df_bot = pd.DataFrame(bot_tbl["data"])
+
+                        # 0-row continuation: headers are actually the data row
+                        if len(df_bot) == 0 and bot_tbl["headers"]:
+                            header_vals = [str(h) for h in bot_tbl["headers"]]
+                            df_bot = pd.DataFrame(
+                                [header_vals],
+                                columns=df_top.columns[: len(header_vals)],
+                            )
+
+                        # Remove duplicate header repeated at top of continuation
+                        top_headers = [str(h).strip().lower() for h in df_top.columns]
+                        if len(df_bot) > 0:
+                            first_row = [str(v).strip().lower() for v in df_bot.iloc[0]]
+                            if first_row == top_headers:
+                                df_bot = df_bot.iloc[1:]
+
+                        # Align columns and concatenate
+                        df_bot.columns = df_top.columns[: len(df_bot.columns)]
+                        df_stitched = pd.concat([df_top, df_bot], ignore_index=True)
+
+                        def _clean(val: Any) -> str:
+                            s = str(val).replace("\n", " ").replace("<br>", " ")
+                            return re.sub(r"\s+", " ", s).strip()
+
+                        md_lines = [
+                            "| " + " | ".join(_clean(h) for h in df_stitched.columns) + " |",
+                            "| " + " | ".join("---" for _ in df_stitched.columns) + " |",
+                        ]
+                        for _, row in df_stitched.iterrows():
+                            md_lines.append("| " + " | ".join(_clean(v) for v in row) + " |")
+
+                        stitched: Dict[str, Any] = {
+                            "page": page_num,
+                            "pages": [page_num, page_num + 1],
+                            "method": "pymupdf_stitched",
+                            "data": df_stitched.to_dict(orient="records"),
+                            "headers": [str(h) for h in df_stitched.columns],
+                            "markdown": "\n".join(md_lines),
+                            "num_rows": len(df_stitched),
+                            "num_cols": len(df_stitched.columns),
+                            "stitched": True,
+                            "stitched_from_rows": [top_tbl["num_rows"], bot_tbl["num_rows"]],
+                            "confidence": min(
+                                top_tbl.get("confidence", 0.9),
+                                bot_tbl.get("confidence", 0.9),
+                            ),
+                        }
+                        stitched["classification"] = self._classify_table(
+                            stitched, extra_dosing, extra_clinical
+                        )
+
+                        stitched_tables.append(stitched)
+                        fragment_ids.add((top_tbl["page"], top_tbl.get("table_id")))
+                        fragment_ids.add((bot_tbl["page"], bot_tbl.get("table_id")))
+
+                        print(
+                            f"  ✅ Pass 2b: stitched pages {page_num}+{page_num+1} — "
+                            f"{top_tbl['num_rows']}+{len(df_bot)}={len(df_stitched)} rows "
+                            f"[{stitched['classification']}]"
+                        )
+                        break  # one continuation per top fragment
+
+                    except Exception as e:
+                        print(f"  ⚠️  Pass 2b: stitch failed pages {page_num}+{page_num+1}: {e}")
+
+        doc.close()
+
+        remaining = [
+            t for t in pymupdf_tables
+            if (t["page"], t.get("table_id")) not in fragment_ids
+        ]
+        result = remaining + stitched_tables + other_tables
+
+        self.passes.append({
+            "pass": "2b",
+            "strategy": "page_boundary_stitching",
+            "stitched_count": len(stitched_tables),
+            "fragments_removed": len(fragment_ids),
+        })
+
+        if stitched_tables:
+            print(f"\n  📎 Pass 2b: {len(stitched_tables)} table(s) stitched across page boundaries")
+        else:
+            print("\n  Pass 2b: no page-boundary tables detected")
+
+        return result
 
     def pass3_ocr_extraction(self, scanned_pages: List[int]) -> List[Dict]:
         """Pass 3: OCR for scanned/image-heavy pages."""
@@ -572,6 +728,7 @@ class MultiPassExtractor:
         tables = []
         if pages_with_tables and self.config.enable_table_detection:
             tables = self.pass2_table_extraction(pages_with_tables)
+            tables = self.pass2b_stitch_page_boundary_tables(tables)
 
         ocr_data = []
         if scanned_pages and self.config.enable_ocr:
