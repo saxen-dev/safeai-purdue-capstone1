@@ -311,6 +311,59 @@ class MultiPassExtractor:
 
         return "other"
 
+    @staticmethod
+    def _generate_nll(table: Dict) -> str:
+        """
+        Convert a classified dosing or clinical_management table into Natural
+        Language Logic (NLL) sentences to prevent LLM alignment hallucinations
+        when reasoning about tabular dosing data.
+
+        Each row becomes one IF/THEN sentence:
+          IF <first_column_header> is <value>, THEN <col2_header> is <val2>, ...
+
+        Only called for dosing and clinical_management tables; returns "" for
+        evidence, structural, and other types.
+
+        Example output for an AL dosing table row:
+          IF body weight is 5–<15 kg, THEN dose is 1 tablet, frequency is twice
+          daily, duration is 3 days.
+        """
+        classification = table.get("classification", "other")
+        if classification not in ("dosing", "clinical_management"):
+            return ""
+
+        headers = [str(h).strip() for h in table.get("headers", []) if str(h).strip()]
+        data = table.get("data", [])
+
+        if not headers or not data:
+            return ""
+
+        sentences: List[str] = []
+        for row in data:
+            if isinstance(row, dict):
+                values = [str(row.get(h, "")).strip() for h in headers]
+            else:
+                values = [str(v).strip() for v in row]
+
+            pairs = [(h, v) for h, v in zip(headers, values) if v]
+            if not pairs:
+                continue
+
+            condition_h, condition_v = pairs[0]
+            sentence = f"IF {condition_h} is {condition_v}"
+
+            if len(pairs) > 1:
+                outcomes = ", ".join(
+                    f"{h} is {v}" for h, v in pairs[1:]
+                )
+                sentence += f", THEN {outcomes}."
+            else:
+                sentence += "."
+
+            sentences.append(sentence)
+
+        return "\n".join(sentences)
+
     def pass_images_extraction(self) -> List[Dict[str, Any]]:
         """
         Rasterize embedded images per page to PNG under output_dir/images/.
@@ -402,6 +455,7 @@ class MultiPassExtractor:
                         raw_table["classification"] = self._classify_table(
                             raw_table, extra_dosing, extra_clinical
                         )
+                        raw_table["nll"] = self._generate_nll(raw_table)
                         tables.append(raw_table)
             except Exception as e:
                 print(f"  Warning: Table extraction on page {page_num} failed: {e}")
@@ -424,6 +478,7 @@ class MultiPassExtractor:
                             "confidence": 0.95,
                         }
                         t["classification"] = self._classify_table(t, extra_dosing, extra_clinical)
+                        t["nll"] = self._generate_nll(t)
                         tables.append(t)
 
                     stream_tables = camelot.read_pdf(temp_pdf, pages="1", flavor="stream")
@@ -438,6 +493,7 @@ class MultiPassExtractor:
                             "confidence": 0.85,
                         }
                         t["classification"] = self._classify_table(t, extra_dosing, extra_clinical)
+                        t["nll"] = self._generate_nll(t)
                         tables.append(t)
 
                     if os.path.exists(temp_pdf):
@@ -580,6 +636,7 @@ class MultiPassExtractor:
                         stitched["classification"] = self._classify_table(
                             stitched, extra_dosing, extra_clinical
                         )
+                        stitched["nll"] = self._generate_nll(stitched)
 
                         stitched_tables.append(stitched)
                         fragment_ids.add((top_tbl["page"], top_tbl.get("table_id")))
@@ -688,6 +745,20 @@ class MultiPassExtractor:
 
         return validation_results
 
+    def _write_nll_file(self, tables: List[Dict]) -> None:
+        """Write tables_nll.txt — one NLL block per dosing/clinical_management table."""
+        nll_path = os.path.join(self.config.output_dir, "tables_nll.txt")
+        nll_tables = [t for t in tables if t.get("nll")]
+        if not nll_tables:
+            return
+        with open(nll_path, "w", encoding="utf-8") as f:
+            for i, t in enumerate(nll_tables, 1):
+                pages = t.get("pages", [t.get("page", "?")])
+                f.write(f"--- Table {i} | page(s) {pages} | {t.get('classification', '')} ---\n")
+                f.write(t["nll"])
+                f.write("\n\n")
+        print(f"  📝 NLL written: {len(nll_tables)} table(s) → {nll_path}")
+
     def extract_all(self) -> Dict:
         """Orchestrate multi-pass extraction."""
         print("=" * 70)
@@ -729,6 +800,7 @@ class MultiPassExtractor:
         if pages_with_tables and self.config.enable_table_detection:
             tables = self.pass2_table_extraction(pages_with_tables)
             tables = self.pass2b_stitch_page_boundary_tables(tables)
+            self._write_nll_file(tables)
 
         ocr_data = []
         if scanned_pages and self.config.enable_ocr:
