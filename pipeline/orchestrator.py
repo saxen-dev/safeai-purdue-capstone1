@@ -23,6 +23,7 @@ from .response import (
     ResponseOrchestrator,
     infer_triage_from_query,
 )
+from .retriever import HybridRetriever
 
 
 class MedicalQASystem:
@@ -62,6 +63,7 @@ class MedicalQASystem:
         self.chunks: List[Dict] | None = None
         self.search_index: Dict[str, Any] | None = None
         self.guardrail: MedicalGuardrailBrain | None = None
+        self._retriever: Optional[HybridRetriever] = None
         self._response_orchestrator: Optional[ResponseOrchestrator] = None
 
     def initialize(self) -> "MedicalQASystem":
@@ -108,6 +110,7 @@ class MedicalQASystem:
         chunker = SmartChunker(self.extraction_result, self.config)
         self.chunks = chunker.chunk_by_headings()
         self.search_index = chunker.create_search_index()
+        self._retriever = HybridRetriever(self.chunks)
 
         print("\n" + "=" * 70)
         print("STEP 4: INITIALIZING GUARDRAIL BRAIN")
@@ -172,6 +175,7 @@ class MedicalQASystem:
         chunker = SmartChunker({}, self.config)
         chunker.chunks = self.chunks
         self.search_index = chunker.create_search_index()
+        self._retriever = HybridRetriever(self.chunks)
 
         self.guardrail = MedicalGuardrailBrain(self.chunks)
 
@@ -229,20 +233,21 @@ class MedicalQASystem:
         )
 
     def _retrieve_top_k(self, query: str, k: int = 5) -> tuple[List[int], List[Dict], List[Dict]]:
-        """BM25 top-k: indices, slim sources {page, heading}, full chunk dicts."""
+        """
+        Hybrid top-k retrieval (dense + BM25 + RRF when deps available, else BM25-only).
+        Returns: indices (best-effort), slim sources {page, heading}, full chunk dicts.
+        """
         assert self.chunks is not None
-        assert self.search_index is not None
-        query_tokens = re.findall(r"[a-zA-Z0-9]+", query.lower())
-        query_tokens = [t for t in query_tokens if len(t) > 1]
-        scores = self.search_index["bm25"].get_scores(query_tokens)
-        top_indices = np.argsort(scores)[::-1][:k]
-        sources: List[Dict] = []
-        chunk_dicts: List[Dict] = []
-        for idx in top_indices:
-            chunk = self.chunks[idx]
-            sources.append({"page": chunk["page"], "heading": chunk.get("heading", "")})
-            chunk_dicts.append(dict(chunk))
-        return list(top_indices), sources, chunk_dicts
+        assert self._retriever is not None
+        chunk_dicts = self._retriever.retrieve(query, k)
+        sources: List[Dict] = [
+            {"page": c["page"], "heading": c.get("heading", "")}
+            for c in chunk_dicts
+        ]
+        # Build index list for callers that use positional indices.
+        id_to_idx = {c["chunk_id"]: i for i, c in enumerate(self.chunks)}
+        indices = [id_to_idx.get(c["chunk_id"], -1) for c in chunk_dicts]
+        return indices, sources, chunk_dicts
 
     def answer(self, query: str) -> Dict:
         """Answer a medical query with guardrail validation."""
