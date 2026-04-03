@@ -10,7 +10,7 @@ from dataclasses import dataclass, field
 from enum import Enum
 from typing import Any, Dict, List, Optional
 
-from .config import MedicalSource, TriageLevel
+from .config import MedicalSource, PreservationLevel, TriageLevel
 
 
 class ResponseFormat(Enum):
@@ -75,6 +75,9 @@ class VHTResponseFormatter:
         if content.family_message:
             lines.append(self._family_message_section(content.family_message))
         lines.append(self._vht_reminder(content.triage))
+        dosing = self._dosing_block(content.citations)
+        if dosing:
+            lines.append(dosing)
         lines.append(self._citations_section(content.citations))
         if content.validation_warnings:
             lines.append(self._warnings_section(content.validation_warnings))
@@ -148,6 +151,30 @@ class VHTResponseFormatter:
             "• Keep your VHT kit and referral forms ready"
         )
 
+    def _dosing_block(self, citations: List[Dict[str, Any]]) -> str:
+        """
+        Render verbatim NLL/text for VERBATIM-level chunks.
+
+        VERBATIM chunks contain dosing tables whose quantities must never be
+        paraphrased.  This block surfaces them explicitly so the VHT sees the
+        exact dosing language from the guideline.
+        """
+        verbatim = [
+            c for c in citations
+            if c.get("preservation_level") == PreservationLevel.VERBATIM.value
+        ]
+        if not verbatim:
+            return ""
+        lines = ["**EXACT DOSING (copy from guidelines — do not change numbers):**", ""]
+        for c in verbatim[:2]:
+            nll = c.get("nll", "").strip()
+            text = c.get("text", "").strip()
+            content = nll if nll else text
+            if content:
+                lines.append(content)
+                lines.append("")
+        return "\n".join(lines).rstrip()
+
     def _citations_section(self, citations: List[Dict[str, Any]]) -> str:
         if not citations:
             return "**FROM THE GUIDELINES:**\n\n• Refer to national / MoH handbook"
@@ -158,10 +185,16 @@ class VHTResponseFormatter:
                 src = src.value
             page = c.get("page", "?")
             section = c.get("section", "")
+            level = c.get("preservation_level", PreservationLevel.STANDARD.value)
+            label = ""
+            if level == PreservationLevel.VERBATIM.value:
+                label = " [EXACT DOSING]"
+            elif level == PreservationLevel.HIGH.value:
+                label = " [HIGH FIDELITY]"
             if section:
-                lines.append(f"• {src}, Page {page}: {section}")
+                lines.append(f"• {src}, Page {page}: {section}{label}")
             else:
-                lines.append(f"• {src}, Page {page}")
+                lines.append(f"• {src}, Page {page}{label}")
         return "\n".join(lines)
 
     def _warnings_section(self, warnings: List[str]) -> str:
@@ -369,10 +402,25 @@ class ResponseOrchestrator:
             page = chunk.get("page")
             if page is None:
                 continue
+            # Resolve preservation level — chunks store the string value of the enum.
+            raw_level = chunk.get("preservation_level", PreservationLevel.STANDARD.value)
+            if isinstance(raw_level, PreservationLevel):
+                level = raw_level.value
+            else:
+                level = raw_level
+            # Collect NLL text from any dosing tables in this chunk.
+            nll_parts = [
+                t.get("nll", "")
+                for t in chunk.get("tables", [])
+                if t.get("nll")
+            ]
             out.append({
                 "source": source,
                 "page": page,
                 "section": chunk.get("heading", "Clinical guideline"),
+                "preservation_level": level,
+                "text": chunk.get("text", ""),
+                "nll": " ".join(nll_parts),
             })
         return out
 
