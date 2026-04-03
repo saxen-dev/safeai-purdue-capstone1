@@ -128,6 +128,21 @@ def _extract_image_caption(page: Any, xref: int) -> str:
         return ""
 
 
+def _normalise_for_crossval(text: str) -> str:
+    """Normalise text before cross-validation comparison.
+
+    Removes differences that are artefacts of the extractor (whitespace,
+    soft hyphens, line-break hyphens) rather than genuine content divergence.
+    """
+    # Strip soft-hyphen line-break joins: "treat-\nment" → "treatment"
+    text = re.sub(r"-\s*\n\s*", "", text)
+    # Collapse all whitespace (tabs, newlines, multiple spaces) to single space
+    text = re.sub(r"\s+", " ", text)
+    # Remove non-printable characters
+    text = re.sub(r"[^\x20-\x7E]", "", text)
+    return text.strip().lower()
+
+
 def _dataframe_to_markdown(df) -> str:
     """Prefer pandas to_markdown (needs tabulate); fall back to CSV-like text."""
     if hasattr(df, "to_markdown"):
@@ -827,7 +842,10 @@ class MultiPassExtractor:
                             break
 
                     if pass1_text and text:
-                        similarity = fuzz.ratio(pass1_text, text) / 100.0
+                        similarity = fuzz.ratio(
+                            _normalise_for_crossval(pass1_text),
+                            _normalise_for_crossval(text),
+                        ) / 100.0
                         validation_results["page_matches"].append({
                             "page": page_num,
                             "similarity": similarity,

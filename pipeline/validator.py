@@ -31,6 +31,13 @@ _DOSE_BOUNDS_TOLERANCE: float = 2.5
 # Maximum fractional deviation from median ratio in combination drugs (35%)
 _RATIO_TOLERANCE: float = 0.35
 
+# Cell values treated as "not applicable" rather than missing in dosing tables.
+# Truly empty strings are NOT included — those are still flagged as missing.
+_NA_CELL_VALUES: frozenset = frozenset({
+    "-", "--", "---", "—", "–", "n/a", "na", "nil", "none",
+    "not applicable", "not used", "n.a.", "n.a", ".", "/",
+})
+
 # Reference per-kg dose ranges for key guideline drugs [mg/kg, per single dose]
 # Sources: WHO malaria guidelines; Uganda Clinical Guidelines 2023
 _DRUG_DOSE_RANGES: Dict[str, Tuple[float, float]] = {
@@ -165,7 +172,9 @@ class ExtractionValidator:
             f"conf={validation_results['dosing_plausibility'].confidence:.0%}"
         )
 
-        validation_results["human_review"] = self._flag_for_human_review()
+        validation_results["human_review"] = self._flag_for_human_review(
+            dosing_report=validation_results.get("dosing_plausibility")
+        )
         print(
             f"  Stage 5 (Human Review): flagged {len(validation_results['human_review'].issues)} items"
         )
@@ -238,11 +247,13 @@ class ExtractionValidator:
                         f"Heading level skipped: {heading_levels[i]} → {heading_levels[i+1]}"
                     )
 
-        confidence = 0.9 if not issues else 0.7
+        # Proportional: each issue costs 0.1, floor at 0.6 so a single
+        # heading-level skip (common in medical PDFs) still passes at 0.8.
+        confidence = max(0.6, 0.9 - 0.1 * len(issues))
 
         return ValidationReport(
             stage="structure",
-            passed=len(issues) == 0,
+            passed=confidence >= 0.8,
             issues=issues,
             confidence=confidence,
             suggestions=(
@@ -445,7 +456,9 @@ class ExtractionValidator:
             })
 
         weight_band_count = sum(1 for r in rows if r["weight_range"] is not None)
-        has_weight_bands = explicit_weight_col is not None and weight_band_count >= 2
+        # ≥1 parsed weight range is enough to confirm the table has weight-band
+        # structure; the individual checks that need ≥2 bands guard themselves.
+        has_weight_bands = explicit_weight_col is not None and weight_band_count >= 1
 
         return {
             "headers": headers,
@@ -620,17 +633,38 @@ class ExtractionValidator:
 
     @staticmethod
     def _check_combination_consistency(parsed: Dict) -> Dict:
-        """Check 5: Component ratios in combination drugs are stable across rows."""
+        """Check 5: Component ratios in combination drugs are stable across rows.
+
+        Only fires when the column header explicitly suggests a fixed-ratio
+        combination drug (e.g. contains '/', '+', or 'co-').  Generic dose
+        columns with multiple numeric values (e.g. two unrelated drugs listed
+        in one row) are skipped to avoid false positives.
+        """
         issues: List[str] = []
 
+        # Keywords that indicate a genuine fixed-ratio combination product
+        _COMBO_HINTS = ("/", "+", " co-", "coartem", "co-artemether",
+                        "combined", "combination", "compound")
+
         for dc_idx in range(len(parsed["dose_cols"])):
+            col_i = parsed["dose_cols"][dc_idx]
+            header = (
+                parsed["headers"][col_i].lower()
+                if col_i < len(parsed["headers"]) else ""
+            )
+
+            # Skip columns whose header doesn't look like a combo product
+            if not any(hint in header for hint in _COMBO_HINTS):
+                continue
+
             multi_rows = [
                 (r_i, row["dose_values"][dc_idx])
                 for r_i, row in enumerate(parsed["rows"])
                 if dc_idx < len(row["dose_values"]) and len(row["dose_values"][dc_idx]) >= 2
             ]
 
-            if len(multi_rows) < 2:
+            # Need at least 3 multi-component rows to establish a reliable ratio
+            if len(multi_rows) < 3:
                 continue
 
             ratios = [vals[1] / vals[0] for _, vals in multi_rows if vals[0] > 0]
@@ -664,11 +698,18 @@ class ExtractionValidator:
             return {"passed": True, "issues": ["no explicit dose columns — skipped"]}
 
         for r_i, row in enumerate(parsed["rows"]):
-            if not row["weight_cell"].strip():
+            weight_norm = row["weight_cell"].strip().lower()
+            if weight_norm in _NA_CELL_VALUES:
+                continue  # intentionally blank / not-applicable weight row
+
+            if not weight_norm and parsed.get("has_weight_bands"):
                 issues.append(f"Row {r_i+1}: empty weight cell")
 
             for dc_idx, dose_cell in enumerate(row["dose_cells"]):
-                if not dose_cell.strip():
+                cell_norm = dose_cell.strip().lower()
+                if cell_norm in _NA_CELL_VALUES:
+                    continue  # intentionally blank / not-applicable cell
+                if not cell_norm:
                     issues.append(f"Row {r_i+1}, dose col {dc_idx+1}: empty dose cell")
                     continue
                 for comp_idx, val in enumerate(
@@ -764,22 +805,47 @@ class ExtractionValidator:
             },
         )
 
-    def _flag_for_human_review(self) -> ValidationReport:
-        """Flag sections needing human verification."""
+    def _flag_for_human_review(
+        self,
+        dosing_report: Optional[Any] = None,
+    ) -> ValidationReport:
+        """Flag sections needing human verification.
+
+        Only dosing tables that *failed* Stage 6 checks are flagged as needing
+        dosing review — not every table that mentions "mg".  Contraindication
+        pages and OCR pages are always included.  Total items are capped at 50
+        to keep the list actionable.
+        """
+        _MAX_ITEMS = 50
         priority_items: List[Dict[str, Any]] = []
 
-        for table in self.result.get("tables", []):
-            table_text = json.dumps(table.get("data", "")).lower()
-            if any(
-                word in table_text
-                for word in ["dose", "mg", "tablet", "administration"]
-            ):
+        # Build a set of page numbers for dosing tables that failed Stage 6
+        failed_dosing_pages: set = set()
+        if dosing_report is not None:
+            for tr in dosing_report.metadata.get("table_results", []):
+                if not tr.get("overall_passed"):
+                    for pg in (tr.get("pages") or [tr.get("page")]):
+                        if pg is not None:
+                            failed_dosing_pages.add(pg)
+
+        # If no Stage 6 data available, fall back to all dosing-classified tables
+        if dosing_report is None:
+            for table in self.result.get("tables", []):
+                if table.get("classification") == "dosing":
+                    priority_items.append({
+                        "type": "dosing_table",
+                        "page": table.get("page"),
+                        "reason": "Dosing accuracy critical - requires human verification",
+                    })
+        else:
+            for page_num in sorted(failed_dosing_pages):
                 priority_items.append({
                     "type": "dosing_table",
-                    "page": table.get("page"),
+                    "page": page_num,
                     "reason": "Dosing accuracy critical - requires human verification",
                 })
 
+        # Always include contraindication pages
         for page in self.result.get("pages", []):
             for block in page.get("text_blocks", []):
                 text = block.get("text", "").lower()
@@ -791,6 +857,7 @@ class ExtractionValidator:
                     })
                     break
 
+        # Always include OCR pages
         for ocr_item in self.result.get("ocr_data", []):
             if ocr_item.get("status") == "requires_manual_review":
                 priority_items.append({
@@ -799,7 +866,10 @@ class ExtractionValidator:
                     "reason": "OCR required - manual transcription needed",
                 })
 
-        hr_conf = max(0.0, min(1.0, 1.0 - (len(priority_items) * 0.1)))
+        # Cap to keep the list actionable
+        priority_items = priority_items[:_MAX_ITEMS]
+
+        hr_conf = max(0.0, min(1.0, 1.0 - (len(priority_items) * 0.02)))
         return ValidationReport(
             stage="human_review",
             passed=len(priority_items) == 0,

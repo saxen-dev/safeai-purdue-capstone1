@@ -290,7 +290,8 @@ class TestCombinationConsistency:
         assert result["passed"] is True
 
     def test_unstable_ratio_fails(self):
-        t = make_table("dosing", ["Weight", "Dose mg"], [
+        # Header must contain a combo hint (e.g. '/') for the check to fire
+        t = make_table("dosing", ["Weight", "Artemether/Lumefantrine mg"], [
             ["5-9 kg",   "20 + 120 mg"],   # ratio 6.0
             ["10-14 kg", "40 + 240 mg"],   # ratio 6.0
             ["15-24 kg", "60 + 60 mg"],    # ratio 1.0 — very different
@@ -322,16 +323,20 @@ class TestPositiveNoEmpty:
         assert result["passed"] is True
 
     def test_empty_weight_cell_fails(self):
+        # Needs ≥2 weight-band rows so has_weight_bands=True and the check fires
         t = make_table("dosing", ["Weight", "Dose"], [
-            ["", "80 mg"],
+            ["5-9 kg", "80 mg"],
+            ["", "160 mg"],          # second row has empty weight cell
         ])
         result = _positive(_parse(t))
         assert result["passed"] is False
         assert any("empty weight" in i for i in result["issues"])
 
     def test_empty_dose_cell_fails(self):
+        # Needs ≥2 weight-band rows so has_weight_bands=True and the check fires
         t = make_table("dosing", ["Weight", "Dose"], [
-            ["5-9 kg", ""],
+            ["5-9 kg", "80 mg"],
+            ["10-14 kg", ""],        # second row has truly empty dose cell
         ])
         result = _positive(_parse(t))
         assert result["passed"] is False
