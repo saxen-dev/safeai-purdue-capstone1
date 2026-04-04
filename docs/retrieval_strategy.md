@@ -102,4 +102,15 @@ Hypothetical Document Embeddings (HyDE) generates a synthetic answer to the quer
 
 The retriever returns a list of chunk dictionaries enriched with `score` (fused/reranked relevance) and `retrieval_rank` (1-based position). These feed into the [response layer](response_layer.md) for answer generation.
 
+## Benchmark data
+
+The retrieval benchmark artifacts are tracked in [`rag_output/`](../rag_output/):
+
+- **[`retrieval_test_results.json`](../rag_output/retrieval_test_results.json)** — 12-query clinical benchmark with per-result relevance, rankings, and source pages
+- **[`build_report.json`](../rag_output/build_report.json)** — aggregate metrics (P@3 = 0.944, P@5 = 0.967, MRR = 0.944), corpus stats, and model configuration
+- **[`child_chunks.json`](../rag_output/child_chunks.json)** — all 1,695 child chunks used for retrieval
+- **[`brain1_package/`](../rag_output/brain1_package/)** — mobile-ready export (24.11 MB)
+
+See [`rag_output/README.md`](../rag_output/README.md) for the full directory guide and how to cross-reference results against the source PDFs.
+
 See also: [Chunking strategy](chunking_strategy.md) for how chunks are prepared for retrieval.

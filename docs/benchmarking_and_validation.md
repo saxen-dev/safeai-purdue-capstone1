@@ -80,6 +80,16 @@ The verifier generates a JSON review package and a Markdown physician review rep
 
 `passes_deployment_gate()` requires that all mandatory-tier chunks (Tiers 1-3) have `verified_by.status == "verified"` and a valid `audit_hash`. Any unverified mandatory chunk blocks deployment.
 
+## Raw data
+
+The benchmark data files are tracked in the repository under [`rag_output/`](../rag_output/):
+
+- **[`retrieval_test_results.json`](../rag_output/retrieval_test_results.json)** — per-query results for all 12 clinical test queries (P@3, P@5, MRR, per-result relevance, source pages, content previews)
+- **[`build_report.json`](../rag_output/build_report.json)** — corpus stats, timing, aggregate metrics, model configuration
+- **[`brain1_package/`](../rag_output/brain1_package/)** — the deployable mobile package (24.11 MB)
+
+See [`rag_output/README.md`](../rag_output/README.md) for the full directory guide.
+
 ## Benchmark results
 
 ### WHO Malaria Guidelines (478 pages, 203 tables)
@@ -156,4 +166,6 @@ python -m pytest tests/ -q
 # 417 passed in ~25s
 ```
 
-See also: [Safety and guardrails](safety_and_guardrails.md) for how these validation results enforce safety decisions.
+See also:
+- [Safety and guardrails](safety_and_guardrails.md) for how these validation results enforce safety decisions
+- [`rag_output/README.md`](../rag_output/README.md) for cross-referencing benchmark results against the source PDFs

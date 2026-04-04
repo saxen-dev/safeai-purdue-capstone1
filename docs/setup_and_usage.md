@@ -132,6 +132,8 @@ my_output/
   tables_nll.txt             # Natural language descriptions of dosing tables
 ```
 
+The RAG retrieval artifacts (benchmark results, child chunks, brain1 mobile package) are stored separately in [`rag_output/`](../rag_output/). See [`rag_output/README.md`](../rag_output/README.md) for the full directory guide.
+
 ## Interactive Q&A mode
 
 After the pipeline finishes, it drops into an interactive prompt:
