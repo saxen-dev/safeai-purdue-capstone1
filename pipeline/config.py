@@ -332,6 +332,12 @@ class ExtractionConfig:
     dosing_table_keywords: Optional[List[str]] = None
     # Extra clinical management keywords added to CLINICAL_TABLE_KEYWORDS.
     clinical_table_keywords: Optional[List[str]] = None
+    # Raw drug name keywords for retrieval-time metadata boosting.
+    # Populated from JSON drug_keywords by factory presets.
+    drug_keywords: Optional[List[str]] = None
+    # Condition patterns for retrieval-time metadata boosting.
+    # Each entry is [regex_pattern, canonical_label] from JSON domain_keywords.conditions.
+    condition_patterns: Optional[List[List[str]]] = None
 
     def __post_init__(self) -> None:
         # Normalize path: expanduser, resolve for stable cache keys on absolute paths
@@ -378,6 +384,9 @@ def extraction_config_who_malaria_nih(
         or "WHO Malaria Guidelines (NCBI Bookshelf)"
     )
 
+    # Condition patterns for retrieval metadata boosting
+    raw_conditions = (doc.get("domain_keywords") or {}).get("conditions") or []
+
     return ExtractionConfig(
         pdf_path=str(pdf),
         output_dir=str(out),
@@ -385,6 +394,8 @@ def extraction_config_who_malaria_nih(
         critical_content_terms=list(MALARIA_GUIDELINE_CRITICAL_TERMS),
         dosing_table_keywords=all_dosing,
         clinical_table_keywords=clinical_kws or None,
+        drug_keywords=drug_kws or None,
+        condition_patterns=raw_conditions or None,
     )
 
 
@@ -425,6 +436,9 @@ def extraction_config_uganda_clinical_2023(
         or "Uganda Clinical Guidelines 2023"
     )
 
+    # Condition patterns for retrieval metadata boosting
+    raw_conditions = (doc.get("domain_keywords") or {}).get("conditions") or []
+
     return ExtractionConfig(
         pdf_path=str(pdf),
         output_dir=str(out),
@@ -432,6 +446,8 @@ def extraction_config_uganda_clinical_2023(
         critical_content_terms=list(UGANDA_CLINICAL_CRITICAL_TERMS),
         dosing_table_keywords=all_dosing,
         clinical_table_keywords=all_clinical,
+        drug_keywords=drug_kws or None,
+        condition_patterns=raw_conditions or None,
     )
 
 

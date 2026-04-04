@@ -51,15 +51,32 @@ The top-10 fused results are re-scored using `cross-encoder/ms-marco-MiniLM-L-6-
 
 Reranking is non-fatal: if the cross-encoder model fails to load (e.g., no internet on first run), the system falls back to RRF-only results with a warning.
 
+### Metadata-aware re-ranking (v2)
+
+After cross-encoder reranking, a metadata-aware post-processing step applies four multiplicative boost signals using clinical metadata already present on every chunk. This never removes results — only re-orders them.
+
+**Boost 1 — Drug-name match (×1.35):** Drug names are extracted from the query using the config's `drug_keywords` list. Chunks whose content or `drug_name` metadata field contains a matching drug receive a 35% score boost. This fixes the Q01 failure where artesunate content outranked the correct artemether-lumefantrine dosing table.
+
+**Boost 2 — Chunk-type for dosing queries (×1.25 / ×1.15 / ×0.85):** When the query contains dosing-intent signals ("dose", "mg/kg", "tablet", "schedule"), `dosing_table` and `verbatim` chunks receive a 25% boost, NLL children (semantic bridges to tables) receive 15%, and `evidence_table` chunks are demoted by 15%. This ensures that for dosing questions, the actual dosing table ranks above narrative paragraphs that happen to mention similar weights.
+
+**Boost 3 — Condition match (×1.20):** The query is matched against condition patterns from the config (regex-based, e.g., `severe\s+malaria` → "Severe malaria") or a built-in keyword map. Chunks whose `condition` metadata matches receive a 20% boost.
+
+**Boost 4 — Clinical domain match (×1.10):** Domain-relevant keywords are extracted from the query and soft-matched against each chunk's `clinical_domain` field (99.7% fill rate). The boost scales with the fraction of matched keywords, up to 10%.
+
+All four boosts stack multiplicatively. A dosing table chunk matching on drug name + dosing type + condition + domain can receive up to ~2× the original score, while an irrelevant evidence table is demoted.
+
 ### Graceful degradation
 
 The retriever adapts to available dependencies:
 
 | Available | Behavior |
 |---|---|
-| BM25 + FAISS + cross-encoder | Full hybrid + reranking |
+| BM25 + FAISS + cross-encoder + metadata | Full hybrid + reranking + metadata boosts |
+| BM25 + FAISS + cross-encoder | Full hybrid + reranking (no metadata boosts) |
 | BM25 + FAISS | Hybrid with RRF, no reranking |
 | BM25 only | Sparse keyword search only |
+
+Metadata re-ranking is enabled by default and requires no additional dependencies — it uses metadata fields already present on chunks. It can be disabled via `enable_metadata_reranking=False` on the `HybridRetriever` constructor.
 
 This means the pipeline works on machines without GPU or without `sentence-transformers` / `faiss-cpu` installed — it just falls back to BM25.
 
@@ -97,6 +114,9 @@ Hypothetical Document Embeddings (HyDE) generates a synthetic answer to the quer
 | `top_k_fused` | 10 | Candidates after RRF before reranking |
 | `rrf_k` | 60 | RRF fusion constant |
 | `enable_reranking` | True | Enable cross-encoder reranking |
+| `enable_metadata_reranking` | True | Enable metadata-aware boost layer |
+| `drug_keywords` | From config | Drug names for query-time extraction |
+| `condition_patterns` | From config | Regex→label pairs for condition matching |
 
 ## Output
 

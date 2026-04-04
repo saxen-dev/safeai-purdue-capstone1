@@ -1,15 +1,24 @@
 """
-Hybrid retrieval: dense (FAISS) + sparse (BM25) + RRF + optional cross-encoder.
+Hybrid retrieval: dense (FAISS) + sparse (BM25) + RRF + optional cross-encoder
++ metadata-aware re-ranking.
 
 Falls back gracefully to BM25-only when sentence-transformers or faiss are
 not installed.
+
+Metadata re-ranking (v2) applies four boost signals after cross-encoder
+reranking, using clinical metadata already present on every chunk:
+
+  1. Drug-name boost   — query drug names matched against chunk content/metadata
+  2. Chunk-type boost  — dosing_table / NLL chunks boosted for dosing queries
+  3. Condition boost   — condition field matched against query condition signals
+  4. Domain boost      — clinical_domain field matched against query intent
 """
 
 from __future__ import annotations
 
 import re
 from collections import defaultdict
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, List, Optional, Sequence, Tuple
 
 import numpy as np
 from rank_bm25 import BM25Okapi
@@ -37,6 +46,179 @@ except ImportError:
 DEFAULT_EMBED_MODEL = "sentence-transformers/all-MiniLM-L6-v2"
 DEFAULT_RERANK_MODEL = "cross-encoder/ms-marco-MiniLM-L-6-v2"
 _RRF_K_DEFAULT = 60
+
+# ---------------------------------------------------------------------------
+# Metadata re-ranking constants
+# ---------------------------------------------------------------------------
+
+# Boost multipliers applied to fused/reranked scores.  Values > 1.0 promote;
+# < 1.0 demote.  Multipliers stack multiplicatively.
+_DRUG_MATCH_BOOST = 1.35          # chunk mentions a drug the query asks about
+_DOSING_TYPE_BOOST = 1.25         # chunk is a dosing_table for a dosing query
+_NLL_BOOST = 1.15                 # chunk is an NLL child (semantic bridge to table)
+_EVIDENCE_TABLE_DEMOTE = 0.85     # evidence_table for a dosing query (comparison, not prescribing)
+_CONDITION_MATCH_BOOST = 1.20     # condition metadata matches query condition signal
+_DOMAIN_MATCH_BOOST = 1.10        # clinical_domain matches query intent
+
+# Dosing-intent signal words detected in the query.
+_DOSING_QUERY_SIGNALS = frozenset([
+    "dose", "doses", "dosing", "dosage", "mg", "mg/kg", "tablet", "tablets",
+    "how much", "how many", "weight", "kg", "schedule", "regimen",
+])
+
+# Condition signal words -> canonical condition labels (used when config
+# condition_patterns are not available).
+_DEFAULT_CONDITION_MAP: Dict[str, str] = {
+    "severe": "Severe malaria",
+    "uncomplicated": "Uncomplicated malaria",
+    "pregnancy": "Malaria in pregnancy",
+    "pregnant": "Malaria in pregnancy",
+    "vivax": "P. vivax malaria",
+    "falciparum": "P. falciparum malaria",
+    "prevention": "Malaria prevention",
+    "chemoprevention": "Malaria chemoprevention",
+    "recurrent": "Recurrent malaria",
+    "diagnosis": "Malaria diagnosis",
+    "vector": "Vector control",
+}
+
+
+def _query_has_dosing_intent(query_lower: str) -> bool:
+    """Return True if the query is asking about dosing."""
+    tokens = set(re.findall(r"[a-z/]+", query_lower))
+    return bool(tokens & _DOSING_QUERY_SIGNALS)
+
+
+def _extract_drug_names(
+    query_lower: str,
+    drug_keywords: Optional[Sequence[str]] = None,
+) -> List[str]:
+    """Extract drug name keywords present in the query."""
+    if not drug_keywords:
+        return []
+    return [d for d in drug_keywords if d.lower() in query_lower]
+
+
+def _detect_condition(
+    query_lower: str,
+    condition_patterns: Optional[List[List[str]]] = None,
+) -> Optional[str]:
+    """Return the canonical condition label if the query matches a condition pattern."""
+    # Try config-provided regex patterns first.
+    if condition_patterns:
+        for entry in condition_patterns:
+            if len(entry) >= 2:
+                pattern, label = entry[0], entry[1]
+                if re.search(pattern, query_lower, re.IGNORECASE):
+                    return label
+    # Fall back to built-in keyword map.
+    for keyword, label in _DEFAULT_CONDITION_MAP.items():
+        if keyword in query_lower:
+            return label
+    return None
+
+
+def _detect_domain_keywords(query_lower: str) -> List[str]:
+    """Extract domain-relevant keywords from the query for soft matching."""
+    # Domain keywords that appear in clinical_domain strings.
+    domain_signals = [
+        "dosing", "act", "treatment", "chemoprevention", "pregnancy",
+        "severe", "diagnosis", "vaccine", "vector", "prevention",
+        "relapse", "vivax", "referral", "artesunate", "artemether",
+        "primaquine", "quinine", "hiv", "infant", "children",
+    ]
+    return [kw for kw in domain_signals if kw in query_lower]
+
+
+def metadata_rerank(
+    scored_ids: List[Tuple[str, float]],
+    id_to_chunk: Dict[str, Dict[str, Any]],
+    query: str,
+    *,
+    drug_keywords: Optional[Sequence[str]] = None,
+    condition_patterns: Optional[List[List[str]]] = None,
+) -> List[Tuple[str, float]]:
+    """
+    Apply metadata-aware score boosts to a ranked list.
+
+    This is a post-processing step that adjusts scores from RRF or cross-encoder
+    reranking using four metadata signals.  It never removes results — only
+    re-orders by adjusting scores multiplicatively.
+
+    Parameters
+    ----------
+    scored_ids : ranked list of (chunk_id, score) from upstream.
+    id_to_chunk : lookup from chunk_id to full chunk dict.
+    query : the original user query string.
+    drug_keywords : drug name list from config (e.g., config.drug_keywords).
+    condition_patterns : condition regex patterns from config.
+
+    Returns
+    -------
+    Re-sorted list of (chunk_id, adjusted_score).
+    """
+    if not scored_ids:
+        return scored_ids
+
+    ql = query.lower()
+    is_dosing = _query_has_dosing_intent(ql)
+    query_drugs = _extract_drug_names(ql, drug_keywords)
+    query_condition = _detect_condition(ql, condition_patterns)
+    query_domains = _detect_domain_keywords(ql)
+
+    boosted: List[Tuple[str, float]] = []
+    for doc_id, score in scored_ids:
+        chunk = id_to_chunk.get(doc_id)
+        if chunk is None:
+            boosted.append((doc_id, score))
+            continue
+
+        multiplier = 1.0
+        meta = chunk.get("metadata") or {}
+        chunk_type = chunk.get("chunk_type", meta.get("chunk_type", ""))
+        pres = chunk.get("preservation_level", meta.get("preservation_level", ""))
+        condition = meta.get("condition", "") or ""
+        drug_name = meta.get("drug_name", "") or ""
+        domain = chunk.get("clinical_domain", "") or ""
+        content_lower = chunk.get("content", "").lower()
+        is_nll = chunk.get("is_nll", False)
+
+        # --- Boost 1: Drug-name match ---
+        if query_drugs:
+            # Check both metadata drug_name and content for matches.
+            drug_match = any(
+                d.lower() in drug_name.lower() or d.lower() in content_lower
+                for d in query_drugs
+            )
+            if drug_match:
+                multiplier *= _DRUG_MATCH_BOOST
+
+        # --- Boost 2: Chunk-type for dosing queries ---
+        if is_dosing:
+            if chunk_type == "dosing_table" or pres == "verbatim":
+                multiplier *= _DOSING_TYPE_BOOST
+            elif is_nll:
+                multiplier *= _NLL_BOOST
+            elif chunk_type == "evidence_table":
+                multiplier *= _EVIDENCE_TABLE_DEMOTE
+
+        # --- Boost 3: Condition match ---
+        if query_condition and condition:
+            if query_condition.lower() in condition.lower():
+                multiplier *= _CONDITION_MATCH_BOOST
+
+        # --- Boost 4: Clinical domain match ---
+        if query_domains and domain:
+            domain_lower = domain.lower()
+            matched = sum(1 for kw in query_domains if kw in domain_lower)
+            if matched:
+                # Scale boost by fraction of matched domain keywords (max = full boost).
+                frac = min(matched / max(len(query_domains), 1), 1.0)
+                multiplier *= 1.0 + (_DOMAIN_MATCH_BOOST - 1.0) * frac
+
+        boosted.append((doc_id, score * multiplier))
+
+    return sorted(boosted, key=lambda x: x[1], reverse=True)
 
 
 def reciprocal_rank_fusion(
@@ -80,11 +262,17 @@ class HybridRetriever:
         top_k_initial: int = 20,
         top_k_fused: int = 10,
         rrf_k: int = _RRF_K_DEFAULT,
+        drug_keywords: Optional[Sequence[str]] = None,
+        condition_patterns: Optional[List[List[str]]] = None,
+        enable_metadata_reranking: bool = True,
     ):
         self.chunks = chunks
         self.top_k_initial = top_k_initial
         self.top_k_fused = top_k_fused
         self.rrf_k = rrf_k
+        self._drug_keywords = list(drug_keywords) if drug_keywords else []
+        self._condition_patterns = condition_patterns or []
+        self._enable_metadata_reranking = enable_metadata_reranking
 
         # Sparse index — always built (None when corpus is empty).
         self._corpus_tokens: List[List[str]]
@@ -248,6 +436,17 @@ class HybridRetriever:
                     reverse=True,
                 )
 
+        # Metadata-aware re-ranking — applies four boost signals using
+        # clinical metadata already present on each chunk.
+        if self._enable_metadata_reranking and fused:
+            fused = metadata_rerank(
+                fused,
+                id_to_chunk,
+                query,
+                drug_keywords=self._drug_keywords,
+                condition_patterns=self._condition_patterns,
+            )
+
         # Assemble final result list.
         results: List[Dict[str, Any]] = []
         seen: set = set()
@@ -277,3 +476,8 @@ class HybridRetriever:
     def reranking_available(self) -> bool:
         """True when a cross-encoder reranker is loaded."""
         return self._reranker is not None
+
+    @property
+    def metadata_reranking_enabled(self) -> bool:
+        """True when metadata-aware re-ranking is active."""
+        return self._enable_metadata_reranking

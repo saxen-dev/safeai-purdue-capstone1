@@ -139,6 +139,19 @@ Both presets were tested with 25 queries each (50 total):
 
 All 50 queries passed guardrail validation with no warnings or errors.
 
+## Metadata-aware re-ranking (v2)
+
+A metadata-aware post-processing layer was added to the retrieval pipeline to address the Q01 failure (artemether-lumefantrine dosing query returning artesunate content at ranks 1-2). The layer applies four multiplicative score boosts using clinical metadata already present on chunks:
+
+1. **Drug-name match (×1.35)** — extracted from query via config `drug_keywords`
+2. **Chunk-type boost (×1.25 dosing / ×0.85 evidence)** — for dosing-intent queries
+3. **Condition match (×1.20)** — condition metadata matched against query signals
+4. **Domain match (×1.10)** — clinical_domain soft-matched against query keywords
+
+These boosts stack multiplicatively. In the Q01 case, the correct AL dosing table (originally ranked 3rd with score 0.9) jumps to rank 1 (score ~1.52) while the irrelevant artesunate narrative drops due to lacking drug-name match on "artemether" / "lumefantrine".
+
+See [retrieval_strategy.md](retrieval_strategy.md) for full implementation details and boost constants.
+
 ## Test suite
 
 417 unit tests cover all pipeline modules:

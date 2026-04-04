@@ -118,7 +118,11 @@ class MedicalQASystem:
         # Use children for retrieval when available (richer contextual_content);
         # fall back to parent chunks when child generation produces nothing.
         retrieval_units = children if children else self.chunks
-        self._retriever = HybridRetriever(retrieval_units)
+        self._retriever = HybridRetriever(
+            retrieval_units,
+            drug_keywords=getattr(self.config, "drug_keywords", None),
+            condition_patterns=getattr(self.config, "condition_patterns", None),
+        )
 
         print("\n" + "=" * 70)
         print("STEP 4: STAGE 4b — CLINICAL VERIFICATION PACKAGE")
@@ -198,7 +202,11 @@ class MedicalQASystem:
             doc_title=getattr(self.config, "document_title", "")
         )
         retrieval_units = children if children else self.chunks
-        self._retriever = HybridRetriever(retrieval_units)
+        self._retriever = HybridRetriever(
+            retrieval_units,
+            drug_keywords=getattr(self.config, "drug_keywords", None),
+            condition_patterns=getattr(self.config, "condition_patterns", None),
+        )
 
         self._verifier = ClinicalVerifier(self.chunks, self.config)
         self.guardrail = MedicalGuardrailBrain(self.chunks)

@@ -155,6 +155,12 @@ if args.preset == "my-guideline":
 | `_CHILD_MAX_TOKENS` | chunker.py | 512 | Max child chunk size (STANDARD) |
 | `_CHILD_OVERLAP_TOKENS` | chunker.py | 50 | Overlap between consecutive children |
 | `_RRF_K_DEFAULT` | retriever.py | 60 | RRF fusion constant |
+| `_DRUG_MATCH_BOOST` | retriever.py | 1.35 | Score multiplier for drug-name match |
+| `_DOSING_TYPE_BOOST` | retriever.py | 1.25 | Score multiplier for dosing_table in dosing queries |
+| `_NLL_BOOST` | retriever.py | 1.15 | Score multiplier for NLL children in dosing queries |
+| `_EVIDENCE_TABLE_DEMOTE` | retriever.py | 0.85 | Score demote for evidence_table in dosing queries |
+| `_CONDITION_MATCH_BOOST` | retriever.py | 1.20 | Score multiplier for condition metadata match |
+| `_DOMAIN_MATCH_BOOST` | retriever.py | 1.10 | Score multiplier for clinical_domain match |
 | `_RATIO_TOLERANCE` | validator.py | 0.35 | Max combo drug ratio deviation |
 | `_COVERAGE_PEDIATRIC_LOW` | validator.py | 10.0 kg | Expected minimum weight coverage |
 | `_COVERAGE_ADULT_HIGH` | validator.py | 35.0 kg | Expected minimum adult coverage |
