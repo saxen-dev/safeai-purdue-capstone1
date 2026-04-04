@@ -1,0 +1,1426 @@
+{
+  "queries": {
+    "Q01": {
+      "query_id": "Q01",
+      "query": "What is the artemether-lumefantrine dose for a child weighing 20 kg?",
+      "type": "dosage_lookup",
+      "num_results": 5,
+      "precision_at_3": 0.333,
+      "precision_at_5": 0.6,
+      "mrr": 0.333,
+      "results": [
+        {
+          "rank": 1,
+          "child_id": "child-00900",
+          "parent_chunk_id": "narrative-0754",
+          "chunk_type": "narrative",
+          "preservation_level": "high",
+          "type_match": false,
+          "keyword_coverage": 0.333,
+          "keywords_found": [
+            "20"
+          ],
+          "keywords_missing": [
+            "artemether",
+            "lumefantrine"
+          ],
+          "relevant": false,
+          "preservation_tag": "[HIGH FIDELITY: Preserve all clinical facts, numbers, and drug names.]",
+          "content_preview": "Children weighing &lt; 20 kg should receive a higher dose of artesunate (3 mg/kg bw per dose) than larger children and adults (2.4 mg/kg bw per dose) ",
+          "source_pages": [
+            215
+          ]
+        },
+        {
+          "rank": 2,
+          "child_id": "child-00095",
+          "parent_chunk_id": "narrative-0092",
+          "chunk_type": "narrative",
+          "preservation_level": "high",
+          "type_match": false,
+          "keyword_coverage": 0.333,
+          "keywords_found": [
+            "20"
+          ],
+          "keywords_missing": [
+            "artemether",
+            "lumefantrine"
+          ],
+          "relevant": false,
+          "preservation_tag": "[HIGH FIDELITY: Preserve all clinical facts, numbers, and drug names.]",
+          "content_preview": "Treating severe malaria in children (2015)\n\nChildren weighing &lt; 20 kg should receive a higher dose of artesunate (3 mg/kg bw per dose) than larger ",
+          "source_pages": [
+            20
+          ]
+        },
+        {
+          "rank": 3,
+          "child_id": "child-00703",
+          "parent_chunk_id": "dosing_table-0013",
+          "chunk_type": "dosing_table",
+          "preservation_level": "verbatim",
+          "type_match": true,
+          "keyword_coverage": 1.0,
+          "keywords_found": [
+            "artemether",
+            "lumefantrine",
+            "20"
+          ],
+          "keywords_missing": [],
+          "relevant": true,
+          "preservation_tag": "[VERBATIM: Return content exactly. Do not paraphrase dosages.]",
+          "content_preview": "IF Body weight (kg) is < 15, THEN Dose (mg) of artemether + lumefantrine given twice daily for 3 days is 20 + 120.\nIF Body weight (kg) is 15 to < 25, ",
+          "source_pages": [
+            172
+          ]
+        },
+        {
+          "rank": 4,
+          "child_id": "child-00701",
+          "parent_chunk_id": "narrative-0590",
+          "chunk_type": "narrative",
+          "preservation_level": "high",
+          "type_match": false,
+          "keyword_coverage": 1.0,
+          "keywords_found": [
+            "artemether",
+            "lumefantrine",
+            "20"
+          ],
+          "keywords_missing": [],
+          "relevant": true,
+          "preservation_tag": "[HIGH FIDELITY: Preserve all clinical facts, numbers, and drug names.]",
+          "content_preview": "Formulations currently available: Dispersible or standard tablets containing 20 mg artemether and 120 mg lumefantrine, and standard tablets containing",
+          "source_pages": [
+            172
+          ]
+        },
+        {
+          "rank": 5,
+          "child_id": "child-01695",
+          "parent_chunk_id": "stitched_table-S1",
+          "chunk_type": "dosing_table",
+          "preservation_level": "verbatim",
+          "type_match": true,
+          "keyword_coverage": 1.0,
+          "keywords_found": [
+            "artemether",
+            "lumefantrine",
+            "20"
+          ],
+          "keywords_missing": [],
+          "relevant": true,
+          "preservation_tag": "[VERBATIM: Return content exactly. Do not paraphrase dosages.]",
+          "content_preview": "IF Body weight (kg) is < 15, THEN Dose (mg) of artemether + lumefantrine given twice daily for 3 days is 20 + 120.\nIF Body weight (kg) is 15 to < 25, ",
+          "source_pages": [
+            173,
+            174
+          ]
+        }
+      ]
+    },
+    "Q02": {
+      "query_id": "Q02",
+      "query": "Is primaquine safe during pregnancy?",
+      "type": "contraindication",
+      "num_results": 5,
+      "precision_at_3": 1.0,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "results": [
+        {
+          "rank": 1,
+          "child_id": "child-00864",
+          "parent_chunk_id": "narrative-0721",
+          "chunk_type": "narrative",
+          "preservation_level": "high",
+          "type_match": true,
+          "keyword_coverage": 1.0,
+          "keywords_found": [
+            "primaquine",
+            "pregnancy",
+            "contraindicated"
+          ],
+          "keywords_missing": [],
+          "relevant": true,
+          "preservation_tag": "[HIGH FIDELITY: Preserve all clinical facts, numbers, and drug names.]",
+          "content_preview": "Primaquine is contraindicated in pregnancy and women breastfeeding infants aged &lt; 1 month.\n\nAs an alternative, chloroquine prophylaxis could be giv",
+          "source_pages": [
+            208
+          ]
+        },
+        {
+          "rank": 2,
+          "child_id": "child-00859",
+          "parent_chunk_id": "narrative-0716",
+          "chunk_type": "narrative",
+          "preservation_level": "high",
+          "type_match": true,
+          "keyword_coverage": 1.0,
+          "keywords_found": [
+            "primaquine",
+            "pregnancy",
+            "contraindicated"
+          ],
+          "keywords_missing": [],
+          "relevant": true,
+          "preservation_tag": "[HIGH FIDELITY: Preserve all clinical facts, numbers, and drug names.]",
+          "content_preview": "Primaquine is contraindicated in pregnancy and women breastfeeding infants aged &lt; 1 month.",
+          "source_pages": [
+            208
+          ]
+        },
+        {
+          "rank": 3,
+          "child_id": "child-00868",
+          "parent_chunk_id": "narrative-0725",
+          "chunk_type": "narrative",
+          "preservation_level": "high",
+          "type_match": true,
+          "keyword_coverage": 0.667,
+          "keywords_found": [
+            "primaquine",
+            "contraindicated"
+          ],
+          "keywords_missing": [
+            "pregnancy"
+          ],
+          "relevant": true,
+          "preservation_tag": "[HIGH FIDELITY: Preserve all clinical facts, numbers, and drug names.]",
+          "content_preview": "Primaquine is contraindicated in pregnant or breastfeeding women with P. vivax malaria. Therefore, consider weekly chemoprophylaxis with chloroquine u",
+          "source_pages": [
+            209
+          ]
+        },
+        {
+          "rank": 4,
+          "child_id": "child-00863",
+          "parent_chunk_id": "narrative-0720",
+          "chunk_type": "narrative",
+          "preservation_level": "standard",
+          "type_match": true,
+          "keyword_coverage": 0.333,
+          "keywords_found": [
+            "primaquine"
+          ],
+          "keywords_missing": [
+            "pregnancy",
+            "contraindicated"
+          ],
+          "relevant": true,
+          "preservation_tag": "",
+          "content_preview": "In women who are pregnant or breastfeeding, weekly chemoprophylaxis with chloroquine can be given until delivery and breastfeeding are completed, then",
+          "source_pages": [
+            208
+          ]
+        },
+        {
+          "rank": 5,
+          "child_id": "child-00747",
+          "parent_chunk_id": "narrative-0623",
+          "chunk_type": "narrative",
+          "preservation_level": "high",
+          "type_match": true,
+          "keyword_coverage": 0.667,
+          "keywords_found": [
+            "primaquine",
+            "pregnancy"
+          ],
+          "keywords_missing": [
+            "contraindicated"
+          ],
+          "relevant": true,
+          "preservation_tag": "[HIGH FIDELITY: Preserve all clinical facts, numbers, and drug names.]",
+          "content_preview": "only &gt; 1300 pregnancies. Use of amodiaquine in women in Ghana in the second and third trimesters of pregnancy was associated with frequent minor si",
+          "source_pages": [
+            179
+          ]
+        }
+      ]
+    },
+    "Q03": {
+      "query_id": "Q03",
+      "query": "Child with fast breathing and fever, what should a VHT do?",
+      "type": "semantic",
+      "num_results": 5,
+      "precision_at_3": 1.0,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "results": [
+        {
+          "rank": 1,
+          "child_id": "child-00670",
+          "parent_chunk_id": "narrative-0559",
+          "chunk_type": "narrative",
+          "preservation_level": "high",
+          "type_match": true,
+          "keyword_coverage": 0.25,
+          "keywords_found": [
+            "fever"
+          ],
+          "keywords_missing": [
+            "tachypnea",
+            "refer",
+            "danger"
+          ],
+          "relevant": true,
+          "preservation_tag": "[HIGH FIDELITY: Preserve all clinical facts, numbers, and drug names.]",
+          "content_preview": "In young children, high fevers are often associated with vomiting, regurgitation of medication and seizures. They are thus treated with antipyretics a",
+          "source_pages": [
+            166
+          ]
+        },
+        {
+          "rank": 2,
+          "child_id": "child-00886",
+          "parent_chunk_id": "narrative-0740",
+          "chunk_type": "narrative",
+          "preservation_level": "high",
+          "type_match": true,
+          "keyword_coverage": 0.25,
+          "keywords_found": [
+            "fever"
+          ],
+          "keywords_missing": [
+            "tachypnea",
+            "refer",
+            "danger"
+          ],
+          "relevant": true,
+          "preservation_tag": "[HIGH FIDELITY: Preserve all clinical facts, numbers, and drug names.]",
+          "content_preview": "The threshold for administering antibiotic treatment should be low in severe malaria. Septicaemia and severe malaria are associated, and there is subs",
+          "source_pages": [
+            212
+          ]
+        },
+        {
+          "rank": 3,
+          "child_id": "child-00873",
+          "parent_chunk_id": "narrative-0729",
+          "chunk_type": "narrative",
+          "preservation_level": "high",
+          "type_match": true,
+          "keyword_coverage": 0.25,
+          "keywords_found": [
+            "fever"
+          ],
+          "keywords_missing": [
+            "tachypnea",
+            "refer",
+            "danger"
+          ],
+          "relevant": true,
+          "preservation_tag": "[HIGH FIDELITY: Preserve all clinical facts, numbers, and drug names.]",
+          "content_preview": "Severe malaria is a medical emergency. An open airway should be secured in unconscious patients and breathing and circulation assessed. The patient sh",
+          "source_pages": [
+            210
+          ]
+        },
+        {
+          "rank": 4,
+          "child_id": "child-00883",
+          "parent_chunk_id": "narrative-0737",
+          "chunk_type": "narrative",
+          "preservation_level": "high",
+          "type_match": true,
+          "keyword_coverage": 0.0,
+          "keywords_found": [],
+          "keywords_missing": [
+            "tachypnea",
+            "fever",
+            "refer",
+            "danger"
+          ],
+          "relevant": true,
+          "preservation_tag": "[HIGH FIDELITY: Preserve all clinical facts, numbers, and drug names.]",
+          "content_preview": "Fluid requirements should be assessed individually. Adults with severe malaria are very vulnerable to fluid overload, while children are more likely t",
+          "source_pages": [
+            212
+          ]
+        },
+        {
+          "rank": 5,
+          "child_id": "child-00656",
+          "parent_chunk_id": "narrative-0546",
+          "chunk_type": "narrative",
+          "preservation_level": "standard",
+          "type_match": true,
+          "keyword_coverage": 0.25,
+          "keywords_found": [
+            "fever"
+          ],
+          "keywords_missing": [
+            "tachypnea",
+            "refer",
+            "danger"
+          ],
+          "relevant": true,
+          "preservation_tag": "",
+          "content_preview": "The signs and symptoms of malaria are non-specific. Malaria is suspected clinically primarily on the basis of fever or a history of fever. There is no",
+          "source_pages": [
+            162
+          ]
+        }
+      ]
+    },
+    "Q04": {
+      "query_id": "Q04",
+      "query": "artesunate-amodiaquine dosing schedule",
+      "type": "exact_drug_name",
+      "num_results": 5,
+      "precision_at_3": 1.0,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "results": [
+        {
+          "rank": 1,
+          "child_id": "child-00708",
+          "parent_chunk_id": "dosing_table-0014",
+          "chunk_type": "dosing_table",
+          "preservation_level": "verbatim",
+          "type_match": true,
+          "keyword_coverage": 1.0,
+          "keywords_found": [
+            "artesunate",
+            "amodiaquine"
+          ],
+          "keywords_missing": [],
+          "relevant": true,
+          "preservation_tag": "[VERBATIM: Return content exactly. Do not paraphrase dosages.]",
+          "content_preview": "IF Body weight (kg) is < 9, THEN Artesunate + amodiaquine dose (mg) given daily for 3 days is 25 + 67.5.\nIF Body weight (kg) is 9 to < 18, THEN Artesu",
+          "source_pages": [
+            173
+          ]
+        },
+        {
+          "rank": 2,
+          "child_id": "child-00706",
+          "parent_chunk_id": "narrative-0593",
+          "chunk_type": "narrative",
+          "preservation_level": "high",
+          "type_match": false,
+          "keyword_coverage": 1.0,
+          "keywords_found": [
+            "artesunate",
+            "amodiaquine"
+          ],
+          "keywords_missing": [],
+          "relevant": true,
+          "preservation_tag": "[HIGH FIDELITY: Preserve all clinical facts, numbers, and drug names.]",
+          "content_preview": "Formulations currently available: A fixed-dose combination in tablets containing 25 + 67.5 mg, 50 + 135 mg or 100 + 270 mg of artesunate and amodiaqui",
+          "source_pages": [
+            173
+          ]
+        },
+        {
+          "rank": 3,
+          "child_id": "child-00715",
+          "parent_chunk_id": "narrative-0598",
+          "chunk_type": "narrative",
+          "preservation_level": "high",
+          "type_match": false,
+          "keyword_coverage": 0.5,
+          "keywords_found": [
+            "artesunate"
+          ],
+          "keywords_missing": [
+            "amodiaquine"
+          ],
+          "relevant": true,
+          "preservation_tag": "[HIGH FIDELITY: Preserve all clinical facts, numbers, and drug names.]",
+          "content_preview": "Formulations: Currently available as blister-packed, scored tablets containing 50 mg artesunate and fixed dose combination tablets comprising 500 mg s",
+          "source_pages": [
+            174
+          ]
+        },
+        {
+          "rank": 4,
+          "child_id": "child-00763",
+          "parent_chunk_id": "narrative-0635",
+          "chunk_type": "narrative",
+          "preservation_level": "high",
+          "type_match": false,
+          "keyword_coverage": 1.0,
+          "keywords_found": [
+            "artesunate",
+            "amodiaquine"
+          ],
+          "keywords_missing": [],
+          "relevant": true,
+          "preservation_tag": "[HIGH FIDELITY: Preserve all clinical facts, numbers, and drug names.]",
+          "content_preview": "Although dosing on the basis of body area is recommended for many drugs in young children, for the sake of simplicity, antimalarial drugs have been ad",
+          "source_pages": [
+            185
+          ]
+        },
+        {
+          "rank": 5,
+          "child_id": "child-00796",
+          "parent_chunk_id": "narrative-0666",
+          "chunk_type": "narrative",
+          "preservation_level": "standard",
+          "type_match": false,
+          "keyword_coverage": 1.0,
+          "keywords_found": [
+            "artesunate",
+            "amodiaquine"
+          ],
+          "keywords_missing": [],
+          "relevant": true,
+          "preservation_tag": "",
+          "content_preview": "ACTs containing piperaquine, mefloquine or lumefantrine are the recommended treatment, although artesunate + amodiaquine may also be effective in some",
+          "source_pages": [
+            191
+          ]
+        }
+      ]
+    },
+    "Q05": {
+      "query_id": "Q05",
+      "query": "Malaria treatment for infant under 5 kg",
+      "type": "weight_based",
+      "num_results": 5,
+      "precision_at_3": 1.0,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "results": [
+        {
+          "rank": 1,
+          "child_id": "child-00771",
+          "parent_chunk_id": "narrative-0643",
+          "chunk_type": "narrative",
+          "preservation_level": "high",
+          "type_match": true,
+          "keyword_coverage": 1.0,
+          "keywords_found": [
+            "5 kg",
+            "infant",
+            "weight"
+          ],
+          "keywords_missing": [],
+          "relevant": true,
+          "preservation_tag": "[HIGH FIDELITY: Preserve all clinical facts, numbers, and drug names.]",
+          "content_preview": "Treat infants weighing &lt; 5 kg with uncomplicated P. falciparum malaria with an ACT. The weight-adjusted dose should achieve the same mg/kg bw targe",
+          "source_pages": [
+            187
+          ]
+        },
+        {
+          "rank": 2,
+          "child_id": "child-00076",
+          "parent_chunk_id": "narrative-0073",
+          "chunk_type": "narrative",
+          "preservation_level": "high",
+          "type_match": true,
+          "keyword_coverage": 0.667,
+          "keywords_found": [
+            "5 kg",
+            "infant"
+          ],
+          "keywords_missing": [
+            "weight"
+          ],
+          "relevant": true,
+          "preservation_tag": "[HIGH FIDELITY: Preserve all clinical facts, numbers, and drug names.]",
+          "content_preview": "Young children and infants (2015)\n\nInfants weighing &lt; 5 kg with uncomplicated P. falciparum malaria should be treated with an ACT at the same mg/kg",
+          "source_pages": [
+            17
+          ]
+        },
+        {
+          "rank": 3,
+          "child_id": "child-00766",
+          "parent_chunk_id": "narrative-0638",
+          "chunk_type": "narrative",
+          "preservation_level": "high",
+          "type_match": true,
+          "keyword_coverage": 0.667,
+          "keywords_found": [
+            "5 kg",
+            "infant"
+          ],
+          "keywords_missing": [
+            "weight"
+          ],
+          "relevant": true,
+          "preservation_tag": "[HIGH FIDELITY: Preserve all clinical facts, numbers, and drug names.]",
+          "content_preview": "Infants weighing &lt; 5 kg with uncomplicated P. falciparum malaria should be treated with an ACT at the same mg/kg bw target dose as for children wei",
+          "source_pages": [
+            186
+          ]
+        },
+        {
+          "rank": 4,
+          "child_id": "child-00769",
+          "parent_chunk_id": "narrative-0641",
+          "chunk_type": "narrative",
+          "preservation_level": "standard",
+          "type_match": true,
+          "keyword_coverage": 0.667,
+          "keywords_found": [
+            "5 kg",
+            "infant"
+          ],
+          "keywords_missing": [
+            "weight"
+          ],
+          "relevant": true,
+          "preservation_tag": "",
+          "content_preview": "Data available were not suitable for evaluation using the GRADE methodology.\n\nIn most clinical studies, subgroups of infants and older children were n",
+          "source_pages": [
+            187
+          ]
+        },
+        {
+          "rank": 5,
+          "child_id": "child-00765",
+          "parent_chunk_id": "narrative-0637",
+          "chunk_type": "narrative",
+          "preservation_level": "high",
+          "type_match": true,
+          "keyword_coverage": 0.667,
+          "keywords_found": [
+            "infant",
+            "weight"
+          ],
+          "keywords_missing": [
+            "5 kg"
+          ],
+          "relevant": true,
+          "preservation_tag": "[HIGH FIDELITY: Preserve all clinical facts, numbers, and drug names.]",
+          "content_preview": "Malaria and malnutrition frequently coexist. Malnutrition may result in inaccurate dosing when doses are based on age (a dose may be too high for an i",
+          "source_pages": [
+            186
+          ]
+        }
+      ]
+    },
+    "Q06": {
+      "query_id": "Q06",
+      "query": "How to manage severe malaria with convulsions?",
+      "type": "severe_management",
+      "num_results": 5,
+      "precision_at_3": 1.0,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "results": [
+        {
+          "rank": 1,
+          "child_id": "child-00872",
+          "parent_chunk_id": "narrative-0728",
+          "chunk_type": "narrative",
+          "preservation_level": "high",
+          "type_match": true,
+          "keyword_coverage": 0.333,
+          "keywords_found": [
+            "severe"
+          ],
+          "keywords_missing": [
+            "convulsions",
+            "artesunate"
+          ],
+          "relevant": true,
+          "preservation_tag": "[HIGH FIDELITY: Preserve all clinical facts, numbers, and drug names.]",
+          "content_preview": "The main objective of the treatment of severe malaria is to prevent the patient from dying. Secondary objectives are prevention of disabilities and pr",
+          "source_pages": [
+            210
+          ]
+        },
+        {
+          "rank": 2,
+          "child_id": "child-00672",
+          "parent_chunk_id": "narrative-0561",
+          "chunk_type": "narrative",
+          "preservation_level": "high",
+          "type_match": true,
+          "keyword_coverage": 0.667,
+          "keywords_found": [
+            "severe",
+            "convulsions"
+          ],
+          "keywords_missing": [
+            "artesunate"
+          ],
+          "relevant": true,
+          "preservation_tag": "[HIGH FIDELITY: Preserve all clinical facts, numbers, and drug names.]",
+          "content_preview": "Generalized seizures are more common in children with P. falciparum malaria than in those with malaria due to other species. This suggests an overlap ",
+          "source_pages": [
+            166
+          ]
+        },
+        {
+          "rank": 3,
+          "child_id": "child-00887",
+          "parent_chunk_id": "narrative-0741",
+          "chunk_type": "narrative",
+          "preservation_level": "high",
+          "type_match": true,
+          "keyword_coverage": 0.333,
+          "keywords_found": [
+            "convulsions"
+          ],
+          "keywords_missing": [
+            "severe",
+            "artesunate"
+          ],
+          "relevant": true,
+          "preservation_tag": "[HIGH FIDELITY: Preserve all clinical facts, numbers, and drug names.]",
+          "content_preview": "The treatment of convulsions in cerebral malaria with intravenous (or, if this is not possible, rectal) benzodiazepines or intramuscular paraldehyde i",
+          "source_pages": [
+            213
+          ]
+        },
+        {
+          "rank": 4,
+          "child_id": "child-00880",
+          "parent_chunk_id": "narrative-0735",
+          "chunk_type": "narrative",
+          "preservation_level": "high",
+          "type_match": true,
+          "keyword_coverage": 0.333,
+          "keywords_found": [
+            "severe"
+          ],
+          "keywords_missing": [
+            "convulsions",
+            "artesunate"
+          ],
+          "relevant": true,
+          "preservation_tag": "[HIGH FIDELITY: Preserve all clinical facts, numbers, and drug names.]",
+          "content_preview": "Severe malaria is associated with a variety of manifestations and complications, which must be recognized promptly and treated as shown below.\n\nImmedi",
+          "source_pages": [
+            211
+          ]
+        },
+        {
+          "rank": 5,
+          "child_id": "child-00874",
+          "parent_chunk_id": "narrative-0729",
+          "chunk_type": "narrative",
+          "preservation_level": "high",
+          "type_match": true,
+          "keyword_coverage": 0.333,
+          "keywords_found": [
+            "severe"
+          ],
+          "keywords_missing": [
+            "convulsions",
+            "artesunate"
+          ],
+          "relevant": true,
+          "preservation_tag": "[HIGH FIDELITY: Preserve all clinical facts, numbers, and drug names.]",
+          "content_preview": "blood culture and full biochemistry (if possible). Careful attention should be paid to the patient's fluid balance in severe malaria in order to avoid",
+          "source_pages": [
+            210
+          ]
+        }
+      ]
+    },
+    "Q07": {
+      "query_id": "Q07",
+      "query": "Intermittent preventive treatment for pregnant women",
+      "type": "prevention",
+      "num_results": 4,
+      "precision_at_3": 1.0,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "results": [
+        {
+          "rank": 1,
+          "child_id": "child-00043",
+          "parent_chunk_id": "narrative-0042",
+          "chunk_type": "narrative",
+          "preservation_level": "standard",
+          "type_match": true,
+          "keyword_coverage": 0.25,
+          "keywords_found": [
+            "pregnancy"
+          ],
+          "keywords_missing": [
+            "IPTp",
+            "sulfadoxine",
+            "pyrimethamine"
+          ],
+          "relevant": true,
+          "preservation_tag": "",
+          "content_preview": "Intermittent preventive treatment of malaria in pregnancy (2022)\n\nIn malaria-endemic areas, pregnant women of all gravidities should be given antimala",
+          "source_pages": [
+            10
+          ]
+        },
+        {
+          "rank": 2,
+          "child_id": "child-00410",
+          "parent_chunk_id": "narrative-0340",
+          "chunk_type": "narrative",
+          "preservation_level": "standard",
+          "type_match": true,
+          "keyword_coverage": 1.0,
+          "keywords_found": [
+            "IPTp",
+            "sulfadoxine",
+            "pyrimethamine",
+            "pregnancy"
+          ],
+          "keywords_missing": [],
+          "relevant": true,
+          "preservation_tag": "",
+          "content_preview": "Intermittent preventive treatment of malaria in pregnancy (IPTp) is the administration of a treatment course of an antimalarial medicine at predetermi",
+          "source_pages": [
+            102
+          ]
+        },
+        {
+          "rank": 3,
+          "child_id": "child-00434",
+          "parent_chunk_id": "narrative-0358",
+          "chunk_type": "narrative",
+          "preservation_level": "standard",
+          "type_match": true,
+          "keyword_coverage": 1.0,
+          "keywords_found": [
+            "IPTp",
+            "sulfadoxine",
+            "pyrimethamine",
+            "pregnancy"
+          ],
+          "keywords_missing": [],
+          "relevant": true,
+          "preservation_tag": "",
+          "content_preview": "Please refer to the WHO policy brief for the implementation of intermittent preventive treatment of malaria in pregnancy using sulfadoxine-pyrimethami",
+          "source_pages": [
+            107
+          ]
+        },
+        {
+          "rank": 4,
+          "child_id": "child-01213",
+          "parent_chunk_id": "narrative-0993",
+          "chunk_type": "narrative",
+          "preservation_level": "standard",
+          "type_match": true,
+          "keyword_coverage": 1.0,
+          "keywords_found": [
+            "IPTp",
+            "sulfadoxine",
+            "pyrimethamine",
+            "pregnancy"
+          ],
+          "keywords_missing": [],
+          "relevant": true,
+          "preservation_tag": "",
+          "content_preview": "antenatal care for a positive pregnancy experience. Geneva: World Health Organization 2016. Website - 125. Community deployment of intermittent preven",
+          "source_pages": [
+            294
+          ]
+        }
+      ]
+    },
+    "Q08": {
+      "query_id": "Q08",
+      "query": "When to use a rapid diagnostic test vs microscopy?",
+      "type": "diagnosis",
+      "num_results": 5,
+      "precision_at_3": 1.0,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "results": [
+        {
+          "rank": 1,
+          "child_id": "child-00955",
+          "parent_chunk_id": "narrative-0805",
+          "chunk_type": "narrative",
+          "preservation_level": "high",
+          "type_match": true,
+          "keyword_coverage": 1.0,
+          "keywords_found": [
+            "RDT",
+            "microscopy",
+            "diagnostic"
+          ],
+          "keywords_missing": [],
+          "relevant": true,
+          "preservation_tag": "[HIGH FIDELITY: Preserve all clinical facts, numbers, and drug names.]",
+          "content_preview": "Choosing a diagnostic strategy\n\nThe two methods currently considered suitable for routine patient management are light microscopy and RDTs. Different ",
+          "source_pages": [
+            224
+          ]
+        },
+        {
+          "rank": 2,
+          "child_id": "child-00660",
+          "parent_chunk_id": "narrative-0550",
+          "chunk_type": "narrative",
+          "preservation_level": "standard",
+          "type_match": true,
+          "keyword_coverage": 1.0,
+          "keywords_found": [
+            "RDT",
+            "microscopy",
+            "diagnostic"
+          ],
+          "keywords_missing": [],
+          "relevant": true,
+          "preservation_tag": "",
+          "content_preview": "Rapid diagnostic tests (RDTs) are immuno-chromatographic tests for detecting parasite-specific antigens in a finger-prick blood sample. Some tests all",
+          "source_pages": [
+            164
+          ]
+        },
+        {
+          "rank": 3,
+          "child_id": "child-00787",
+          "parent_chunk_id": "narrative-0657",
+          "chunk_type": "narrative",
+          "preservation_level": "standard",
+          "type_match": true,
+          "keyword_coverage": 0.667,
+          "keywords_found": [
+            "microscopy",
+            "diagnostic"
+          ],
+          "keywords_missing": [
+            "RDT"
+          ],
+          "relevant": true,
+          "preservation_tag": "",
+          "content_preview": "Diagnosis of P. vivax , P. ovale , and P. malariae malaria is based on microscopy. P. knowlesi is frequently misdiagnosed under the microscope, as the",
+          "source_pages": [
+            190
+          ]
+        },
+        {
+          "rank": 4,
+          "child_id": "child-01222",
+          "parent_chunk_id": "narrative-0997",
+          "chunk_type": "narrative",
+          "preservation_level": "standard",
+          "type_match": true,
+          "keyword_coverage": 1.0,
+          "keywords_found": [
+            "RDT",
+            "microscopy",
+            "diagnostic"
+          ],
+          "keywords_missing": [],
+          "relevant": true,
+          "preservation_tag": "",
+          "content_preview": "- 200. Malaria diagnosis: memorandum from a WHO meeting. Bulletin of the World Health Organization 1988;66(5):575-94 Pubmed\n- 201. Malaria microscopy ",
+          "source_pages": [
+            294
+          ]
+        },
+        {
+          "rank": 5,
+          "child_id": "child-00067",
+          "parent_chunk_id": "narrative-0064",
+          "chunk_type": "narrative",
+          "preservation_level": "standard",
+          "type_match": true,
+          "keyword_coverage": 0.667,
+          "keywords_found": [
+            "RDT",
+            "microscopy"
+          ],
+          "keywords_missing": [
+            "diagnostic"
+          ],
+          "relevant": true,
+          "preservation_tag": "",
+          "content_preview": "Diagnosing malaria (2015)\n\nAll cases of suspected malaria should have a parasitological test (microscopy or RDT) to confirm the diagnosis.\n\nBoth micro",
+          "source_pages": [
+            15
+          ]
+        }
+      ]
+    },
+    "Q09": {
+      "query_id": "Q09",
+      "query": "What to do if first-line ACT treatment fails?",
+      "type": "treatment_failure",
+      "num_results": 5,
+      "precision_at_3": 1.0,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "results": [
+        {
+          "rank": 1,
+          "child_id": "child-00729",
+          "parent_chunk_id": "narrative-0608",
+          "chunk_type": "narrative",
+          "preservation_level": "high",
+          "type_match": true,
+          "keyword_coverage": 0.667,
+          "keywords_found": [
+            "treatment failure",
+            "ACT"
+          ],
+          "keywords_missing": [
+            "second-line"
+          ],
+          "relevant": true,
+          "preservation_tag": "[HIGH FIDELITY: Preserve all clinical facts, numbers, and drug names.]",
+          "content_preview": "Recurrence of fever and parasitaemia &gt; 4 weeks after treatment may be due to either recrudescence or a new infection. The distinction can be made o",
+          "source_pages": [
+            176
+          ]
+        },
+        {
+          "rank": 2,
+          "child_id": "child-00683",
+          "parent_chunk_id": "narrative-0572",
+          "chunk_type": "narrative",
+          "preservation_level": "standard",
+          "type_match": true,
+          "keyword_coverage": 0.333,
+          "keywords_found": [
+            "ACT"
+          ],
+          "keywords_missing": [
+            "treatment failure",
+            "second-line"
+          ],
+          "relevant": true,
+          "preservation_tag": "",
+          "content_preview": "Recommendation: Treat adults and children with uncomplicated P. falciparum malaria (including infants, pregnant women in their second and third trimes",
+          "source_pages": [
+            168
+          ]
+        },
+        {
+          "rank": 3,
+          "child_id": "child-00075",
+          "parent_chunk_id": "narrative-0072",
+          "chunk_type": "narrative",
+          "preservation_level": "high",
+          "type_match": true,
+          "keyword_coverage": 0.333,
+          "keywords_found": [
+            "ACT"
+          ],
+          "keywords_missing": [
+            "treatment failure",
+            "second-line"
+          ],
+          "relevant": true,
+          "preservation_tag": "[HIGH FIDELITY: Preserve all clinical facts, numbers, and drug names.]",
+          "content_preview": "- \u00b7 Limited exposures to other ACTs (artesunate-amodiaquine, artesunate-mefloquine and dihydroartemisininpiperaquine) suggest that the current evidenc",
+          "source_pages": [
+            17
+          ]
+        },
+        {
+          "rank": 4,
+          "child_id": "child-00728",
+          "parent_chunk_id": "narrative-0607",
+          "chunk_type": "narrative",
+          "preservation_level": "high",
+          "type_match": true,
+          "keyword_coverage": 0.667,
+          "keywords_found": [
+            "second-line",
+            "ACT"
+          ],
+          "keywords_missing": [
+            "treatment failure"
+          ],
+          "relevant": true,
+          "preservation_tag": "[HIGH FIDELITY: Preserve all clinical facts, numbers, and drug names.]",
+          "content_preview": "The recommended second-line treatment is an alternative ACT known to be effective in the region. Adherence to 7-day treatment regimens (with artesunat",
+          "source_pages": [
+            176
+          ]
+        },
+        {
+          "rank": 5,
+          "child_id": "child-00958",
+          "parent_chunk_id": "narrative-0807",
+          "chunk_type": "narrative",
+          "preservation_level": "high",
+          "type_match": true,
+          "keyword_coverage": 0.333,
+          "keywords_found": [
+            "ACT"
+          ],
+          "keywords_missing": [
+            "treatment failure",
+            "second-line"
+          ],
+          "relevant": true,
+          "preservation_tag": "[HIGH FIDELITY: Preserve all clinical facts, numbers, and drug names.]",
+          "content_preview": "Oral artemisinin and its derivatives (e.g. artesunate, artemether, dihydroartemisinin) should not be used alone. In order to simplify use, improve adh",
+          "source_pages": [
+            225
+          ]
+        }
+      ]
+    },
+    "Q10": {
+      "query_id": "Q10",
+      "query": "What is the evidence quality for dihydroartemisinin-piperaquine?",
+      "type": "evidence",
+      "num_results": 5,
+      "precision_at_3": 1.0,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "results": [
+        {
+          "rank": 1,
+          "child_id": "child-00678",
+          "parent_chunk_id": "narrative-0567",
+          "chunk_type": "narrative",
+          "preservation_level": "high",
+          "type_match": true,
+          "keyword_coverage": 1.0,
+          "keywords_found": [
+            "dihydroartemisinin",
+            "piperaquine",
+            "evidence"
+          ],
+          "keywords_missing": [],
+          "relevant": true,
+          "preservation_tag": "[HIGH FIDELITY: Preserve all clinical facts, numbers, and drug names.]",
+          "content_preview": "- \u00b7 A PCR-adjusted treatment failure rate of &lt; 5% has been seen consistently in trials of dihydroartemisinin + piperaquine (high-quality evidence).",
+          "source_pages": [
+            168
+          ]
+        },
+        {
+          "rank": 2,
+          "child_id": "child-01504",
+          "parent_chunk_id": "dosing_table-0141",
+          "chunk_type": "dosing_table",
+          "preservation_level": "verbatim",
+          "type_match": false,
+          "keyword_coverage": 1.0,
+          "keywords_found": [
+            "dihydroartemisinin",
+            "piperaquine",
+            "evidence"
+          ],
+          "keywords_missing": [],
+          "relevant": true,
+          "preservation_tag": "[VERBATIM: Return content exactly. Do not paraphrase dosages.]",
+          "content_preview": "IF Outcome Timeframe is Treatment failure - PCR unadjusted 1 28 days, THEN Study results and measurements is Relative risk 0.34 (CI 95% 0.3 - 0.39) Ba",
+          "source_pages": [
+            414
+          ]
+        },
+        {
+          "rank": 3,
+          "child_id": "child-01580",
+          "parent_chunk_id": "narrative-1166",
+          "chunk_type": "narrative",
+          "preservation_level": "standard",
+          "type_match": true,
+          "keyword_coverage": 0.667,
+          "keywords_found": [
+            "dihydroartemisinin",
+            "piperaquine"
+          ],
+          "keywords_missing": [
+            "evidence"
+          ],
+          "relevant": true,
+          "preservation_tag": "",
+          "content_preview": "- 1. Risk of Bias: no serious. Allocation was adequately concealed in these studies, resulting in a low risk of bias. Inconsistency: serious. There wa",
+          "source_pages": [
+            444
+          ]
+        },
+        {
+          "rank": 4,
+          "child_id": "child-00725",
+          "parent_chunk_id": "narrative-0604",
+          "chunk_type": "narrative",
+          "preservation_level": "high",
+          "type_match": true,
+          "keyword_coverage": 0.667,
+          "keywords_found": [
+            "dihydroartemisinin",
+            "piperaquine"
+          ],
+          "keywords_missing": [
+            "evidence"
+          ],
+          "relevant": true,
+          "preservation_tag": "[HIGH FIDELITY: Preserve all clinical facts, numbers, and drug names.]",
+          "content_preview": "The dosing subgroup reviewed all available dihydroartemisinin-piperaquine pharmacokinetic data (6 published studies and 10 studies from the WWARN data",
+          "source_pages": [
+            176
+          ]
+        },
+        {
+          "rank": 5,
+          "child_id": "child-01506",
+          "parent_chunk_id": "narrative-1135",
+          "chunk_type": "narrative",
+          "preservation_level": "high",
+          "type_match": true,
+          "keyword_coverage": 0.667,
+          "keywords_found": [
+            "dihydroartemisinin",
+            "piperaquine"
+          ],
+          "keywords_missing": [
+            "evidence"
+          ],
+          "relevant": true,
+          "preservation_tag": "[HIGH FIDELITY: Preserve all clinical facts, numbers, and drug names.]",
+          "content_preview": "east, west and southern Africa. Most studies were limited to children.. Imprecision: no serious. The 95% CI implies appreciable benefit, and the meta-",
+          "source_pages": [
+            414
+          ]
+        }
+      ]
+    },
+    "Q11": {
+      "query_id": "Q11",
+      "query": "When should a community health worker refer a patient to a health facility?",
+      "type": "referral",
+      "num_results": 5,
+      "precision_at_3": 1.0,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "results": [
+        {
+          "rank": 1,
+          "child_id": "child-00961",
+          "parent_chunk_id": "narrative-0810",
+          "chunk_type": "narrative",
+          "preservation_level": "high",
+          "type_match": true,
+          "keyword_coverage": 0.333,
+          "keywords_found": [
+            "refer"
+          ],
+          "keywords_missing": [
+            "danger signs",
+            "health facility"
+          ],
+          "relevant": true,
+          "preservation_tag": "[HIGH FIDELITY: Preserve all clinical facts, numbers, and drug names.]",
+          "content_preview": "Community case management is recommended by WHO to improve access to prompt, effective treatment of malaria episodes by trained community members livi",
+          "source_pages": [
+            226
+          ]
+        },
+        {
+          "rank": 2,
+          "child_id": "child-00508",
+          "parent_chunk_id": "narrative-0426",
+          "chunk_type": "narrative",
+          "preservation_level": "standard",
+          "type_match": true,
+          "keyword_coverage": 0.667,
+          "keywords_found": [
+            "refer",
+            "health facility"
+          ],
+          "keywords_missing": [
+            "danger signs"
+          ],
+          "relevant": true,
+          "preservation_tag": "",
+          "content_preview": "Two delivery approaches for PDMC were evaluated in one effectiveness study: community-based and facility-based delivery strategies. For community-base",
+          "source_pages": [
+            123
+          ]
+        },
+        {
+          "rank": 3,
+          "child_id": "child-00978",
+          "parent_chunk_id": "narrative-0825",
+          "chunk_type": "narrative",
+          "preservation_level": "standard",
+          "type_match": true,
+          "keyword_coverage": 0.333,
+          "keywords_found": [
+            "health facility"
+          ],
+          "keywords_missing": [
+            "refer",
+            "danger signs"
+          ],
+          "relevant": true,
+          "preservation_tag": "",
+          "content_preview": "included difficult transportation to hard-to-reach areas; difficulty charging personal digital assistants for data collection due to unavailability of",
+          "source_pages": [
+            230
+          ]
+        },
+        {
+          "rank": 4,
+          "child_id": "child-00517",
+          "parent_chunk_id": "narrative-0431",
+          "chunk_type": "narrative",
+          "preservation_level": "standard",
+          "type_match": true,
+          "keyword_coverage": 0.667,
+          "keywords_found": [
+            "refer",
+            "health facility"
+          ],
+          "keywords_missing": [
+            "danger signs"
+          ],
+          "relevant": true,
+          "preservation_tag": "",
+          "content_preview": "a hospital. Nevertheless, among those who have already accessed a hospital, the intervention is likely to be equitable; however, this may be dependent",
+          "source_pages": [
+            125
+          ]
+        },
+        {
+          "rank": 5,
+          "child_id": "child-00921",
+          "parent_chunk_id": "narrative-0774",
+          "chunk_type": "narrative",
+          "preservation_level": "high",
+          "type_match": true,
+          "keyword_coverage": 0.667,
+          "keywords_found": [
+            "refer",
+            "health facility"
+          ],
+          "keywords_missing": [
+            "danger signs"
+          ],
+          "relevant": true,
+          "preservation_tag": "[HIGH FIDELITY: Preserve all clinical facts, numbers, and drug names.]",
+          "content_preview": "The risk for death from severe malaria is greatest in the first 24 h, yet, in most malaria-endemic countries, the transit time between referral and ar",
+          "source_pages": [
+            218
+          ]
+        }
+      ]
+    },
+    "Q12": {
+      "query_id": "Q12",
+      "query": "Malaria treatment for HIV-positive patients",
+      "type": "special_population",
+      "num_results": 5,
+      "precision_at_3": 1.0,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "results": [
+        {
+          "rank": 1,
+          "child_id": "child-00077",
+          "parent_chunk_id": "narrative-0074",
+          "chunk_type": "narrative",
+          "preservation_level": "high",
+          "type_match": true,
+          "keyword_coverage": 0.333,
+          "keywords_found": [
+            "HIV"
+          ],
+          "keywords_missing": [
+            "co-infection",
+            "antiretroviral"
+          ],
+          "relevant": true,
+          "preservation_tag": "[HIGH FIDELITY: Preserve all clinical facts, numbers, and drug names.]",
+          "content_preview": "Patients co-infected with HIV (2015)\n\nIn people who have HIV/AIDS and uncomplicated P. falciparum malaria, artesunate + SP is not recommended if they ",
+          "source_pages": [
+            17
+          ]
+        },
+        {
+          "rank": 2,
+          "child_id": "child-00772",
+          "parent_chunk_id": "narrative-0644",
+          "chunk_type": "narrative",
+          "preservation_level": "high",
+          "type_match": true,
+          "keyword_coverage": 0.333,
+          "keywords_found": [
+            "HIV"
+          ],
+          "keywords_missing": [
+            "co-infection",
+            "antiretroviral"
+          ],
+          "relevant": true,
+          "preservation_tag": "[HIGH FIDELITY: Preserve all clinical facts, numbers, and drug names.]",
+          "content_preview": "There is considerable geographical overlap between malaria and HIV infection, and many people are co-infected. Worsening HIV-related immunosuppression",
+          "source_pages": [
+            187
+          ]
+        },
+        {
+          "rank": 3,
+          "child_id": "child-00658",
+          "parent_chunk_id": "narrative-0548",
+          "chunk_type": "narrative",
+          "preservation_level": "high",
+          "type_match": true,
+          "keyword_coverage": 0.333,
+          "keywords_found": [
+            "HIV"
+          ],
+          "keywords_missing": [
+            "co-infection",
+            "antiretroviral"
+          ],
+          "relevant": true,
+          "preservation_tag": "[HIGH FIDELITY: Preserve all clinical facts, numbers, and drug names.]",
+          "content_preview": "In patients with suspected severe malaria and in other high-risk groups, such as patients living with HIV/AIDS, absence or delay of parasitological di",
+          "source_pages": [
+            163
+          ]
+        },
+        {
+          "rank": 4,
+          "child_id": "child-00774",
+          "parent_chunk_id": "narrative-0646",
+          "chunk_type": "narrative",
+          "preservation_level": "high",
+          "type_match": true,
+          "keyword_coverage": 0.333,
+          "keywords_found": [
+            "HIV"
+          ],
+          "keywords_missing": [
+            "co-infection",
+            "antiretroviral"
+          ],
+          "relevant": true,
+          "preservation_tag": "[HIGH FIDELITY: Preserve all clinical facts, numbers, and drug names.]",
+          "content_preview": "In people who have HIV/AIDS and uncomplicated P. falciparum malaria, artesunate + SP is not recommended if they are being treated with co-trimoxazole,",
+          "source_pages": [
+            187
+          ]
+        },
+        {
+          "rank": 5,
+          "child_id": "child-00630",
+          "parent_chunk_id": "narrative-0527",
+          "chunk_type": "narrative",
+          "preservation_level": "high",
+          "type_match": true,
+          "keyword_coverage": 0.333,
+          "keywords_found": [
+            "HIV"
+          ],
+          "keywords_missing": [
+            "co-infection",
+            "antiretroviral"
+          ],
+          "relevant": true,
+          "preservation_tag": "[HIGH FIDELITY: Preserve all clinical facts, numbers, and drug names.]",
+          "content_preview": "Malnourished children may be at particular risk of malaria infection and can be vaccinated with either vaccine. RTS,S/AS01 can be given to children wi",
+          "source_pages": [
+            155
+          ]
+        }
+      ]
+    }
+  },
+  "aggregate": {
+    "mean_precision_at_3": 0.944,
+    "mean_precision_at_5": 0.967,
+    "mean_mrr": 0.944,
+    "num_queries": 12
+  }
+}
