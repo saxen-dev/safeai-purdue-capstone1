@@ -155,6 +155,11 @@ if args.preset == "my-guideline":
 | `_CHILD_MAX_TOKENS` | chunker.py | 512 | Max child chunk size (STANDARD) |
 | `_CHILD_OVERLAP_TOKENS` | chunker.py | 50 | Overlap between consecutive children |
 | `_RRF_K_DEFAULT` | retriever.py | 60 | RRF fusion constant |
+| `_CE_BLEND_ALPHA` | retriever.py | 0.6 | Weight for RRF in cross-encoder blend (1-alpha for CE) |
+| `DEFAULT_EMBED_MODEL` | retriever.py | all-MiniLM-L6-v2 | Primary embedding (general-purpose, 384-dim) |
+| `MEDICAL_EMBED_MODEL` | retriever.py | pubmedbert-base-embeddings | Medical embedding (optional, 768-dim, disabled by default) |
+| `DEFAULT_RERANK_MODEL` | retriever.py | ms-marco-MiniLM-L-6-v2 | Cross-encoder reranker (general-purpose) |
+| `MEDICAL_RERANK_MODEL` | retriever.py | MedCPT-Cross-Encoder | Medical cross-encoder alternative (Public Domain) |
 | `_DRUG_MATCH_BOOST` | retriever.py | 1.35 | Score multiplier for drug-name match |
 | `_DOSING_TYPE_BOOST` | retriever.py | 1.25 | Score multiplier for dosing_table in dosing queries |
 | `_NLL_BOOST` | retriever.py | 1.15 | Score multiplier for NLL children in dosing queries |

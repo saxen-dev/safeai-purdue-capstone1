@@ -1,21 +1,25 @@
 # Retrieval Strategy
 
-**Module:** `pipeline/retriever.py` (279 lines) | **Class:** `HybridRetriever`
+**Module:** `pipeline/retriever.py` (650 lines) | **Class:** `HybridRetriever`
 
 ## What we built
 
-A **hybrid retrieval system** combining sparse keyword search (BM25), dense semantic search (FAISS + sentence-transformers), reciprocal rank fusion (RRF), and optional cross-encoder reranking.
+A **hybrid retrieval system** combining sparse keyword search (BM25), dense semantic search (FAISS + sentence-transformers), reciprocal rank fusion (RRF), cross-encoder reranking, and metadata-aware boosting.
 
 ```
 User query
   |
-  +---> BM25 (sparse)     ---> top-20 by keyword match
-  |                              |
-  +---> FAISS (dense)     ---> top-20 by embedding similarity
-  |                              |
-  +--- Reciprocal Rank Fusion ---+---> top-10 fused results
+  +---> BM25 (sparse)              ---> top-20 by keyword match
+  |                                       |
+  +---> FAISS (general, MiniLM)    ---> top-20 by embedding similarity
+  |                                       |
+  +---> FAISS (medical, PubMedBERT) --> top-20 by medical similarity (optional)
+  |                                       |
+  +------- Reciprocal Rank Fusion --------+---> top-10 fused results
   |
-  +---> Cross-encoder reranking ---> top-5 final results
+  +---> Cross-encoder reranking (blended) ---> re-scored top-10
+  |
+  +---> Metadata-aware re-ranking (4 boosts) ---> top-5 final results
 ```
 
 ### Why hybrid?
@@ -35,6 +39,10 @@ The BM25Okapi index is built over tokenized chunk text. Tokenization strips non-
 
 Chunks are embedded using `sentence-transformers/all-MiniLM-L6-v2` (384-dimensional embeddings, ~90 MB model). The FAISS `IndexFlatIP` (inner product) index stores normalized embeddings for exact cosine similarity search. The text sent to the encoder is the `contextual_content` field — the child chunk's content with its metadata header prepended — so the embedding captures both context and content.
 
+**Model choice rationale:** `all-MiniLM-L6-v2` is a general-purpose sentence encoder trained on 1B+ sentence pairs (Apache 2.0). It is NOT a medical-domain-specific model. We chose it for its small footprint, fast inference, and strong general semantic similarity. The lack of medical-specific training is compensated by BM25's exact keyword matching and the metadata-aware re-ranking layer.
+
+**Dual-embedding support:** The retriever supports an optional second embedding model via the `medical_embed_model_name` parameter (default `None`). When set (e.g., to `NeuML/pubmedbert-base-embeddings`), the retriever builds a second FAISS index and merges results via 3-way RRF (BM25 + general dense + medical dense). Model constants are defined in `retriever.py`: `DEFAULT_EMBED_MODEL`, `MEDICAL_EMBED_MODEL`, `DEFAULT_RERANK_MODEL`, `MEDICAL_RERANK_MODEL`.
+
 ### Reciprocal Rank Fusion (RRF)
 
 RRF merges the BM25 and dense ranked lists using:
@@ -47,7 +55,17 @@ With `k=60` (standard), this gives balanced weight to both modalities. A documen
 
 ### Cross-encoder reranking (optional)
 
-The top-10 fused results are re-scored using `cross-encoder/ms-marco-MiniLM-L-6-v2`. Unlike bi-encoder similarity (where query and document are embedded independently), the cross-encoder processes the query-document pair jointly, enabling deeper semantic matching. This is expensive per-pair but only runs on 10 candidates.
+The top-10 fused results are re-scored using `cross-encoder/ms-marco-MiniLM-L-6-v2` with **alpha-blended scoring**. Rather than fully replacing RRF scores with cross-encoder scores, the system blends them:
+
+```
+blended = alpha * norm(RRF) + (1 - alpha) * norm(CE)
+```
+
+where `_CE_BLEND_ALPHA = 0.6` (i.e., 60% weight on RRF, 40% on cross-encoder). Both score vectors are min-max normalized to [0, 1] before blending. This preserves the medical-keyword signals from BM25 (carried through RRF) while benefiting from the cross-encoder's semantic understanding. The optimal alpha range was found via sweep: 0.60-0.80 all produce equivalent results; 0.60 was chosen as the sweet spot giving maximum cross-encoder influence without degrading keyword precision.
+
+**Model choice rationale:** `cross-encoder/ms-marco-MiniLM-L-6-v2` is a general-purpose cross-encoder trained on MS MARCO web search data (Apache 2.0). Like the embedding model, it has NO medical-domain-specific training, which is why blending (not replacing) RRF scores is important — a full replacement lets the cross-encoder overpower medical keyword signals from BM25.
+
+**MedCPT cross-encoder support:** The `_load_cross_encoder()` method auto-detects MedCPT vs. sentence-transformers models. For MedCPT (`ncbi/MedCPT-Cross-Encoder`), it uses `AutoModelForSequenceClassification` with safetensors instead of the sentence-transformers `CrossEncoder` wrapper. This is the only biomedical cross-encoder available on HuggingFace, trained on 18M PubMed query-article pairs (Public Domain license).
 
 Reranking is non-fatal: if the cross-encoder model fails to load (e.g., no internet on first run), the system falls back to RRF-only results with a warning.
 
@@ -79,6 +97,62 @@ The retriever adapts to available dependencies:
 Metadata re-ranking is enabled by default and requires no additional dependencies — it uses metadata fields already present on chunks. It can be disabled via `enable_metadata_reranking=False` on the `HybridRetriever` constructor.
 
 This means the pipeline works on machines without GPU or without `sentence-transformers` / `faiss-cpu` installed — it just falls back to BM25.
+
+## Model evaluation
+
+We evaluated 6 embedding models and 1 cross-encoder for medical domain retrieval. Both current production models are general-purpose (not medical-trained).
+
+### Embedding candidates
+
+| Model | Training Data | License | Dims | Drop-in? | Verdict |
+|-------|--------------|---------|------|----------|---------|
+| `NeuML/pubmedbert-base-embeddings` | PubMed title-abstract pairs | Apache 2.0 | 768 | Yes | Best medical option -- benchmarks 95.62 vs 93.46 on PubMed tasks |
+| `FremyCompany/BioLORD-2023` | UMLS/SNOMED-CT ontologies | MIT | 768 | Yes | Ontology-grounded; UMLS license nuance |
+| `ncbi/MedCPT-Query-Encoder` + `Article-Encoder` | 255M PubMed search logs | Public Domain | 768 | No (dual encoder) | Best retrieval benchmarks but needs pipeline refactor |
+| `lokeshch19/ModernPubMedBERT` | PubMed (contrastive) | MIT | 768 | Yes | 2048-token context; new, limited benchmarks |
+| `pritamdeka/S-PubMedBert-MS-MARCO` | PubMedBERT + MS MARCO | CC-BY-NC | 768 | Yes | Non-commercial license -- unusable for production |
+| `gsarti/biobert-nli` | BioBERT + NLI | unclear | 768 | Yes | REJECTED: underperforms general-purpose |
+
+### Cross-encoder candidates
+
+| Model | Training Data | License | Verdict |
+|-------|--------------|---------|---------|
+| `ncbi/MedCPT-Cross-Encoder` | 18M PubMed query-article pairs | Public Domain | Only biomedical cross-encoder on HuggingFace |
+
+### Configuration benchmark (12-query, original)
+
+| Config | Embedding | Cross-Encoder | P@3 | MRR | Perfect | Build Time |
+|--------|-----------|--------------|------|------|---------|------------|
+| Baseline (archived) | MiniLM | none | 0.944 | 0.944 | 11/12 | -- |
+| **A: gen+gen blend** | MiniLM | ms-marco (alpha=0.6) | **0.750** | **0.944** | **5/12** | ~70s |
+| B: med+med | PubMedBERT | MedCPT (alpha=0.6) | 0.722 | 0.958 | 4/12 | ~890s |
+| C: gen+med | MiniLM | MedCPT (alpha=0.6) | 0.694 | 0.938 | 4/12 | ~67s |
+| D: CE off | MiniLM | none | 0.611 | 0.896 | 2/12 | ~70s |
+| E: dual+med | MiniLM+PubMedBERT | MedCPT (alpha=0.6) | 0.694 | 0.958 | 3/12 | ~780s |
+
+Config A chosen because: highest P@3 on 12-query benchmark, 13x faster build than Config B, wide alpha plateau (0.60-0.80).
+
+Config C (gen embed + med CE) failed because MiniLM's candidate set doesn't contain medically relevant chunks for MedCPT CE to promote. Config E (dual-embed) failed because MiniLM's noise diluted PubMedBERT's medical signal in 3-way RRF.
+
+### Expanded benchmark (30 queries)
+
+The benchmark was expanded from 12 to 30 queries to reduce overfitting risk and test diverse clinical scenarios. 18 new queries span 8 categories with independently created relevance labels (searched chunk content directly, not retriever output).
+
+Config A results on 30 queries: **P@3=0.489, MRR=0.686, Perfect=5/30**
+
+| Category | Queries | P@3 | Notes |
+|----------|---------|------|-------|
+| original (dosing/treatment) | 12 | 0.750 | Strong -- keyword-heavy |
+| procedural | 2 | 0.667 | |
+| population_specific | 2 | 0.500 | |
+| treatment_protocol | 4 | 0.417 | |
+| evidence | 2 | 0.333 | |
+| prevention | 2 | 0.167 | Weak |
+| safety | 2 | 0.167 | Weak |
+| operational | 2 | 0.167 | Weak |
+| diagnostic | 2 | 0.000 | Failed |
+
+**Key insight:** The original 12-query benchmark was biased toward drug-dosing lookups. Broader clinical queries (diagnostic, prevention, safety) need medical-domain models. Next step: retest Config B (PubMedBERT + MedCPT) on the 30-query benchmark.
 
 ## Alternatives we considered
 
@@ -114,6 +188,7 @@ Hypothetical Document Embeddings (HyDE) generates a synthetic answer to the quer
 | `top_k_fused` | 10 | Candidates after RRF before reranking |
 | `rrf_k` | 60 | RRF fusion constant |
 | `enable_reranking` | True | Enable cross-encoder reranking |
+| `_CE_BLEND_ALPHA` | 0.6 | Weight for RRF in cross-encoder blend (1-alpha for CE) |
 | `enable_metadata_reranking` | True | Enable metadata-aware boost layer |
 | `drug_keywords` | From config | Drug names for query-time extraction |
 | `condition_patterns` | From config | Regex→label pairs for condition matching |
@@ -126,8 +201,8 @@ The retriever returns a list of chunk dictionaries enriched with `score` (fused/
 
 The retrieval benchmark artifacts are tracked in [`rag_output/`](../rag_output/):
 
-- **[`retrieval_test_results.json`](../rag_output/retrieval_test_results.json)** — 12-query clinical benchmark with per-result relevance, rankings, and source pages
-- **[`build_report.json`](../rag_output/build_report.json)** — aggregate metrics (P@3 = 0.944, P@5 = 0.967, MRR = 0.944), corpus stats, and model configuration
+- **[`retrieval_test_results.json`](../rag_output/retrieval_test_results.json)** — 30-query clinical benchmark (12 original + 18 expanded) with per-result relevance, rankings, source pages, and per-category breakdown
+- **[`build_report.json`](../rag_output/build_report.json)** — aggregate metrics (Mean P@3 = 0.489, MRR = 0.686, Perfect P@3 = 5/30 on 30-query expanded benchmark), corpus stats, and model configuration
 - **[`child_chunks.json`](../rag_output/child_chunks.json)** — all 1,695 child chunks used for retrieval
 - **[`brain1_package/`](../rag_output/brain1_package/)** — mobile-ready export (24.11 MB)
 

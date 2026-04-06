@@ -25,7 +25,7 @@ pip install -r requirements-pipeline.txt
 | `pymupdf` | Primary PDF text and table extraction (Pass 1, 2) |
 | `pdfplumber` | Secondary extraction for cross-validation (Pass 4) |
 | `rank-bm25` | Sparse keyword retrieval |
-| `sentence-transformers` | Dense embedding retrieval |
+| `sentence-transformers` | Dense embedding (`all-MiniLM-L6-v2`) and cross-encoder reranking (`ms-marco-MiniLM-L-6-v2`) |
 | `faiss-cpu` | Approximate nearest-neighbor search |
 | `rapidfuzz` | Fuzzy text matching for cross-validation |
 | `numpy>=1.20,<2` | Pinned below 2.0 for torch compatibility |
