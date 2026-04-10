@@ -178,11 +178,11 @@ Tested on two clinical guideline PDFs:
 | Validation: Tables | 100% PASS | 100% PASS |
 | Validation: Cross-consistency | 83% | 94% PASS |
 | Validation: Medical content | 100% PASS | 100% PASS |
-| Validation: Dosing plausibility | 62.5% (10/16) *(+Docling)* | 97% PASS (495/509) |
+| Validation: Dosing plausibility | 62.5% (10/16) *(+Docling)* | 99% PASS (479/484) |
 | Retrieval P@3 (30 queries) | 0.489 | — |
 | Retrieval MRR (30 queries) | 0.686 | — |
 | Guardrail pass rate (25 queries) | 100% | 100% |
-| Response confidence | Computed per-query (retrieval score × coverage − guardrail penalty) | Computed per-query |
+| Response confidence (mean, 25 queries) | *Re-run required (WHO Malaria KB not built)* | 0.89 (range: 0.68–1.00) |
 
 *Docling + TableFormer ACCURATE was used for WHO Malaria extraction — requires `pip install 'docling>=2.64.0'`.*
 *ColPali v1.2 visual retrieval is integrated but requires ≥16 GB RAM to run inference; index building tested on hardware with sufficient memory.*
