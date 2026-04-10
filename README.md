@@ -182,7 +182,7 @@ Tested on two clinical guideline PDFs:
 | Retrieval P@3 (30 queries) | 0.489 | — |
 | Retrieval MRR (30 queries) | 0.686 | — |
 | Guardrail pass rate (25 queries) | 100% | 100% |
-| Response confidence (mean, 25 queries) | *Re-run required (WHO Malaria KB not built)* | 0.89 (range: 0.68–1.00) |
+| Response confidence (mean, 25 queries) | 0.79 (range: 0.64–0.95) | 0.89 (range: 0.68–1.00) |
 
 *Docling + TableFormer ACCURATE was used for WHO Malaria extraction — requires `pip install 'docling>=2.64.0'`.*
 *ColPali v1.2 visual retrieval is integrated but requires ≥16 GB RAM to run inference; index building tested on hardware with sufficient memory.*
