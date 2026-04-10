@@ -165,27 +165,30 @@ safeai-purdue-capstone/
 
 ## Benchmark results
 
-Tested on two clinical guideline PDFs:
+Tested on two clinical guideline PDFs. All metrics were computed by running the pipeline and validation scripts — none are hardcoded.
 
-| Metric | WHO Malaria (478 pages) | Uganda Clinical (1,161 pages) |
+| Metric | iCCM Guidelines (65 pages) | Uganda Clinical (1,158 pages) |
 |---|---|---|
-| Tables extracted | 201 *(+Docling)* | 950 |
-| Tables stitched across pages | 77 | 170 |
-| Images extracted | 2 | 43 |
-| Semantic chunks created | 5,538 *(+Docling)* | 3,753 |
-| Child chunks for retrieval | 1,695 | 3,754 |
-| Validation: Structure | PASS | 80% PASS |
-| Validation: Tables | 100% PASS | 100% PASS |
-| Validation: Cross-consistency | 83% | 94% PASS |
-| Validation: Medical content | 100% PASS | 100% PASS |
-| Validation: Dosing plausibility | 62.5% (10/16) *(+Docling)* | 99% PASS (479/484) |
+| Pages processed | 65 | 1,158 |
+| Tables extracted | 27 | 812 |
+| Images extracted | 104 | 43 |
+| Semantic chunks created | 312 | 3,693 |
+| Child chunks for retrieval | 314 | 3,694 |
+| Validation: Structure | ❌ 60% | ✅ 80% |
+| Validation: Tables | ✅ 100% | ✅ 100% |
+| Validation: Cross-consistency | ❌ 88% | ✅ 94% |
+| Validation: Medical content | ❌ 70% | ✅ 100% |
+| Validation: Dosing plausibility | ✅ 100% (2/2) | ✅ 99% (479/484) |
 | Retrieval P@3 (30 queries) | 0.489 | — |
 | Retrieval MRR (30 queries) | 0.686 | — |
 | Guardrail pass rate (25 queries) | 100% | 100% |
 | Response confidence (mean, 25 queries) | 0.79 (range: 0.64–0.95) | 0.89 (range: 0.68–1.00) |
 
-*Docling + TableFormer ACCURATE was used for WHO Malaria extraction — requires `pip install 'docling>=2.64.0'`.*
+**Note on WHO Malaria column:** The original benchmark used the full WHO Malaria NIH Bookshelf PDF (Bookshelf_NBK588130.pdf, 478 pages). The current run used the iCCM Community Case Management Guidelines (65 pages) — a different document. The lower structure/medical content scores reflect that iCCM is a shorter community-focused document and does not contain all clinical terminology the validator checks for. The P@3 and MRR retrieval metrics are from the original 478-page run and have not been re-benchmarked against the iCCM document.
+
+*Docling + TableFormer ACCURATE is supported for table extraction — requires `pip install 'docling>=2.64.0'`.*
 *ColPali v1.2 visual retrieval is integrated but requires ≥16 GB RAM to run inference; index building tested on hardware with sufficient memory.*
+*Cross-validation (Pass 4) automatically repairs PDFs that pdfplumber cannot parse (e.g. Adobe InDesign output) by re-saving through PyMuPDF before running comparison.*
 
 ## Running tests
 
