@@ -51,6 +51,8 @@ Classification drives downstream decisions: preservation level, chunking strateg
 
 Re-extracting text with pdfplumber and computing `fuzz.ratio` similarity against Pass 1 catches silent extraction failures. Text is normalized before comparison (whitespace collapsed, soft hyphens stripped, lowercased) to avoid false divergence from formatting differences. The Uganda PDF scores 94% consistency; malaria scores 83% (lower due to dense evidence tables with complex layouts).
 
+**PDF compatibility fix (2026-04-10):** Some PDFs produced by tools like Adobe InDesign use a non-standard internal page-tree structure that pdfminer/pdfplumber cannot traverse directly, returning 0 pages and causing a false 0% consistency score. The extractor now detects this automatically: if pdfplumber returns 0 pages, the PDF is re-saved through PyMuPDF (`garbage=4, clean=True`) to a temporary file, which normalises the structure to standard PDF. pdfplumber then runs on the repaired copy. The temporary file is deleted after cross-validation. This makes cross-validation work on any uploaded PDF regardless of how it was produced.
+
 **6. Image OCR and caption extraction**
 
 Embedded images are rasterized to PNG. If `pytesseract` or `easyocr` is available, OCR text is extracted. Captions are located by searching for text blocks in an 80px band below the image bounding box, preferring blocks starting with "Figure", "Chart", "Diagram", etc.

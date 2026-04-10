@@ -835,8 +835,27 @@ class MultiPassExtractor:
 
         try:
             import pdfplumber
+            import tempfile
 
-            with pdfplumber.open(self.config.pdf_path) as pdf:
+            # Some PDFs (e.g. Adobe InDesign output) use internal page-tree
+            # structures that pdfminer/pdfplumber cannot traverse directly,
+            # returning 0 pages. Re-saving through PyMuPDF normalises the
+            # structure so pdfplumber can read any document.
+            pdf_path_for_plumber = self.config.pdf_path
+            tmp_file = None
+            with pdfplumber.open(pdf_path_for_plumber) as probe:
+                if len(probe.pages) == 0:
+                    print("  PDF structure not readable by pdfplumber — repairing via PyMuPDF...")
+                    import fitz
+                    src = fitz.open(self.config.pdf_path)
+                    tmp_file = tempfile.NamedTemporaryFile(suffix=".pdf", delete=False)
+                    tmp_file.close()
+                    src.save(tmp_file.name, garbage=4, deflate=True, clean=True)
+                    src.close()
+                    pdf_path_for_plumber = tmp_file.name
+                    print(f"  Repaired PDF written to temp file — retrying cross-validation")
+
+            with pdfplumber.open(pdf_path_for_plumber) as pdf:
                 for page_num, page in enumerate(pdf.pages, 1):
                     text = page.extract_text() or ""
 
@@ -855,6 +874,10 @@ class MultiPassExtractor:
                             "page": page_num,
                             "similarity": similarity,
                         })
+
+            if tmp_file:
+                import os as _os
+                _os.unlink(tmp_file.name)
 
             if validation_results["page_matches"]:
                 validation_results["consistency_score"] = float(np.mean([

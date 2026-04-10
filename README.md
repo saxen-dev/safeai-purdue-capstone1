@@ -224,6 +224,14 @@ python -m pytest tests/ -q
 
 All three methods fall back to the hardcoded templates only when the PDF chunks contain no extractable list items or metadata. This preserves backward compatibility for edge cases while grounding responses in the actual source document by default.
 
+### 2026-04-10 — Cross-validation fix for all PDF types (`pipeline/extractor.py`)
+
+**What changed:** `pass4_cross_validation()` now works on any uploaded PDF, not just those compatible with pdfplumber.
+
+**Why it was wrong:** Some PDFs produced by tools like Adobe InDesign use a non-standard internal page-tree structure that pdfminer/pdfplumber cannot traverse directly. pdfplumber would return 0 pages for these files, causing the cross-validation consistency score to silently stay at 0% — a false failure that made the validation stage report ❌ for cross-consistency even when the extraction itself was fine. The Uganda Clinical Guidelines 2023 PDF is one such document.
+
+**What it does now:** Before running pdfplumber, the extractor checks if pdfplumber returns 0 pages. If so, it re-saves the PDF through PyMuPDF (`garbage=4, deflate=True, clean=True`) to a temporary file, which normalises the PDF structure to standard format. pdfplumber then runs on the repaired copy and produces correct results. The temporary file is deleted immediately after. This fix is transparent — no change to any configuration or interface is needed.
+
 ## License
 
 Purdue University Capstone Project — SafeAI Team.
