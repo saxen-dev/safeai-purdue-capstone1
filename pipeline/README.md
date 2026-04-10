@@ -186,6 +186,41 @@ The retrieval benchmark results and deployable mobile package are tracked in [`r
 
 ## Recent changes
 
+### 2026-04-10 — `pipeline/orchestrator.py`: Offline query rewriting (`_preprocess_query`)
+
+New `_preprocess_query(query)` static method runs before every retrieval call. It strips conversational framing ("A lady has…", "My child is…", "I have a patient who…") so the retriever sees clinical terms instead of pronouns and filler. It then appends medical synonyms for 15 term groups (e.g. "bleed" → appends "bleeding haemorrhage hemorrhage"; "fit" → "convulsions seizures"). Original query is kept for triage inference, display, and response text — only the retrieval call receives the enriched query. No internet access, no models — pure regex and a static synonym dictionary.
+
+### 2026-04-10 — `pipeline/retriever.py` + `chat.py`: No-match detection
+
+**Problem:** Min-max normalisation maps the best retrieved chunk to score 1.0 regardless of absolute relevance. A query about the weather would still return a chunk scoring 1.0 relative to the others in the KB, and the system would generate a response using those chunks.
+
+**Fix:** After computing cross-encoder logits and before min-max normalisation, the max raw CE score (`_ce_best_raw`) is stored on the first result chunk. CE logit > 0 = model believes query and chunk are related; < 0 = not related. In `chat.py`, if `_ce_best_raw < -1.5` (clearly off-topic), the response is suppressed and "No matching guidelines found for this query" is displayed instead. Queries between −1.5 and 0 still show the response but with the existing low-confidence warning. Falls back silently when the cross-encoder is not installed (BM25-only mode).
+
+### 2026-04-10 — `pipeline/response.py` + `chat.py`: RED triage safety gating
+
+**Problem:** For RED-triage (emergency) responses, the response could include:
+1. A family message extracted verbatim from a GREEN-context PDF chunk containing "manage at home" language
+2. Actions labeled "What to do:" that read as home management steps rather than pre-transport steps
+
+**Fix (response.py):** `_generate_family_message()` now validates PDF-extracted sentences against triage level. For RED triage, sentences containing "at home", "home treatment", or "home management" are rejected. Only sentences containing "refer", "health facility", "hospital", "urgent", or "immediately" are accepted; all others fall through to the hardcoded RED template.
+
+**Fix (chat.py):** For RED triage, actions are filtered to remove any item matching "at home" / "home treatment" / "manage at home". The section label changes from "What to do:" to "Steps while arranging referral:" to make clear these are pre-transport actions.
+
+### 2026-04-10 — `pipeline/response.py`: Triage keyword expansion + typo tolerance
+
+**Problem:** The triage keyword list had only 8 entries with exact matching. A query like "vaginal leeding" (typo for "bleeding") returned GREEN triage; obstetric emergencies ("haemorrhage", "eclampsia", "placenta previa") were not recognised.
+
+**Fix:** Expanded `danger_kw` from 8 to 24 entries using partial-prefix matching (e.g. "bleed" catches bleeding/bleeds/bled; "haemorrhag" catches British haemorrhage). Added obstetric emergency keywords: haemorrhage, hemorrhage, eclampsia, antepartum, postpartum, placenta previa/praevia, abruption, cord prolapse, obstructed labour, sepsis, "in shock". Added fuzzy matching via `rapidfuzz.fuzz.ratio` as a second pass: if exact matching finds nothing, each word in the query is compared to 6 canonical danger-sign phrases; ≥80% similarity triggers RED (catches typos like "leeding" matching "bleeding" at 82%).
+
+### 2026-04-10 — `chat.py`: Extended table artifact filter in `_clean_list_items`
+
+Added patterns to drop table-cell fragments that were leaking into the "When to refer:" section:
+- `~` — tilde character used as a cell separator in the Uganda guidelines
+- `mg(or` — dose column concatenation artifact
+- `)(` — adjacent merged cells
+- `con-, ` — word broken across table cells
+- Lines starting with "hospital is" — referral column fragment
+
 ### 2026-04-10 — `pipeline/response.py`: Content leakage fix (`_relevant_chunks`)
 
 **Problem:** `_extract_list_items_from_chunks` and `_collect_metadata_field` iterated over all 5 retrieved chunks equally. Chunks ranked 4th/5th often score 0.2–0.3 (tangentially related sections), so their bullet points and metadata leaked into actions, monitoring, and referral output — producing steps from unrelated parts of the guidelines.

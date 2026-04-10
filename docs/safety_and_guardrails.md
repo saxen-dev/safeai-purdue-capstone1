@@ -96,6 +96,16 @@ Six independent validation stages catch different error categories:
 
 5. **Section completeness** — `_check_completeness()`: required sections must contain content above minimum character thresholds (not just a bare header). Citations section must include at least one page reference.
 
+**Triage keyword hardening (2026-04-10):** `infer_triage_from_query()` expanded from 8 to 24 danger-sign entries covering obstetric emergencies (haemorrhage, eclampsia, antepartum/postpartum, abruption, placenta previa, cord prolapse, obstructed labour), systemic emergencies (sepsis, shock, not breathing), and partial-prefix matching to catch inflected forms. Fuzzy matching via `rapidfuzz` (≥80% similarity) added as a second pass to catch misspelled danger signs — a query like "vaginal leeding" now correctly triggers RED triage.
+
+**RED triage response gating (2026-04-10):** Two gates prevent home-management language from appearing in emergency responses:
+- `_generate_family_message()` rejects PDF-extracted sentences containing "at home"/"home treatment" for RED triage; only accepts sentences with hospital/refer/emergency language.
+- `chat.py` filters actions matching "at home"/"manage at home" for RED triage and relabels the section "Steps while arranging referral:" so instructions are clearly pre-transport, not home care.
+
+**No-match detection (2026-04-10):** When a query has no relevant content in the loaded guidelines, the system now responds "No matching guidelines found" instead of fabricating a response from loosely related chunks. The raw cross-encoder logit (before min-max normalisation) is captured as `_ce_best_raw` on the top result. CE logit < −1.5 indicates no reliable match; the response is suppressed entirely. This is a safety improvement: a fabricated response based on wrong-section chunks is more dangerous than a clear "not found" message.
+
+**Offline query rewriting (2026-04-10):** Before retrieval, `orchestrator._preprocess_query()` strips conversational framing and expands medical synonyms using a 15-group offline dictionary. This improves the chance that the retriever finds the correct guideline section, reducing the risk of responses based on wrong-section content.
+
 **Preservation-level enforcement.** VERBATIM content (dosing tables) is rendered exactly as extracted — the response formatter cannot paraphrase or summarize it.
 
 **Confidence scoring (updated 2026-04-09).** Every response includes a numeric confidence (0.0–1.0) computed from three real retrieval signals:

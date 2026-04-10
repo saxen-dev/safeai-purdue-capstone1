@@ -42,11 +42,25 @@ Every response starts with a triage classification:
 
 | Level | Criteria | Response behavior |
 |---|---|---|
-| **RED** | Danger signs detected (convulsions, unconscious, unable to drink, severe bleeding) | Emergency header, immediate referral, no home treatment |
+| **RED** | Danger signs detected (convulsions, unconscious, unable to drink, severe bleeding, haemorrhage, eclampsia, sepsis, etc.) | Emergency header, immediate referral, no home treatment |
 | **YELLOW** | Clinical concern without danger signs | Urgent actions, monitoring checklist, referral criteria |
 | **GREEN** | Routine clinical question | Standard guidance, monitoring, when-to-refer list |
 
 Triage level drives fallback template selection when PDF chunks do not yield extractable content. When chunks contain relevant list items or clinical metadata, those are used instead (see PDF-first content extraction below).
+
+**Updated 2026-04-10 — Expanded keyword list + typo tolerance.**
+
+`infer_triage_from_query()` now has 24 danger-sign entries (was 8). Partial-prefix matching is used instead of full-word matching: "bleed" matches bleeding/bleeds/bled; "haemorrhag" matches both British and American spellings; "eclampsi" matches eclampsia/pre-eclampsia. Added obstetric emergencies (antepartum/postpartum haemorrhage, eclampsia, placenta previa/praevia, abruption, cord prolapse, obstructed labour), systemic emergencies (sepsis, "in shock", not breathing), and expanded neurological signs (fits, not waking).
+
+Fuzzy matching via `rapidfuzz` is applied as a second pass when exact matching finds nothing: each word in the query is compared to 6 canonical danger-sign phrases at ≥80% similarity. This catches common typos ("leeding" → "bleeding" at 82% similarity) without false-positives on normal clinical vocabulary.
+
+### RED triage response gating
+
+**Added 2026-04-10.** For RED-triage responses, two additional safety gates apply on top of the standard pipeline:
+
+1. **Family message validation** (`_generate_family_message`): PDF-extracted caregiver sentences are rejected for RED triage if they contain "at home", "home treatment", or "home management" language — a GREEN-context sentence extracted from the guidelines must not appear in an emergency response. The sentence is also rejected unless it contains emergency language ("refer", "health facility", "hospital", "urgent", "immediately"). Rejected sentences fall through to the hardcoded RED template ("This is a serious condition. The patient needs to go to the health facility immediately.").
+
+2. **Action label and filter** (`chat.py _format_response`): For RED triage, any action item containing "at home" / "home treatment" / "manage at home" is removed from the list. The section header changes from "What to do:" to "Steps while arranging referral:" to make clear these are pre-transport instructions, not home management steps.
 
 ### Preservation-level-aware formatting
 

@@ -278,6 +278,37 @@ ColBERT stores per-token embeddings and computes fine-grained query-document int
 
 Hypothetical Document Embeddings (HyDE) generates a synthetic answer to the query and uses its embedding for retrieval. This requires an LLM call per query, adding latency and cost. Our hybrid BM25 + dense approach already handles the vocabulary mismatch that HyDE addresses, without the LLM dependency.
 
+## Offline query preprocessing (2026-04-10)
+
+Before retrieval, `orchestrator._preprocess_query()` rewrites the user's query into a retrieval-optimised form. This runs entirely offline — no API calls, no internet.
+
+**Step 1 — Strip conversational framing.** VHT workers typically describe scenarios: "A lady has vaginal bleeding" or "My child is not eating". The retriever performs better on the clinical core. A regex removes the leading subject phrase, leaving "vaginal bleeding after 28 weeks of pregnancy" for retrieval.
+
+**Step 2 — Medical synonym expansion.** 15 term groups are expanded at query time. The original term stays; synonyms are appended only if not already present:
+
+| Query term | Appended synonyms |
+|---|---|
+| bleed/bleeding | haemorrhage hemorrhage |
+| vomit/vomiting | emesis nausea |
+| fit/fits | convulsions seizures |
+| fever | febrile pyrexia temperature |
+| diarrhoea/diarrhea | loose stool |
+| pregnant/pregnancy | antenatal obstetric |
+| weak/weakness | lethargic |
+| … (15 groups total) | |
+
+The original query is preserved for triage inference, family message, and all display text. Only the retrieval call uses the enriched form.
+
+## No-match detection (2026-04-10)
+
+Min-max normalisation in the cross-encoder blend always maps the best-ranked chunk to score 1.0, regardless of absolute relevance. A query completely outside the loaded guidelines (e.g. "What is the weather today?") would still return chunks with high normalised scores and generate a fabricated response.
+
+**Fix:** The raw cross-encoder logit is captured **before** normalisation as `_ce_best_raw` on the top result chunk. CE logits are unbounded:
+- Positive logit → model believes the query and chunk are related
+- Negative logit → model believes they are unrelated
+
+In `chat.py`, if `_ce_best_raw < -1.5`, the response is suppressed and "No matching guidelines found for this query" is displayed. Queries scoring between −1.5 and 0 still receive a response with the existing low-confidence warning. When the cross-encoder is not installed (BM25-only mode), `_ce_best_raw` is None and this check is skipped.
+
 ## Parameters
 
 | Parameter | Default | Purpose |
