@@ -1,6 +1,6 @@
 # Response layer validation (25 queries × 2 sources)
 
-- **Generated (UTC)**: 2026-04-01T04:59:53.311063+00:00
+- **Generated (UTC)**: 2026-04-10T04:59:48.445208+00:00
 - **Method**: `MedicalQASystem.answer_with_response()` after BM25 + guardrail
 
 ## Acceptance criteria
@@ -15,38 +15,38 @@ Per preset: summary table (metrics only), then **full query** and **complete** f
 
 ## Preset: `who-malaria`
 
-- **Document**: WHO Malaria Guidelines (NCBI Bookshelf)
+- **Document**: WHO guidelines for malaria - 13 August 2025
 - **Queries**: 25
 
 ### Summary table
 
 | # | Triage | Guardrail OK | Confidence | VHT chars | Referral chars | Quick chars |
 |---|--------|--------------|------------|-----------|----------------|-------------|
-| 1 | GREEN | True | 0.90 | 1439 | 380 | 123 |
-| 2 | GREEN | True | 0.90 | 1487 | 380 | 123 |
-| 3 | GREEN | True | 0.90 | 1472 | 380 | 123 |
-| 4 | GREEN | True | 0.90 | 1478 | 380 | 123 |
-| 5 | GREEN | True | 0.90 | 1434 | 380 | 123 |
-| 6 | GREEN | True | 0.90 | 1453 | 380 | 123 |
-| 7 | GREEN | True | 0.90 | 1435 | 380 | 123 |
-| 8 | GREEN | True | 0.90 | 1444 | 380 | 123 |
-| 9 | GREEN | True | 0.90 | 1492 | 380 | 123 |
-| 10 | GREEN | True | 0.90 | 1520 | 380 | 123 |
-| 11 | GREEN | True | 0.90 | 1521 | 380 | 123 |
-| 12 | GREEN | True | 0.90 | 1457 | 380 | 123 |
-| 13 | GREEN | True | 0.90 | 1489 | 380 | 123 |
-| 14 | GREEN | True | 0.90 | 1465 | 380 | 123 |
-| 15 | GREEN | True | 0.90 | 1492 | 380 | 123 |
-| 16 | GREEN | True | 0.90 | 1498 | 399 | 123 |
-| 17 | GREEN | True | 0.90 | 1462 | 380 | 123 |
-| 18 | GREEN | True | 0.90 | 1497 | 380 | 123 |
-| 19 | GREEN | True | 0.90 | 1434 | 380 | 123 |
-| 20 | GREEN | True | 0.90 | 1578 | 380 | 123 |
-| 21 | GREEN | True | 0.90 | 1520 | 380 | 123 |
-| 22 | GREEN | True | 0.90 | 1574 | 391 | 123 |
-| 23 | GREEN | True | 0.90 | 1439 | 380 | 123 |
-| 24 | GREEN | True | 0.90 | 1439 | 380 | 123 |
-| 25 | GREEN | True | 0.90 | 1506 | 380 | 123 |
+| 1 | GREEN | True | 0.73 | 1768 | 529 | 123 |
+| 2 | GREEN | True | 0.74 | 1492 | 380 | 123 |
+| 3 | GREEN | True | 0.85 | 1465 | 380 | 123 |
+| 4 | GREEN | True | 0.86 | 1688 | 549 | 123 |
+| 5 | GREEN | True | 0.89 | 1454 | 380 | 123 |
+| 6 | GREEN | True | 0.83 | 1490 | 380 | 123 |
+| 7 | GREEN | True | 0.64 | 1517 | 380 | 123 |
+| 8 | GREEN | True | 0.66 | 1492 | 380 | 123 |
+| 9 | GREEN | True | 0.80 | 1529 | 380 | 123 |
+| 10 | GREEN | True | 0.87 | 1474 | 380 | 123 |
+| 11 | GREEN | True | 0.88 | 1474 | 380 | 123 |
+| 12 | GREEN | True | 0.68 | 1737 | 549 | 123 |
+| 13 | GREEN | True | 0.83 | 1690 | 549 | 123 |
+| 14 | GREEN | True | 0.73 | 1475 | 380 | 123 |
+| 15 | GREEN | True | 0.74 | 1542 | 380 | 123 |
+| 16 | GREEN | True | 0.84 | 1429 | 355 | 123 |
+| 17 | GREEN | True | 0.85 | 1532 | 350 | 123 |
+| 18 | GREEN | True | 0.81 | 1707 | 549 | 123 |
+| 19 | GREEN | True | 0.64 | 1471 | 380 | 123 |
+| 20 | GREEN | True | 0.82 | 1502 | 380 | 123 |
+| 21 | GREEN | True | 0.86 | 1384 | 355 | 123 |
+| 22 | GREEN | True | 0.95 | 1460 | 391 | 123 |
+| 23 | GREEN | True | 0.83 | 1508 | 380 | 123 |
+| 24 | GREEN | True | 0.78 | 1454 | 380 | 123 |
+| 25 | GREEN | True | 0.76 | 1816 | 546 | 123 |
 
 ### Full queries and formatted outputs
 
@@ -56,7 +56,7 @@ Per preset: summary table (metrics only), then **full query** and **complete** f
 
 > What is the treatment for uncomplicated Plasmodium falciparum malaria?
 
-**Metrics:** Triage `GREEN` | Guardrail OK `True` | Confidence `0.90`
+**Metrics:** Triage `GREEN` | Guardrail OK `True` | Confidence `0.73`
 
 #### VHT standard (`vht_response`)
 
@@ -69,10 +69,11 @@ Per preset: summary table (metrics only), then **full query** and **complete** f
 
 **WHAT TO DO (step by step):**
 
-**Step 1:** Assess patient carefully
-**Step 2:** Check for danger signs (see below)
-**Step 3:** If unsure, refer to health facility
-**Step 4:** Record all findings
+**Step 1:** How best can iCCM be implemented in emergency settings?
+**Step 2:** Can mHealth applications play a role in improving the adherence of VHTs to clinical diagnostic and
+**Step 3:** What treatment options are effective and safe in settings where referral is not possible?
+**Step 4:** What are the elements that facilitate family members to use CCM services?
+**Step 5:** Do family members follow treatment recommendations properly?
 
 **MONITORING:**
 
@@ -105,9 +106,9 @@ The symptoms can be managed at home with guidance. Follow the advice you were gi
 
 **FROM THE GUIDELINES:**
 
-• WHO Malaria Guidelines (NCBI Bookshelf), Page 437: References
-• WHO Malaria Guidelines (NCBI Bookshelf), Page 308: Untitled
-• WHO Malaria Guidelines (NCBI Bookshelf), Page 435: References
+• WHO Malaria Guidelines (NCBI Bookshelf), Page 10: S [HIGH FIDELITY]
+• WHO Malaria Guidelines (NCBI Bookshelf), Page 45: Management of illness [HIGH FIDELITY]
+• WHO Malaria Guidelines (NCBI Bookshelf), Page 64: 4.1 References [HIGH FIDELITY]
 ```
 
 #### Referral note (`referral_note`)
@@ -119,9 +120,9 @@ The symptoms can be managed at home with guidance. Follow the advice you were gi
 **Reason:** Routine evidence retrieval from national guidelines
 
 **Actions taken:**
-• Assess patient carefully
-• Check for danger signs (see below)
-• If unsure, refer to health facility
+• How best can iCCM be implemented in emergency settings?
+• Can mHealth applications play a role in improving the adherence of VHTs to clinical diagnostic and
+• What treatment options are effective and safe in settings where referral is not possible?
 
 **Referral completed:** [ ]
 **Health worker received:** [ ]
@@ -141,83 +142,125 @@ Action: Follow advice below, monitor for changes
 #### BM25 + guardrail evidence bundle (`response` — markdown)
 
 ```
-**WHO Malaria Guidelines (NCBI Bookshelf)**
+**WHO guidelines for malaria - 13 August 2025**
 
 **Question:** What is the treatment for uncomplicated Plasmodium falciparum malaria?
 
-### 1. References
+### 1. S
 
-### References
+### S
 
-References
+PACKAGE DELIVERED BY ICCM VHTS
 
-219. Pryce J, Taylor M, Fox T, Hine P. Pyronaridine-artesunate for treating uncomplicated Plasmodium falciparum malaria.
+PACKAGES DELIVERED BY ALL VHTS
 
-Cochrane Database Syst Rev 2022;6(6) Pubmed Journal...
+i. Malaria diagnosis with mRDT; treatment with ACTs;
 
-📄 **Reference:** Page 437
+i.
 
-### 2. Untitled
+Home visiting
 
-WHO guidelines for malaria - 13 August 2025 - World Health Organization (WHO)
+ii.
 
-220. . The effect of dosing regimens on the antimalarial efficacy of dihydroartemisinin-piperaquine: a pooled analysis of individual patient
+Mobilization of communities for utilization of health
 
-data. PLoS medicine 2013;10(12):e1001564; discussion e1001564 Pubmed Journal
+services
 
-221. Graves PM, Gelband H, Garner P. Primaquine or other 8-aminoquinoline for reducing P. falciparum transmission. The Cochrane
+iii.
 
-database of systematic reviews 2014;(6):CD008152 Pubmed Journal
+Health Promotion and Education
 
-222. Wh...
+iv.
 
-📄 **Reference:** Page 308
+Community-based case management of common ill-
 
-### 3. References
+health conditions
 
-### References
+v.
 
-References
+Follow up of the mothers during pregnancy and after
 
-219. Pryce J, Taylor M, Fox T, Hine P. Pyronaridine-artesunate for treating uncomplicated Plasmodium falciparum malaria.
+birth and the newborn for provision of advice,
 
-Cochrane Database Syst Rev 2022;6(6) Pubmed Journal...
+recognition of danger signs, and referral
 
-📄 **Reference:** Page 435
+vi.
 
-### 4. knowlesi
+Follow up of people who...
 
-### knowlesi
+📄 **Reference:** Page 10
 
-5.2.1.5 Uncomplicated malaria caused by P. vivax, P. ovale, P. malariae or P.
+### 2. Management of illness
 
-knowlesi
+### Management of illness
 
-Plasmodium vivax accounts for approximately half of all malaria cases outside Africa [3][250][251]. It is prevalent in the Middle
+4.
 
-East, Asia, the Western Pacific and Central and South America. With the exception of the Horn, it is rarer in Africa, where there
+How best can iCCM be implemented in emergency settings?
 
-is a high prevalence of the Duffy-negative phenotype, particularly in West Africa, although cases are reported in both
+C. Management of illness
 
-Mauritania and ...
+5.
 
-📄 **Reference:** Page 190
+Can mHealth applications play a role in improving the adherence of VHTs to clinical diagnostic and
 
-### 5. Untitled
+treatment algorithms?
 
-WHO guidelines for malaria - 13 August 2025 - World Health Organization (WHO)
+6.
 
-in early infancy. Clinical infectious diseases : an official publication of the Infectious Diseases Society of America 2009;48(12):1704-12
+What treatment options are effective and safe in settings where referral is not possible?
 
-Pubmed Journal
+7.
 
-256. Genton B, D'Acremont V, Rare L, Baea K, Reeder JC, Alpers MP, et al. Plasmodium vivax and mixed infections are associated with
+What are the elements that facilitate family members to use CCM services?
 
-severe malaria in children: a prospective cohort study from Papua New Guinea. PLoS medicine 2008;5(6):e127 Pubmed Journal
+8.
 
-257. Koch...
+Do family members follow treatment recommendations properly?
 
-📄 **Reference:** Page 310
+9.
+
+How can timely ...
+
+📄 **Reference:** Page 45
+
+### 3. 4.1 References
+
+### 4.1 References
+
+4.1 References...
+
+📄 **Reference:** Page 64
+
+### 4. Outcome 2
+
+### Outcome 2
+
+Outcome 2
+
+61...
+
+📄 **Reference:** Page 61
+
+### 5. ACKNOWLEDGEMENTS
+
+# ACKNOWLEDGEMENTS
+
+ACKNOWLEDGEMENTS
+
+The Ministry of Health acknowledges the efforts of many stakeholders and partners
+
+who supported the development and update of different components of this guideline
+
+for integrated community case management. iCCM is a key strategy to reducing child
+
+mortality, and the iCCM TWG is commended for the successful update of the new
+
+guidelines that build on past experiences in implementing the program in the country.
+
+I acknowledge the following people for their ...
+
+📄 **Reference:** Page 6
 
 
 ---
@@ -230,7 +273,7 @@ Next Steps / Monitoring: Consult the full source guideline or a clinician for pa
 
 When to Refer: Per excerpts and national guidance; seek urgent care if danger signs, severe disease, or instability is suspected.
 
-Citations: Page 190, Page 308, Page 310, Page 435, Page 437
+Citations: Page 6, Page 10, Page 45, Page 61, Page 64
 
 ---
 **🧪 Guardrail Brain Validation:** ✅ Passed
@@ -245,7 +288,7 @@ Citations: Page 190, Page 308, Page 310, Page 435, Page 437
 
 > Dosing artemisinin-based combination therapy in children under 5
 
-**Metrics:** Triage `GREEN` | Guardrail OK `True` | Confidence `0.90`
+**Metrics:** Triage `GREEN` | Guardrail OK `True` | Confidence `0.74`
 
 #### VHT standard (`vht_response`)
 
@@ -294,9 +337,9 @@ The symptoms can be managed at home with guidance. Follow the advice you were gi
 
 **FROM THE GUIDELINES:**
 
-• WHO Malaria Guidelines (NCBI Bookshelf), Page 226: Considerations in use of artemisinin-based combination therapy
-• WHO Malaria Guidelines (NCBI Bookshelf), Page 443: Intervention:
-• WHO Malaria Guidelines (NCBI Bookshelf), Page 443: h
+• WHO Malaria Guidelines (NCBI Bookshelf), Page 36: Denominator: [HIGH FIDELITY]
+• WHO Malaria Guidelines (NCBI Bookshelf), Page 36: Denominator: [HIGH FIDELITY]
+• WHO Malaria Guidelines (NCBI Bookshelf), Page 35: Denominator: [HIGH FIDELITY]
 ```
 
 #### Referral note (`referral_note`)
@@ -330,57 +373,173 @@ Action: Follow advice below, monitor for changes
 #### BM25 + guardrail evidence bundle (`response` — markdown)
 
 ```
-**WHO Malaria Guidelines (NCBI Bookshelf)**
+**WHO guidelines for malaria - 13 August 2025**
 
 **Question:** Dosing artemisinin-based combination therapy in children under 5
 
-### 1. Considerations in use of artemisinin-based combination therapy
+### 1. Denominator:
 
-### Considerations in use of artemisinin-based combination therapy
+### Denominator:
 
-Considerations in use of artemisinin-based combination therapy
+Nutrition services
 
-Oral artemisinin and its derivatives (e.g. artesunate, artemether, dihydroartemisinin) should not be used alone. In order to simplify use,
+Numerator: Number children under five
 
-improve adherence and minimize the availability of oral artemisinin monotherapy, fixed-dose combination ACTs are strongly preferred
+assessed with Red MUAC  by the VHT
 
-to co-blistered or co-dispensed loose tablets and should be used when they are readily availabl...
+Denominator: Number of children under
 
-📄 **Reference:** Page 226
+five seen by the VHTs in the review period...
 
-### 2. Intervention:
+📄 **Reference:** Page 36
 
-### Intervention:
+### 2. Denominator:
 
-Intervention: Artemisinin-based combination therapy...
+### Denominator:
 
-📄 **Reference:** Page 443
+Numerator: Number children under five
 
-### 3. h
+assessed with diarrheoa treated with
 
-### h
+ORS/Zinc   by the VHT
 
-h...
+Denominator: Number of children under
 
-📄 **Reference:** Page 443
+five seen by the VHTs with diarrheoa
 
-### 4. High
+HMIS 097B
 
-### High
+Quarterly,
 
-High...
+Anually
 
-📄 **Reference:** Page 443
+Program
 
-### 5. High
+District
 
-### High
+Sub-County
 
-High
+Health Facility...
 
-1...
+📄 **Reference:** Page 36
 
-📄 **Reference:** Page 443
+### 3. Denominator:
+
+### Denominator:
+
+Pneumonia cases
+
+are
+
+treated
+
+appropriately.
+
+Numerator: Number children under five
+
+assessed with pneumonia/fast breathing
+
+treated with Amoxicillin  by the VHT
+
+Denominator: Number of children under
+
+five seen by the VHTs with pneumonia/fast
+
+breathing
+
+HMIS 097B
+
+Quarterly,
+
+Anually
+
+Program
+
+District
+
+Sub-County
+
+Health Facility
+
+35 | P a g e...
+
+📄 **Reference:** Page 35
+
+### 4. Denominator:
+
+### Denominator:
+
+Malaria cases are
+
+treated
+
+appropriately.
+
+Numerator: Number children under five
+
+assessed with confirmed malaria treated with
+
+ACT  by the VHT
+
+Denominator: Number of children under
+
+five seen by the VHTs with malaria
+
+HMIS 097B
+
+Quarterly,
+
+Anually
+
+Program
+
+District
+
+Sub-County
+
+Health Facility...
+
+📄 **Reference:** Page 35
+
+### 5. Denominator:
+
+### Denominator:
+
+iCCM
+
+treatment
+
+rate
+
+Numerator: Number of treatments for
+
+children under five provided by iCCM
+
+conditions in twelve months in a target area
+
+by point of treatment (Community or health
+
+facility)
+
+Denominator: Number of children under 5
+
+in target areas at a given time divided by
+
+1,000.
+
+HMIS
+
+UBOS
+
+Annually
+
+Program
+
+District
+
+Health Facility...
+
+📄 **Reference:** Page 35
 
 
 ---
@@ -393,7 +552,7 @@ Next Steps / Monitoring: Consult the full source guideline or a clinician for pa
 
 When to Refer: Per excerpts and national guidance; seek urgent care if danger signs, severe disease, or instability is suspected.
 
-Citations: Page 226, Page 443
+Citations: Page 35, Page 36
 
 ---
 **🧪 Guardrail Brain Validation:** ✅ Passed
@@ -408,7 +567,7 @@ Citations: Page 226, Page 443
 
 > Severe malaria definition and management
 
-**Metrics:** Triage `GREEN` | Guardrail OK `True` | Confidence `0.90`
+**Metrics:** Triage `GREEN` | Guardrail OK `True` | Confidence `0.85`
 
 #### VHT standard (`vht_response`)
 
@@ -457,9 +616,9 @@ The symptoms can be managed at home with guidance. Follow the advice you were gi
 
 **FROM THE GUIDELINES:**
 
-• WHO Malaria Guidelines (NCBI Bookshelf), Page 403: Publication bias: no serious.
-• WHO Malaria Guidelines (NCBI Bookshelf), Page 402: 167
-• WHO Malaria Guidelines (NCBI Bookshelf), Page 404: Publication bias: no serious.
+• WHO Malaria Guidelines (NCBI Bookshelf), Page 61: Outcome 1 [HIGH FIDELITY]
+• WHO Malaria Guidelines (NCBI Bookshelf), Page 10: S [HIGH FIDELITY]
+• WHO Malaria Guidelines (NCBI Bookshelf), Page 6: ACKNOWLEDGEMENTS
 ```
 
 #### Referral note (`referral_note`)
@@ -493,95 +652,137 @@ Action: Follow advice below, monitor for changes
 #### BM25 + guardrail evidence bundle (`response` — markdown)
 
 ```
-**WHO Malaria Guidelines (NCBI Bookshelf)**
+**WHO guidelines for malaria - 13 August 2025**
 
 **Question:** Severe malaria definition and management
 
-### 1. Publication bias: no serious.
+### 1. Outcome 1
 
-### Publication bias: no serious.
+### Outcome 1
 
-children, in the 12 months following administration of the first three doses, protective efficacy against clinical (uncomplicated and
+Outcome 1
 
-severe) malaria was 51% (95% CI 47-55) (per protocol analysis).
+Increased access to iCCM among hard to
 
-3. [Impact outcome] Protective efficacy (%) against clinical malaria episodes (per protocol analysis) Clinical malaria assessed with:
+reach communities
 
-illness in a child brought to a study facility with a measured temperature of 37.5°C and P. falciparum asexual parasitaemia at a d...
+The proportion of newborn who receive
 
-📄 **Reference:** Page 403
+a home visit within 48 hours of birth by a
 
-### 2. 167
+trained VHT administers the danger signs
 
-### 167
+checklist for the newborn and mother,
 
-based
+counsels, or refers as necessary.
 
-vaccination) 167
+80%
 
-month 46.
+Baseline and
 
-Pilot
+Activity
 
-implementation
+reports
 
-study 2019–2023
+The proportion of children with severe
 
-6 Important
+malaria, pneumonia, diarrheoa, TB, and
 
-1. [Impact outcome] Protective efficacy (%) against clinical malaria episodes (modified intention-to-treat analysis). Per-protocol
+HIV or; newborn with danger signs and
 
-analysis protective efficacy 39.0% (95% CI 34.3 to 43.3). Clinical malaria assessed with: illness in a child brought to a study facility
+children with acute malnutrition whom
 
-with a measured temperature of 37.5°C and P. falciparum asexual parasitaemia at a density of > 5000 parasites per cubic millimetre o...
+VHT promptly refers ...
 
-📄 **Reference:** Page 402
+📄 **Reference:** Page 61
 
-### 3. Publication bias: no serious.
+### 2. S
 
-### Publication bias: no serious.
+### S
 
-defined as radiographically proven pneumonia, meningitis established by analysis of cerebrospinal fluid, sepsis (with positive blood
+PACKAGE DELIVERED BY ICCM VHTS
 
-culture), or gastroenteritis with severe dehydration). Laboratory tests and other examinations (chest x-ray, lumbar puncture, blood
+PACKAGES DELIVERED BY ALL VHTS
 
-culture) to exclude co-morbidities were performed only if there was a clinical suspicion/diagnosis justifying additional investigations.
+i. Malaria diagnosis with mRDT; treatment with ACTs;
 
-The study included 450 total participants with three study a...
+i.
 
-📄 **Reference:** Page 404
+Home visiting
 
-### 4. 5.2.2 Treating severe malaria
+ii.
 
-### 5.2.2 Treating severe malaria
+Mobilization of communities for utilization of health
 
-5.2.2 Treating severe malaria
+services
 
-Mortality from untreated severe malaria (particularly cerebral malaria) approaches 100%. With prompt, effective antimalarial
+iii.
 
-treatment and supportive care, the rate falls to 10–20% overall. Within the broad definition of severe malaria some syndromes are
+Health Promotion and Education
 
-associated with lower mortality rates (e.g. severe anaemia) and others with higher mortality rates (e.g. acidosis). The risk for death
+iv.
 
-increases in the presence of multiple com...
+Community-based case management of common ill-
 
-📄 **Reference:** Page 210
+health conditions
 
-### 5. Intervention
+v.
 
-### Intervention
+Follow up of the mothers during pregnancy and after
 
-Outcome
+birth and the newborn for provision of advice,
 
-Timeframe
+recognition of danger signs, and referral
 
-Study results and
+vi.
 
-Intervention
+Follow up of people who...
 
-Malaria vaccination...
+📄 **Reference:** Page 10
 
-📄 **Reference:** Page 402
+### 3. ACKNOWLEDGEMENTS
+
+# ACKNOWLEDGEMENTS
+
+ACKNOWLEDGEMENTS
+
+The Ministry of Health acknowledges the efforts of many stakeholders and partners
+
+who supported the development and update of different components of this guideline
+
+for integrated community case management. iCCM is a key strategy to reducing child
+
+mortality, and the iCCM TWG is commended for the successful update of the new
+
+guidelines that build on past experiences in implementing the program in the country.
+
+I acknowledge the following people for their ...
+
+📄 **Reference:** Page 6
+
+### 4. Collection and Storage of medicines:
+
+### Collection and Storage of medicines:
+
+recovery, development of resistance, adverse medicine reactions, and overall failure of the program.
+
+VHTs will be provided with training on the rational use of iCCM medicines. This will include case
+
+definition/diagnosis, dispensing, record keeping, patient counseling, referral, patient follow-up, adverse
+
+drug reaction monitoring (Pharmaco-vigilance), inventory management to avoid expiries and stockouts.
+
+This will be reinforced by the use of appropria...
+
+📄 **Reference:** Page 28
+
+### 5. Medicines and supplies and supply chain management at the facility and community
+
+### Medicines and supplies and supply chain management at the facility and community
+
+STEP 3: Medicines and supplies and supply chain management at the facility and community...
+
+📄 **Reference:** Page 23
 
 
 ---
@@ -594,7 +795,7 @@ Next Steps / Monitoring: Consult the full source guideline or a clinician for pa
 
 When to Refer: Per excerpts and national guidance; seek urgent care if danger signs, severe disease, or instability is suspected.
 
-Citations: Page 210, Page 402, Page 403, Page 404
+Citations: Page 6, Page 10, Page 23, Page 28, Page 61
 
 ---
 **🧪 Guardrail Brain Validation:** ✅ Passed
@@ -609,7 +810,7 @@ Citations: Page 210, Page 402, Page 403, Page 404
 
 > When to refer a patient with malaria to hospital?
 
-**Metrics:** Triage `GREEN` | Guardrail OK `True` | Confidence `0.90`
+**Metrics:** Triage `GREEN` | Guardrail OK `True` | Confidence `0.86`
 
 #### VHT standard (`vht_response`)
 
@@ -622,10 +823,10 @@ Citations: Page 210, Page 402, Page 403, Page 404
 
 **WHAT TO DO (step by step):**
 
-**Step 1:** Assess patient carefully
-**Step 2:** Check for danger signs (see below)
-**Step 3:** If unsure, refer to health facility
-**Step 4:** Record all findings
+**Step 1:** To increase to at least 90% the proportion of children under-five years with malaria,
+**Step 2:** To increase to at least 90% the proportion of sick children under-five years with fever and
+**Step 3:** Increase to at least 90% the proportion of caregivers in hard-to-reach communities who
+**Step 4:** To increase to at least 90%, the proportion of VHTs trained to manage malaria, pneumonia,
 
 **MONITORING:**
 
@@ -658,9 +859,9 @@ The symptoms can be managed at home with guidance. Follow the advice you were gi
 
 **FROM THE GUIDELINES:**
 
-• WHO Malaria Guidelines (NCBI Bookshelf), Page 220: Follow-on treatment
-• WHO Malaria Guidelines (NCBI Bookshelf), Page 128: Research needs
-• WHO Malaria Guidelines (NCBI Bookshelf), Page 163: 4. Appropriate weight-based dosing
+• WHO Malaria Guidelines (NCBI Bookshelf), Page 51: Untitled
+• WHO Malaria Guidelines (NCBI Bookshelf), Page 9: BJECTIVES
+• WHO Malaria Guidelines (NCBI Bookshelf), Page 61: Outcome 1 [HIGH FIDELITY]
 ```
 
 #### Referral note (`referral_note`)
@@ -672,9 +873,9 @@ The symptoms can be managed at home with guidance. Follow the advice you were gi
 **Reason:** Routine evidence retrieval from national guidelines
 
 **Actions taken:**
-• Assess patient carefully
-• Check for danger signs (see below)
-• If unsure, refer to health facility
+• To increase to at least 90% the proportion of children under-five years with malaria,
+• To increase to at least 90% the proportion of sick children under-five years with fever and
+• Increase to at least 90% the proportion of caregivers in hard-to-reach communities who
 
 **Referral completed:** [ ]
 **Health worker received:** [ ]
@@ -694,91 +895,153 @@ Action: Follow advice below, monitor for changes
 #### BM25 + guardrail evidence bundle (`response` — markdown)
 
 ```
-**WHO Malaria Guidelines (NCBI Bookshelf)**
+**WHO guidelines for malaria - 13 August 2025**
 
 **Question:** When to refer a patient with malaria to hospital?
 
-### 1. Follow-on treatment
+### 1. Untitled
 
-### Follow-on treatment
+h) Screen children 6–59 months for moderate acute malnutrition (MAM) and severe acute malnutrition (SAM) through the use of mid-upper arm
 
-Follow-on treatment
+circumference [MUAC] measurement and refer to health facility observing correct referral protocols.
 
-The current recommendation of experts is to give parenteral antimalarial drugs for the treatment of severe malaria for a
+i)
 
-minimum of 24 h ounce started (irrespective of the patient’s ability to tolerate oral medication earlier) or until the patient can
+Conduct three postnatal home visits for both the mother and the baby on the 1st, 3rd, and 7th  day after delivery to educate and counsel the mother and
 
-tolerate oral medication, before giving the oral follow-up treatment.
+her family/spouse on recommended hygiene practices, essential newborn care practices, infant and young ...
 
-After initial parenteral treatment, once the patient can tolerate oral therapy, it is essential to continue and complete treatmen...
+📄 **Reference:** Page 51
 
-📄 **Reference:** Page 220
+### 2. BJECTIVES
 
-### 2. Research needs
+### BJECTIVES
 
-### Research needs
+2.2 OBJECTIVES
 
-Research needs
+1.
 
-The GDG identified the following evidence gaps as requiring further research. These relate to:
+To increase to at least 90% the proportion of children under-five years with malaria,
 
-•
+pneumonia, and diarrhoea receiving appropriate treatment within 24 hours of the onset of
 
-the optimal duration for PDMC in different geographical and transmission settings, and understanding of the short-, medium-
+illness by 2025.
 
-and long-term benefits of PDMC of different durations; these evaluations should recognize the underlying pattern of post-
+2.
 
-discharge death and/or re-admission, and the higher risk of some groups dying soon after discharge; to minimize bias,...
+To increase to at least 90% the proportion of sick children under-five years with fever and
 
-📄 **Reference:** Page 128
+danger signs, suspected TB, HIV, and those with severe acute malnutrition who are
 
-### 3. 4. Appropriate weight-based dosing
+identified in the community referred to health facilities.
 
-### 4. Appropriate weight-based dosing
+3.
 
-4. Appropriate weight-based dosing
+Increase to at least 90% t...
 
-To prolong their useful therapeutic life and ensure that all patients have an equal chance of being cured, the quality of antimalarial drugs
+📄 **Reference:** Page 9
 
-must be ensured, and antimalarial drugs must be given at optimal dosages. Treatment should maximize the likelihood of rapid clinical and
+### 3. Outcome 1
 
-parasitological cure and minimize transmission from the treated infection. To achieve this, dosage regimens should be based on the
+### Outcome 1
 
-patient’s we...
+Outcome 1
 
-📄 **Reference:** Page 163
+Increased access to iCCM among hard to
 
-### 4. 5.2.1.2 Recurrent falciparum malaria
+reach communities
 
-### 5.2.1.2 Recurrent falciparum malaria
+The proportion of newborn who receive
 
-5.2.1.2 Recurrent falciparum malaria
+a home visit within 48 hours of birth by a
 
-Recurrence of P. falciparum malaria can result from re-infection or recrudescence (treatment failure). Treatment failure may
+trained VHT administers the danger signs
 
-result from drug resistance or inadequate exposure to the drug due to sub-optimal dosing, poor adherence, vomiting, unusual
+checklist for the newborn and mother,
 
-pharmacokinetics in an individual, or substandard medicines. It is important to determine from the patient’s history whether he
+counsels, or refers as necessary.
 
-or she vomited the previous treatment or...
+80%
 
-📄 **Reference:** Page 177
+Baseline and
 
-### 5. Follow-on treatment
+Activity
 
-### Follow-on treatment
+reports
 
-Follow-on treatment
+The proportion of children with severe
 
-The current recommendation of experts is to give parenteral antimalarial drugs for the treatment of severe malaria for a minimum
+malaria, pneumonia, diarrheoa, TB, and
 
-of 24 h once started (irrespective of the patient’s ability to tolerate oral medication earlier) or until the patient can tolerate oral
+HIV or; newborn with danger signs and
 
-medication, before giving the oral follow-up treatment.
+children with acute malnutrition whom
 
-After initial parenteral treatment, once the patient can tolerate oral therapy, it is essential to continue and complete treatment...
+VHT promptly refers ...
 
-📄 **Reference:** Page 211
+📄 **Reference:** Page 61
+
+### 4. CTIVITIES
+
+### CTIVITIES
+
+5.6 VHT LEVEL ACTIVITIES
+
+a)
+
+Home visiting
+
+b) Mobilization of communities for utilization of
+
+f)
+
+Follow up of people who have been discharged
+
+from health facility and those on long term
+
+treatment
+
+g) Distribution of health commodities
+
+h) Community information management
+
+i)
+
+Disease surveillance
+
+health services
+
+c)
+
+Health Promotion and Education
+
+d) Community-based case management of common
+
+ill-health conditions
+
+e)
+
+Follow up of the mothers during pregnancy and
+
+after bi...
+
+📄 **Reference:** Page 12
+
+### 5. S
+
+### S
+
+8.2 TERMS OF REFERENCE FOR ICCM VHTS
+
+Any person serving as an iCCM service provider under the National iCCM program is expected to fulfill the following roles and responsibilities:
+
+a) Actively participate in and potentially lead community mobilization and engagement for health. This includes participation in key community and national
+
+health campaigns to prevent malaria, diarrheoa, pneumonia, malnutrition, and newborn illnesses.
+
+b) Apply interpersonal communication skills to reinforce...
+
+📄 **Reference:** Page 50
 
 
 ---
@@ -791,7 +1054,7 @@ Next Steps / Monitoring: Consult the full source guideline or a clinician for pa
 
 When to Refer: Per excerpts and national guidance; seek urgent care if danger signs, severe disease, or instability is suspected.
 
-Citations: Page 128, Page 163, Page 177, Page 211, Page 220
+Citations: Page 9, Page 12, Page 50, Page 51, Page 61
 
 ---
 **🧪 Guardrail Brain Validation:** ✅ Passed
@@ -806,7 +1069,7 @@ Citations: Page 128, Page 163, Page 177, Page 211, Page 220
 
 > Pregnancy and malaria treatment recommendations
 
-**Metrics:** Triage `GREEN` | Guardrail OK `True` | Confidence `0.90`
+**Metrics:** Triage `GREEN` | Guardrail OK `True` | Confidence `0.89`
 
 #### VHT standard (`vht_response`)
 
@@ -855,9 +1118,9 @@ The symptoms can be managed at home with guidance. Follow the advice you were gi
 
 **FROM THE GUIDELINES:**
 
-• WHO Malaria Guidelines (NCBI Bookshelf), Page 185: Feasibility
-• WHO Malaria Guidelines (NCBI Bookshelf), Page 302: Untitled
-• WHO Malaria Guidelines (NCBI Bookshelf), Page 30: Scope
+• WHO Malaria Guidelines (NCBI Bookshelf), Page 10: S [HIGH FIDELITY]
+• WHO Malaria Guidelines (NCBI Bookshelf), Page 61: Goal [HIGH FIDELITY]
+• WHO Malaria Guidelines (NCBI Bookshelf), Page 12: CTIVITIES
 ```
 
 #### Referral note (`referral_note`)
@@ -891,91 +1154,171 @@ Action: Follow advice below, monitor for changes
 #### BM25 + guardrail evidence bundle (`response` — markdown)
 
 ```
-**WHO Malaria Guidelines (NCBI Bookshelf)**
+**WHO guidelines for malaria - 13 August 2025**
 
 **Question:** Pregnancy and malaria treatment recommendations
 
-### 1. Feasibility
+### 1. S
 
-### Feasibility
+### S
 
-Feasibility
+PACKAGE DELIVERED BY ICCM VHTS
 
-One consideration in determining the feasibility of the recommendation on treatment of malaria in
+PACKAGES DELIVERED BY ALL VHTS
 
-the first trimester is that the existing warning against the use of artemisinin in the first trimester
+i. Malaria diagnosis with mRDT; treatment with ACTs;
 
-implies the need to consistently screen for pregnancy among all women of childbearing potential
+i.
 
-prior to treatment for malaria. However, pregnancy screening is rarely done prior to initiating
+Home visiting
 
-malaria treatment. As observed by national programmes, the contraindicati...
+ii.
 
-📄 **Reference:** Page 185
+Mobilization of communities for utilization of health
 
-### 2. Untitled
+services
 
-WHO guidelines for malaria - 13 August 2025 - World Health Organization (WHO)
+iii.
 
-temperature, and relative humidity: an experimental study in rural Gambia. The Lancet Planetary Health 2018;2(11):e498-e508 Pubmed
+Health Promotion and Education
 
-Journal Website
+iv.
 
-114. Norms, standards and processes underpinning development of WHO recommendations on vector control. Geneva: World Health
+Community-based case management of common ill-
 
-Organization 2020. Website
+health conditions
 
-115. Sicuri E, Bardají A, Nhampossa T, Maixenchs M, Nhacolo A, Nhalungo D, et al. Cost-effectiveness of intermittent pr...
+v.
 
-📄 **Reference:** Page 302
+Follow up of the mothers during pregnancy and after
 
-### 3. Scope
+birth and the newborn for provision of advice,
 
-### Scope
+recognition of danger signs, and referral
 
-Scope
+vi.
 
-The consolidated WHO Guidelines for malaria bring together all recommendations for malaria, including prevention using vector control,
+Follow up of people who...
 
-preventive chemotherapy and the vaccine; diagnosis, treatment and elimination strategies. The Guidelines also provide links to other
+📄 **Reference:** Page 10
 
-resources including unpublished evidence reviewed at the time of formulating recommendations, guidance and information on strategic
+### 2. Goal
 
-use of information to drive impact, surveillance, monitoring and evaluation, op...
+### Goal
 
-📄 **Reference:** Page 30
+Goal
 
-### 4. Implementation
+To increase to at least 80% the proportion
 
-### Implementation
+of children under-five years receiving
 
-Implementation
+appropriate treatment for malaria,
 
-Please refer to the WHO policy brief for the implementation of intermittent preventive treatment of malaria in pregnancy using
+pneumonia, and diarrhoea within 24 hours
 
-sulfadoxine-pyrimethamine (IPTp-SP) [128] and the WHO recommendations on antenatal care for a positive pregnancy
+of the onset of illness
 
-experience [130]. A field guide on community deployment of intermittent preventive treatment of malaria in pregnancy with
+The proportion of children under-five
 
-sulfadoxine-pyrimethamine was released in January 2024 [129]. A manual for subnational tailoring of...
+years receiving appropriate treatment for
 
-📄 **Reference:** Page 108
+malaria, pneumonia, and diarrhoea within
 
-### 5. Untitled
+24 hours of the onset of illness
 
-WHO guidelines for malaria - 13 August 2025 - World Health Organization (WHO)
+80%
 
-based therapies, and in how different cultures would value the outcomes being monitored, such
+Baseline
 
-as perceptions around early trimester pregnancy losses, low birthweight and anaemia. However,
+Activity
 
-artemether-lumefantrine compared to quinine is likely to be a more attractive option because of its
+reports
 
-greater availability and the convenience of a shorter, better tolerated treatment. Policy-makers and
+MoH...
 
-implementers will obviously ...
+📄 **Reference:** Page 61
 
-📄 **Reference:** Page 184
+### 3. CTIVITIES
+
+### CTIVITIES
+
+5.6 VHT LEVEL ACTIVITIES
+
+a)
+
+Home visiting
+
+b) Mobilization of communities for utilization of
+
+f)
+
+Follow up of people who have been discharged
+
+from health facility and those on long term
+
+treatment
+
+g) Distribution of health commodities
+
+h) Community information management
+
+i)
+
+Disease surveillance
+
+health services
+
+c)
+
+Health Promotion and Education
+
+d) Community-based case management of common
+
+ill-health conditions
+
+e)
+
+Follow up of the mothers during pregnancy and
+
+after bi...
+
+📄 **Reference:** Page 12
+
+### 4. S
+
+### S
+
+8.2 TERMS OF REFERENCE FOR ICCM VHTS
+
+Any person serving as an iCCM service provider under the National iCCM program is expected to fulfill the following roles and responsibilities:
+
+a) Actively participate in and potentially lead community mobilization and engagement for health. This includes participation in key community and national
+
+health campaigns to prevent malaria, diarrheoa, pneumonia, malnutrition, and newborn illnesses.
+
+b) Apply interpersonal communication skills to reinforce...
+
+📄 **Reference:** Page 50
+
+### 5. FOREWORD
+
+# FOREWORD
+
+FOREWORD
+
+Integrated community case management (iCCM) of childhood infection saves lives in
+
+hard-to-reach communities in Uganda.  The objective of this strategy is to strengthen
+
+iCCM implementation and and set the path to institutionalizing rapid reduction in
+
+under five mortality in the national and district health during 2020 to 2060.  The
+
+Village health teams in remote poor urban and rural communities provide the needed
+
+lifesaving treatments to sick children within 24 hours wi...
+
+📄 **Reference:** Page 5
 
 
 ---
@@ -988,7 +1331,7 @@ Next Steps / Monitoring: Consult the full source guideline or a clinician for pa
 
 When to Refer: Per excerpts and national guidance; seek urgent care if danger signs, severe disease, or instability is suspected.
 
-Citations: Page 30, Page 108, Page 184, Page 185, Page 302
+Citations: Page 5, Page 10, Page 12, Page 50, Page 61
 
 ---
 **🧪 Guardrail Brain Validation:** ✅ Passed
@@ -1003,7 +1346,7 @@ Citations: Page 30, Page 108, Page 184, Page 185, Page 302
 
 > Drug interactions with artemether lumefantrine
 
-**Metrics:** Triage `GREEN` | Guardrail OK `True` | Confidence `0.90`
+**Metrics:** Triage `GREEN` | Guardrail OK `True` | Confidence `0.83`
 
 #### VHT standard (`vht_response`)
 
@@ -1052,9 +1395,9 @@ The symptoms can be managed at home with guidance. Follow the advice you were gi
 
 **FROM THE GUIDELINES:**
 
-• WHO Malaria Guidelines (NCBI Bookshelf), Page 184: Untitled
-• WHO Malaria Guidelines (NCBI Bookshelf), Page 185: Acceptability
-• WHO Malaria Guidelines (NCBI Bookshelf), Page 118: Antimalarial medicine
+• WHO Malaria Guidelines (NCBI Bookshelf), Page 15: CCM [HIGH FIDELITY]
+• WHO Malaria Guidelines (NCBI Bookshelf), Page 24: Support Supervision:
+• WHO Malaria Guidelines (NCBI Bookshelf), Page 20: Pharmaco-vigilance and medicine inspection:
 ```
 
 #### Referral note (`referral_note`)
@@ -1088,94 +1431,89 @@ Action: Follow advice below, monitor for changes
 #### BM25 + guardrail evidence bundle (`response` — markdown)
 
 ```
-**WHO Malaria Guidelines (NCBI Bookshelf)**
+**WHO guidelines for malaria - 13 August 2025**
 
 **Question:** Drug interactions with artemether lumefantrine
 
-### 1. Untitled
+### 1. CCM
 
-WHO guidelines for malaria - 13 August 2025 - World Health Organization (WHO)
+### CCM
 
-based therapies, and in how different cultures would value the outcomes being monitored, such
+6.1.3 MEDICINE AND COMMODITY SUPPLY MANAGEMENT FOR ICCM
 
-as perceptions around early trimester pregnancy losses, low birthweight and anaemia. However,
+Improving the supply chain for iCCM drugs and commodities constitutes one of the most critical aspects
 
-artemether-lumefantrine compared to quinine is likely to be a more attractive option because of its
+for the performance and sustainability of the program. The medicines for iCCM include:
 
-greater availability and the convenience of a shorter, better tolerated treatment. Policy-makers and
+Artemether/Lumefantrine(20mg/120mg tablet strength), Amoxicillin 125mg dispersible tablet, Low
 
-implementers will obviously ...
+osmolarity ORS, Zinc 20mg tablet and rectal artesunate (50mg). Other commodities include respiratory
 
-📄 **Reference:** Page 184
+timers, rapid diagnostic tests, registers, m...
 
-### 2. Acceptability
+📄 **Reference:** Page 15
 
-### Acceptability
+### 2. Support Supervision:
 
-Acceptability
+### Support Supervision:
 
-In considering the acceptability of artemether-lumefantrine versus quinine treatments, the GDG
+to the VHTs will be done immediately after the training on iCCM. Subsequently, VHTs will be supplied
 
-looked to how quinine is presently being used and accepted.
+with commodities based on their consumption rate. The health facilities will follow proper inventory
 
-Adherence to quinine is low because it is frequently associated with adverse effects, including
+management procedures to replenish medicine stocks to VHTs, including cross-checking VHT registers
 
-cinchonism, nausea and hypoglycaemia [231][243][244]. In a review of 35 national guidelines,
+and consumption logs to ensure appropriate accountability of the medicines. Health Facilities will also
 
-66% recommended oral quinine as first-line treatment for uncomplicated malaria in the first
+ensure the availability of drugs and supplies to handle referred ...
 
-trimester of pregnancy. O...
+📄 **Reference:** Page 24
 
-📄 **Reference:** Page 185
+### 3. Pharmaco-vigilance and medicine inspection:
 
-### 3. Antimalarial medicine
+### Pharmaco-vigilance and medicine inspection:
 
-### Antimalarial medicine
+d) Pharmaco-vigilance and medicine inspection: Standard adverse drug forms will be used to track
 
-Antimalarial medicine
+adverse reactions reported by VHTs. The VHT follows up sick children per protocol, including
 
-Drug regimens evaluated for IPTsc and found to be effective include SP combined with an aminoquinoline (either AQ or
+identifying possible adverse medicine reactions, and requests HF staff for investigation. The HF staff
 
-piperaquine), SP+AS, and artemisinin-based combination therapy including an aminoquinoline (AS-AQ or DHAP)1. SP+AQ has
+investigates possible adverse medicine reactions and documents on standard Adverse Drug Reaction
 
-been widely used for chemoprevention in West Africa and has been shown to be efficacious, safe, well tolerated, available and
+Forms, reported to the DHO office and NDA Pharmaco-vigila...
 
-inexpensive. In order to reduce the risk of drug resistance to life-saving drugs, fir...
+📄 **Reference:** Page 20
 
-📄 **Reference:** Page 118
+### 4. Collection and Storage of medicines:
 
-### 4. Remarks
+### Collection and Storage of medicines:
 
-### Remarks
+recovery, development of resistance, adverse medicine reactions, and overall failure of the program.
 
-Remarks
+VHTs will be provided with training on the rational use of iCCM medicines. This will include case
 
-Longer ACT treatment may be required to achieve > 90% cure rate in areas with artemisinin-resistant P. falciparum, but
+definition/diagnosis, dispensing, record keeping, patient counseling, referral, patient follow-up, adverse
 
-there are insufficient trials to make definitive recommendations. A 3-day course of the artemisinin component of ACTs
+drug reaction monitoring (Pharmaco-vigilance), inventory management to avoid expiries and stockouts.
 
-covers two asexual cycles, ensuring that only a small fraction of parasites remain for clearance by the partner drug, thus
+This will be reinforced by the use of appropria...
 
-reducing the potential development of resistance to the partner drug. Shorter courses (1–2 days) are therefore not
-...
+📄 **Reference:** Page 28
 
-📄 **Reference:** Page 173
+### 5. Untitled
 
-### 5. 5.2.1.1.2 Dosing of ACTs
+It is the responsibility of the national level to mobilize resources, procure, stock, and supply districts with
 
-### 5.2.1.1.2 Dosing of ACTs
+iCCM medicines and commodities through the National Medical Stores. iCCM medicines and
 
-5.2.1.1.2 Dosing of ACTs
+commodities will be procured alongside essential medicines and health supplies for use at the health facility
 
-ACT regimens must ensure optimal dosing to prolong their useful therapeutic life, i.e. to maximize the likelihood of rapid
+and community. The routine medicine supply chain from the central to the community will be used.  For
 
-clinical and parasitological cure, minimize transmission and retard drug resistance.
+the private sector, implementing entities will follow guidance from the MOH and Natio...
 
-It is essential to achieve effective antimalarial drug concentrations for a sufficient time (exposure) in all target populations in
-
-order to ensure high cure rates. The dosage recommendations below are derived from understanding the ...
-
-📄 **Reference:** Page 173
+📄 **Reference:** Page 16
 
 
 ---
@@ -1188,7 +1526,7 @@ Next Steps / Monitoring: Consult the full source guideline or a clinician for pa
 
 When to Refer: Per excerpts and national guidance; seek urgent care if danger signs, severe disease, or instability is suspected.
 
-Citations: Page 118, Page 173, Page 184, Page 185
+Citations: Page 15, Page 16, Page 20, Page 24, Page 28
 
 ---
 **🧪 Guardrail Brain Validation:** ✅ Passed
@@ -1203,7 +1541,7 @@ Citations: Page 118, Page 173, Page 184, Page 185
 
 > Prophylaxis for travelers to endemic areas
 
-**Metrics:** Triage `GREEN` | Guardrail OK `True` | Confidence `0.90`
+**Metrics:** Triage `GREEN` | Guardrail OK `True` | Confidence `0.64`
 
 #### VHT standard (`vht_response`)
 
@@ -1252,9 +1590,9 @@ The symptoms can be managed at home with guidance. Follow the advice you were gi
 
 **FROM THE GUIDELINES:**
 
-• WHO Malaria Guidelines (NCBI Bookshelf), Page 453: Moderate
-• WHO Malaria Guidelines (NCBI Bookshelf), Page 453: Moderate
-• WHO Malaria Guidelines (NCBI Bookshelf), Page 453: Untitled
+• WHO Malaria Guidelines (NCBI Bookshelf), Page 25: Supervising VHTs in their communities ( Home Visit
+• WHO Malaria Guidelines (NCBI Bookshelf), Page 4: Untitled [HIGH FIDELITY]
+• WHO Malaria Guidelines (NCBI Bookshelf), Page 14: District pre-visit for sensitization
 ```
 
 #### Referral note (`referral_note`)
@@ -1288,51 +1626,121 @@ Action: Follow advice below, monitor for changes
 #### BM25 + guardrail evidence bundle (`response` — markdown)
 
 ```
-**WHO Malaria Guidelines (NCBI Bookshelf)**
+**WHO guidelines for malaria - 13 August 2025**
 
 **Question:** Prophylaxis for travelers to endemic areas
 
-### 1. Moderate
+### 1. Supervising VHTs in their communities ( Home Visit
 
-### Moderate
+### Supervising VHTs in their communities ( Home Visit
 
-Moderate
+STEP 6: Supervising VHTs in their communities ( Home Visit
 
-Due to serious...
+Health workers should supplement group meetings at health facilities with monthly community visits
 
-📄 **Reference:** Page 453
+to VHTs for at least the first three months after training to identify problems quickly and coach those
 
-### 2. Moderate
+with difficulties. During these visits, the supervisors should:
 
-### Moderate
+ Observe the actual environment where the VHT operates, e.g., how they store medicines.
 
-Moderate
+The VHT provides iCCM or...
 
-Due to serious...
+📄 **Reference:** Page 25
 
-📄 **Reference:** Page 453
+### 2. Untitled
 
-### 3. Untitled
+7.3
 
-WHO guidelines for malaria - 13 August 2025 - World Health Organization (WHO)...
+KEY NATIONAL PERFORMANCE INDICATORS ..................................................................... 33
 
-📄 **Reference:** Page 453
+7.4
 
-### 4. Intervention:
+THE M&E FRAMEWORK ................................................................................................... 38
 
-### Intervention:
+7.5
 
-Intervention: Chloroquine prophylaxis...
+KEY AREAS OF OPERATIONAL RESEARCH .......................................................................... 45...
 
-📄 **Reference:** Page 453
+📄 **Reference:** Page 4
 
-### 5. Population:
+### 3. District pre-visit for sensitization
 
-### Population:
+### District pre-visit for sensitization
 
-Population: Malaria-endemic areas...
+STEP 4: District pre-visit for sensitization
 
-📄 **Reference:** Page 453
+Before introducing iCCM in a district, the national task force will pre-visit districts to sensitize them on
+
+the iCCM policy, reach a consensus on the plan to roll out iCCM in the districts, including funding sources.
+
+The target group will be the extended district health team, including partners involved in community
+
+mobilization activities. The following materials developed by the Ministry of Health will ...
+
+📄 **Reference:** Page 14
+
+### 4. Denominator:
+
+### Denominator:
+
+iCCM
+
+treatment
+
+rate
+
+Numerator: Number of treatments for
+
+children under five provided by iCCM
+
+conditions in twelve months in a target area
+
+by point of treatment (Community or health
+
+facility)
+
+Denominator: Number of children under 5
+
+in target areas at a given time divided by
+
+1,000.
+
+HMIS
+
+UBOS
+
+Annually
+
+Program
+
+District
+
+Health Facility...
+
+📄 **Reference:** Page 35
+
+### 5. Equity and Access:
+
+### Equity and Access:
+
+
+
+Community Ownership: The community is responsible for the selection, supervision, and support of the VHT.
+
+The VHTs are fully accountable to the communities they operate in, and their services/ responsibilities are
+
+community-driven.
+
+
+
+Equity and Access:  iCCM VHT services are meant to provide family-centered integrated care and increase
+
+access within 24 hours for all sick children under five years of the community, especially those in rural peripheral
+
+areas or mar...
+
+📄 **Reference:** Page 9
 
 
 ---
@@ -1345,7 +1753,7 @@ Next Steps / Monitoring: Consult the full source guideline or a clinician for pa
 
 When to Refer: Per excerpts and national guidance; seek urgent care if danger signs, severe disease, or instability is suspected.
 
-Citations: Page 453
+Citations: Page 4, Page 9, Page 14, Page 25, Page 35
 
 ---
 **🧪 Guardrail Brain Validation:** ✅ Passed
@@ -1360,7 +1768,7 @@ Citations: Page 453
 
 > Rapid diagnostic test interpretation false positives
 
-**Metrics:** Triage `GREEN` | Guardrail OK `True` | Confidence `0.90`
+**Metrics:** Triage `GREEN` | Guardrail OK `True` | Confidence `0.66`
 
 #### VHT standard (`vht_response`)
 
@@ -1409,9 +1817,9 @@ The symptoms can be managed at home with guidance. Follow the advice you were gi
 
 **FROM THE GUIDELINES:**
 
-• WHO Malaria Guidelines (NCBI Bookshelf), Page 267: Untitled
-• WHO Malaria Guidelines (NCBI Bookshelf), Page 307: Untitled
-• WHO Malaria Guidelines (NCBI Bookshelf), Page 447: Target conditions
+• WHO Malaria Guidelines (NCBI Bookshelf), Page 33: If low [HIGH FIDELITY]
+• WHO Malaria Guidelines (NCBI Bookshelf), Page 20: Pharmaco-vigilance and medicine inspection:
+• WHO Malaria Guidelines (NCBI Bookshelf), Page 15: CCM [HIGH FIDELITY]
 ```
 
 #### Referral note (`referral_note`)
@@ -1445,97 +1853,89 @@ Action: Follow advice below, monitor for changes
 #### BM25 + guardrail evidence bundle (`response` — markdown)
 
 ```
-**WHO Malaria Guidelines (NCBI Bookshelf)**
+**WHO guidelines for malaria - 13 August 2025**
 
 **Question:** Rapid diagnostic test interpretation false positives
 
-### 1. Untitled
+### 1. If low
 
-WHO guidelines for malaria - 13 August 2025 - World Health Organization (WHO)
+### If low
 
-chemotherapy
+If low  Explore why...
 
-prophylaxis
+📄 **Reference:** Page 33
 
-Any method of protection from or prevention of disease; when applied to chemotherapy, it is commonly
+### 2. Pharmaco-vigilance and medicine inspection:
 
-termed “chemoprophylaxis”.
+### Pharmaco-vigilance and medicine inspection:
 
-prophylaxis, causal
+d) Pharmaco-vigilance and medicine inspection: Standard adverse drug forms will be used to track
 
-Complete prevention of erythrocytic infection by destroying the pre-erythrocytic forms of the parasite
+adverse reactions reported by VHTs. The VHT follows up sick children per protocol, including
 
-rapid diagnostic test
+identifying possible adverse medicine reactions, and requests HF staff for investigation. The HF staff
 
-(RDT)
+investigates possible adverse medicine reactions and documents on standard Adverse Drug Reaction
 
-Immunochromatographic lateral flow device for rapid detection of malaria parasite antigens
+Forms, reported to the DHO office and NDA Pharmaco-vigila...
 
-rapid diagnostic ...
+📄 **Reference:** Page 20
 
-📄 **Reference:** Page 267
+### 3. CCM
 
-### 2. Untitled
+### CCM
 
-WHO guidelines for malaria - 13 August 2025 - World Health Organization (WHO)
+6.1.3 MEDICINE AND COMMODITY SUPPLY MANAGEMENT FOR ICCM
 
-200. Malaria diagnosis: memorandum from a WHO meeting. Bulletin of the World Health Organization 1988;66(5):575-94 Pubmed
+Improving the supply chain for iCCM drugs and commodities constitutes one of the most critical aspects
 
-201. Malaria microscopy quality assurance manual, version 2. Geneva: World Health Organization 2016. Website
+for the performance and sustainability of the program. The medicines for iCCM include:
 
-202. Kawamoto F, Billingsley PF. Rapid diagnosis of malaria by fluorescence microscopy. Parasitology today (Personal ed.)
+Artemether/Lumefantrine(20mg/120mg tablet strength), Amoxicillin 125mg dispersible tablet, Low
 
-1992;8(2):69-71 Pubmed
+osmolarity ORS, Zinc 20mg tablet and rectal artesunate (50mg). Other commodities include respiratory
 
-203. Malaria diagnosis: new perspectives....
+timers, rapid diagnostic tests, registers, m...
 
-📄 **Reference:** Page 307
+📄 **Reference:** Page 15
 
-### 3. Target conditions
+### 4. SSUMPTIONS
 
-### Target conditions
+### SSUMPTIONS
 
-•
+WHO
 
-Patients with malaria who undergoing G6PD testing to inform treatment with primaquine or tafenoquine to prevent
+RISKS / ASSUMPTIONS
 
-relapses of P. vivax and P. ovale.
+1 2 3 4 5...
 
-•
+📄 **Reference:** Page 62
 
-Index test is semi-quantitative near-patient tests for G6PD.
+### 5. RINCIPLES
 
-•
+### RINCIPLES
 
-Reference standard is the quality assured G6PD spectrophotometric assay using the adjusted male median (AMM) as
+7.1.3 PRINCIPLES
 
-the standardised metric of 100% G6PD activity. For the Standard G6PD biosensor used with the STANDARD G6PD
+1
 
-Analyzer (SB Biosensor, Inc) a suppl...
+iCCM Data is collected based on needs within the general management processes.
 
-📄 **Reference:** Page 447
+2
 
-### 4. Untitled
+Work along the iCCM logframe measured by the corresponding indicators
 
-WHO guidelines for malaria - 13 August 2025 - World Health Organization (WHO)
+3
 
-Qualitative FST and (d) consists of 753 participants assessed by CareStart G6PD enrolled in the Lao People’s Democratic Republic. Henriques 2018 (a) and
+Build iCCM M&E into the national HMIS framework so as not to overwhelm providers or make monitoring an additional activity by utilizing existing
 
-(c) were chosen, due to having a more complete sample size.
+touchpoints
 
-Bancone 2015(a)excluded from meta-analysis, because Bancone 2015 (a) and (b) use the same participants. Difference between two studies are
+4
 
-that(a) uses capillary blood and (b) uses venous blood samples. Ba...
+Minimal tolerance for insufficient data by building quality assurance processes to test the data for quality and giving constant feedback on acce...
 
-📄 **Reference:** Page 447
-
-### 5. Summary
-
-### Summary
-
-Summary...
-
-📄 **Reference:** Page 447
+📄 **Reference:** Page 31
 
 
 ---
@@ -1548,7 +1948,7 @@ Next Steps / Monitoring: Consult the full source guideline or a clinician for pa
 
 When to Refer: Per excerpts and national guidance; seek urgent care if danger signs, severe disease, or instability is suspected.
 
-Citations: Page 267, Page 307, Page 447
+Citations: Page 15, Page 20, Page 31, Page 33, Page 62
 
 ---
 **🧪 Guardrail Brain Validation:** ✅ Passed
@@ -1563,7 +1963,7 @@ Citations: Page 267, Page 307, Page 447
 
 > G6PD deficiency and primaquine
 
-**Metrics:** Triage `GREEN` | Guardrail OK `True` | Confidence `0.90`
+**Metrics:** Triage `GREEN` | Guardrail OK `True` | Confidence `0.80`
 
 #### VHT standard (`vht_response`)
 
@@ -1612,9 +2012,9 @@ The symptoms can be managed at home with guidance. Follow the advice you were gi
 
 **FROM THE GUIDELINES:**
 
-• WHO Malaria Guidelines (NCBI Bookshelf), Page 208: Primaquine and glucose-6-phosphate dehydrogenase deficiency
-• WHO Malaria Guidelines (NCBI Bookshelf), Page 195: Practical info
-• WHO Malaria Guidelines (NCBI Bookshelf), Page 199: Untitled
+• WHO Malaria Guidelines (NCBI Bookshelf), Page 18: DVOCACY AND SENSITIZATION [HIGH FIDELITY]
+• WHO Malaria Guidelines (NCBI Bookshelf), Page 26: DVOCACY AND SENSITIZATION AT THE COMMUNITY [HIGH FIDELITY]
+• WHO Malaria Guidelines (NCBI Bookshelf), Page 33: UALITY [HIGH FIDELITY]
 ```
 
 #### Referral note (`referral_note`)
@@ -1648,109 +2048,69 @@ Action: Follow advice below, monitor for changes
 #### BM25 + guardrail evidence bundle (`response` — markdown)
 
 ```
-**WHO Malaria Guidelines (NCBI Bookshelf)**
+**WHO guidelines for malaria - 13 August 2025**
 
 **Question:** G6PD deficiency and primaquine
 
-### 1. Primaquine and glucose-6-phosphate dehydrogenase deficiency
+### 1. DVOCACY AND SENSITIZATION
 
-### Primaquine and glucose-6-phosphate dehydrogenase deficiency
+### DVOCACY AND SENSITIZATION
 
-Primaquine and glucose-6-phosphate dehydrogenase deficiency
+6.2.1 ADVOCACY AND SENSITIZATION...
 
-Any person (male or female) with red cell G6PD activity < 30% of the normal mean has G6PD deficiency and will experience
+📄 **Reference:** Page 18
 
-haemolysis after primaquine. Heterozygote females with higher mean red cell activities may still show substantial haemolysis.
+### 2. DVOCACY AND SENSITIZATION AT THE COMMUNITY
 
-G6PD deficiency is an inherited sex-linked genetic disorder, which is associated with some protection against P. falciparum
+### DVOCACY AND SENSITIZATION AT THE COMMUNITY
 
-...
+6.3.1 ADVOCACY AND SENSITIZATION AT THE COMMUNITY...
 
-📄 **Reference:** Page 208
+📄 **Reference:** Page 26
 
-### 2. Practical info
+### 3. UALITY
 
-### Practical info
+### UALITY
 
-Practical info
+QUALITY
 
-Please refer to Testing for G6PD deficiency for safe use of primaquine in radical cure of P. vivax and P. ovale (Policy
+33 | P a g e...
 
-brief) [264] and Guide to G6PD deficiency rapid diagnostic testing to support P. vivax radical cure [265].
+📄 **Reference:** Page 33
 
-If G6PD testing is not available, a decision to prescribe or withhold primaquine should be based on the balance of the
+### 4. Districts retain the mandate and responsibility to prepare medicines and supplies plans,
 
-probability and benefits of preventing relapse against the risks of primaquine-induced haemolytic anaemia. This dep...
+### Districts retain the mandate and responsibility to prepare medicines and supplies plans,
 
-📄 **Reference:** Page 195
+a) Districts retain the mandate and responsibility to prepare medicines and supplies plans, originate
 
-### 3. Untitled
+orders, follow up with national medical stores, and monitor utilization (health systems). District
 
-WHO guidelines for malaria - 13 August 2025 - World Health Organization (WHO)
+procurement plans (for HCIV and above ) and essential medicines kits ( HC3 and HC2) for drugs and
 
-In order to prevent relapses of P. vivax and P. ovale, and when the G6PD status of the patient was previously unknown, the
+supplies will be prepared through the aggregation of health facility plans which should be annexed to
 
-following recommendations are made:
+t...
 
-A. If only a qualitative near-patient test for G6PD deficiency is available, tafenoquine single dose treatment or high
+📄 **Reference:** Page 19
 
-dose primaquine (1mg/kg/day for 7 days) should not be given. If by the qualitative test the patient is classified as non-
+### 5. TPR
 
-deficient primaqu...
+### TPR
 
-📄 **Reference:** Page 199
+If high TPR Encourage
 
-### 4. Benefits and harms
+prevention
 
-### Benefits and harms
+measures
 
-Benefits and harms
+at
 
-Desirable effects:
+different levels
 
-•
+If low  Maintain...
 
-There are no comparative trials of the efficacy or safety of primaquine in people with G6PD
-
-deficiency.
-
-Undesirable effects:
-
-•
-
-Primaquine is known to cause haemolysis in people with G6PD deficiency.
-
-•
-
-Of the 15 trials included in the systematic review, 12 explicitly excluded people with G6PD
-
-deficiency; in three trials, it was unclear whether participants were tested for G6PD deficiency or
-
-excluded. None of the trials rep...
-
-📄 **Reference:** Page 208
-
-### 5. Qualitative near-patient G6PD tests (2024)
-
-### Qualitative near-patient G6PD tests (2024)
-
-Qualitative near-patient G6PD tests (2024)
-
-Qualitative near-patient tests for G6PD deficiency should be used to inform administration of specific treatment regimens to
-
-prevent relapses of P. vivax and P. ovale. G6PD non-deficient individuals can receive 0.5 mg/kg/day primaquine for 14 days or
-
-0.5 mg/kg/day primaquine for 7 days.
-
-•
-
-In males and females, <30% of normal G6PD activity is considered deficient.
-
-•
-
-In patients undergoing G6PD activi...
-
-📄 **Reference:** Page 195
+📄 **Reference:** Page 36
 
 
 ---
@@ -1763,7 +2123,7 @@ Next Steps / Monitoring: Consult the full source guideline or a clinician for pa
 
 When to Refer: Per excerpts and national guidance; seek urgent care if danger signs, severe disease, or instability is suspected.
 
-Citations: Page 195, Page 199, Page 208
+Citations: Page 18, Page 19, Page 26, Page 33, Page 36
 
 ---
 **🧪 Guardrail Brain Validation:** ✅ Passed
@@ -1778,7 +2138,7 @@ Citations: Page 195, Page 199, Page 208
 
 > Malaria vaccine recommendations RTS,S R21
 
-**Metrics:** Triage `GREEN` | Guardrail OK `True` | Confidence `0.90`
+**Metrics:** Triage `GREEN` | Guardrail OK `True` | Confidence `0.87`
 
 #### VHT standard (`vht_response`)
 
@@ -1827,9 +2187,9 @@ The symptoms can be managed at home with guidance. Follow the advice you were gi
 
 **FROM THE GUIDELINES:**
 
-• WHO Malaria Guidelines (NCBI Bookshelf), Page 159: Certainty of the evidence related to the safety of R21/Matrix-M
-• WHO Malaria Guidelines (NCBI Bookshelf), Page 386: Systematic review summary
-• WHO Malaria Guidelines (NCBI Bookshelf), Page 162: immunization systems.
+• WHO Malaria Guidelines (NCBI Bookshelf), Page 3: CONTENTS [HIGH FIDELITY]
+• WHO Malaria Guidelines (NCBI Bookshelf), Page 56: (A) [HIGH FIDELITY]
+• WHO Malaria Guidelines (NCBI Bookshelf), Page 56: Untitled [HIGH FIDELITY]
 ```
 
 #### Referral note (`referral_note`)
@@ -1863,83 +2223,61 @@ Action: Follow advice below, monitor for changes
 #### BM25 + guardrail evidence bundle (`response` — markdown)
 
 ```
-**WHO Malaria Guidelines (NCBI Bookshelf)**
+**WHO guidelines for malaria - 13 August 2025**
 
 **Question:** Malaria vaccine recommendations RTS,S R21
 
-### 1. Certainty of the evidence related to the safety of R21/Matrix-M
+### 1. CONTENTS
 
-### Certainty of the evidence related to the safety of R21/Matrix-M
+# CONTENTS
 
-Certainty of the evidence related to the safety of R21/Matrix-M ranged from LOW to MODERATE due to
+CONTENTS...
 
-few or no events, wide CIs and small sample size. While the vaccine was associated with febrile seizures at
+📄 **Reference:** Page 3
 
-a rate of approximately one per 2500 vaccinations, all febrile seizures resolved without sequelae. There was
+### 2. (A)
 
-no imbalance in other severe adverse events (SAEs) among children vaccinated with R21/Matrix-M or with
+### (A)
 
-the cont...
+(A)...
 
-📄 **Reference:** Page 159
+📄 **Reference:** Page 56
 
-### 2. Systematic review summary
+### 3. Untitled
 
-### Systematic review summary
+Stakeholder Matrix...
 
-Systematic review summary
+📄 **Reference:** Page 56
 
-Six studies form the basis of these recommendations: five were individual randomized controlled trials (RCTs) and one was an open-
+### 4. 5
 
-label extension study of an included RCT. One RCT was a multicentre study evaluating three or four doses of the RTS,S/AS01 malaria
+### 5
 
-vaccine compared to no malaria vaccination. One RCT evaluated the seasonal administration of RTS,S/AS01 malaria vaccine alone
+5
 
-compared to SMC alone, and also compared a combinat...
+CONTINUOUS SUPERVISION AND
 
-📄 **Reference:** Page 386
+MENTORING...
 
-### 3. immunization systems.
+📄 **Reference:** Page 26
 
-### immunization systems.
+### 5. Development and pretesting training materials
 
-Feasibility
+### Development and pretesting training materials
 
-Malaria vaccine introduction is feasible with good and equitable coverage, as seen through routine
+a)
 
-immunization systems.
+Development and pretesting training materials
 
-Administrative data from early implementing areas through 46 months of RTS,S/AS01 vaccinations under the
+The national-level team will adapt and pretest WHO generic materials by reviewing national policies,
 
-pilot programme showed the following:
+clinical guidelines, and drug supply systems to determine the relevant recommendations to include in the
 
-•
+course materials for iCCM (the case management charts, modules, and other materials including
 
-About 4.2 million RTS,S/AS01 vaccine doses were administered across the three pilot countries and
+community supply chain management. They will also be required to develop refresher training mat...
 
-more than 1.2 million children received their first dose.
-
-•
-
-All three countries reached ...
-
-📄 **Reference:** Page 162
-
-### 4. RTS,S/AS01 vs
-
-### RTS,S/AS01 vs
-
-RTS,S/AS01 vs...
-
-📄 **Reference:** Page 386
-
-### 5. Summary
-
-### Summary
-
-Summary...
-
-📄 **Reference:** Page 386
+📄 **Reference:** Page 15
 
 
 ---
@@ -1952,7 +2290,7 @@ Next Steps / Monitoring: Consult the full source guideline or a clinician for pa
 
 When to Refer: Per excerpts and national guidance; seek urgent care if danger signs, severe disease, or instability is suspected.
 
-Citations: Page 159, Page 162, Page 386
+Citations: Page 3, Page 15, Page 26, Page 56
 
 ---
 **🧪 Guardrail Brain Validation:** ✅ Passed
@@ -1967,7 +2305,7 @@ Citations: Page 159, Page 162, Page 386
 
 > Resistance to artemisinin in Southeast Asia
 
-**Metrics:** Triage `GREEN` | Guardrail OK `True` | Confidence `0.90`
+**Metrics:** Triage `GREEN` | Guardrail OK `True` | Confidence `0.88`
 
 #### VHT standard (`vht_response`)
 
@@ -2016,9 +2354,9 @@ The symptoms can be managed at home with guidance. Follow the advice you were gi
 
 **FROM THE GUIDELINES:**
 
-• WHO Malaria Guidelines (NCBI Bookshelf), Page 226: Untitled
-• WHO Malaria Guidelines (NCBI Bookshelf), Page 222: Artemisinin-resistant falciparum malaria
-• WHO Malaria Guidelines (NCBI Bookshelf), Page 226: Considerations in use of artemisinin-based combination therapy
+• WHO Malaria Guidelines (NCBI Bookshelf), Page 28: Collection and Storage of medicines:
+• WHO Malaria Guidelines (NCBI Bookshelf), Page 5: FOREWORD
+• WHO Malaria Guidelines (NCBI Bookshelf), Page 44: ORKPLAN [HIGH FIDELITY]
 ```
 
 #### Referral note (`referral_note`)
@@ -2052,87 +2390,81 @@ Action: Follow advice below, monitor for changes
 #### BM25 + guardrail evidence bundle (`response` — markdown)
 
 ```
-**WHO Malaria Guidelines (NCBI Bookshelf)**
+**WHO guidelines for malaria - 13 August 2025**
 
 **Question:** Resistance to artemisinin in Southeast Asia
 
-### 1. Untitled
+### 1. Collection and Storage of medicines:
 
-WHO guidelines for malaria - 13 August 2025 - World Health Organization (WHO)
+### Collection and Storage of medicines:
 
-for days or weeks after effective treatment. HRP2-detecting RDTs are not suitable for detecting treatment failure. RDTs are slightly less
+recovery, development of resistance, adverse medicine reactions, and overall failure of the program.
 
-sensitive for detecting P. malariae and P. ovale. The WHO Malaria RDT Product Testing programme provides comparative data on the
+VHTs will be provided with training on the rational use of iCCM medicines. This will include case
 
-performance of RDT products to guide procurement. Since 2008, 210 products have been evaluated in five rounds of product
+definition/diagnosis, dispensing, record keeping, patient counseling, referral, patient follow-up, adverse
 
-testing [207].
+drug reaction monitoring (Pharmaco-vigilance), inventory management to avoid expiries and stockouts.
 
-For the diagno...
+This will be reinforced by the use of appropria...
 
-📄 **Reference:** Page 226
+📄 **Reference:** Page 28
 
-### 2. Artemisinin-resistant falciparum malaria
+### 2. FOREWORD
 
-### Artemisinin-resistant falciparum malaria
+# FOREWORD
 
-Artemisinin-resistant falciparum malaria
+FOREWORD
 
-Artemisinin resistance in P. falciparum is now prevalent in parts of Cambodia, the Lao People’s Democratic Republic,
+Integrated community case management (iCCM) of childhood infection saves lives in
 
-Myanmar, Thailand and Viet Nam. There is currently no evidence for artemisinin resistance outside these areas. The particular
+hard-to-reach communities in Uganda.  The objective of this strategy is to strengthen
 
-advantage of artemisinins over other antimalarial drugs is that they kill circulating ring-stage parasites and thus accelerate
+iCCM implementation and and set the path to institutionalizing rapid reduction in
 
-therapeutic responses. This is lost in ...
+under five mortality in the national and district health during 2020 to 2060.  The
 
-📄 **Reference:** Page 222
+Village health teams in remote poor urban and rural communities provide the needed
 
-### 3. Considerations in use of artemisinin-based combination therapy
+lifesaving treatments to sick children within 24 hours wi...
 
-### Considerations in use of artemisinin-based combination therapy
+📄 **Reference:** Page 5
 
-Considerations in use of artemisinin-based combination therapy
+### 3. ORKPLAN
 
-Oral artemisinin and its derivatives (e.g. artesunate, artemether, dihydroartemisinin) should not be used alone. In order to simplify use,
+### ORKPLAN
 
-improve adherence and minimize the availability of oral artemisinin monotherapy, fixed-dose combination ACTs are strongly preferred
+7.4.8 M&E WORKPLAN...
 
-to co-blistered or co-dispensed loose tablets and should be used when they are readily availabl...
+📄 **Reference:** Page 44
 
-📄 **Reference:** Page 226
+### 4. Integrate iCCM in the facility and VHT supervision
 
-### 4. P. vivax
+### Integrate iCCM in the facility and VHT supervision
 
-### P. vivax
+community health activities for each facility.  Awareness building and mobilization of sub-county councils and other sectors to support iCCM services will
 
-In areas with chloroquine-sensitive P. vivax
+be critical.
 
-For chloroquine-sensitive vivax malaria, oral chloroquine at a total dose of 25 mg base/kg bw is effective and well tolerated.
+b) Conduct integrated supportive supervision at health center III
 
-Lower total doses are not recommended, as these encourage the emergence of resistance. Chloroquine is given at an initial
+c) Ensure the availability of appropriate IMNCI capacity at iCCM referral facilities in the HSD
 
-dose of 10 mg base/kg bw, followed by 10 mg/kg bw on the second day and 5 mg/kg bw on the third day. In the past, the initial
+d) Integrate iCCM in the facility and VHT supervision using quality audits, coaching, and mentorship mechanism...
 
-10 mg/kg bw dose was followed by 5 mg/kg bw at 6 h, 24 h and 4...
+📄 **Reference:** Page 49
 
-📄 **Reference:** Page 191
+### 5. location
 
-### 5. P. vivax
+### location
 
-### P. vivax
+(B)
 
-In areas with chloroquine-sensitive P. vivax
+activities
 
-For chloroquine-sensitive vivax malaria, oral chloroquine at a total dose of 25 mg base/kg bw is effective and well tolerated.
+location...
 
-Lower total doses are not recommended, as these encourage the emergence of resistance. Chloroquine is given at an initial
-
-dose of 10 mg base/kg bw, followed by 10 mg/kg bw on the second day and 5 mg/kg bw on the third day. In the past, the initial
-
-10-mg/kg bw dose was followed by 5 mg/kg bw at 6 h, 24 h and 4...
-
-📄 **Reference:** Page 192
+📄 **Reference:** Page 56
 
 
 ---
@@ -2145,7 +2477,7 @@ Next Steps / Monitoring: Consult the full source guideline or a clinician for pa
 
 When to Refer: Per excerpts and national guidance; seek urgent care if danger signs, severe disease, or instability is suspected.
 
-Citations: Page 191, Page 192, Page 222, Page 226
+Citations: Page 5, Page 28, Page 44, Page 49, Page 56
 
 ---
 **🧪 Guardrail Brain Validation:** ✅ Passed
@@ -2160,7 +2492,7 @@ Citations: Page 191, Page 192, Page 222, Page 226
 
 > Hypoglycemia in severe malaria
 
-**Metrics:** Triage `GREEN` | Guardrail OK `True` | Confidence `0.90`
+**Metrics:** Triage `GREEN` | Guardrail OK `True` | Confidence `0.68`
 
 #### VHT standard (`vht_response`)
 
@@ -2173,10 +2505,11 @@ Citations: Page 191, Page 192, Page 222, Page 226
 
 **WHAT TO DO (step by step):**
 
-**Step 1:** Assess patient carefully
-**Step 2:** Check for danger signs (see below)
-**Step 3:** If unsure, refer to health facility
-**Step 4:** Record all findings
+**Step 1:** To increase to at least 90% the proportion of children under-five years with malaria,
+**Step 2:** To increase to at least 90% the proportion of sick children under-five years with fever and
+**Step 3:** Increase to at least 90% the proportion of caregivers in hard-to-reach communities who
+**Step 4:** To increase to at least 90%, the proportion of VHTs trained to manage malaria, pneumonia,
+**Step 5:** Application of iCCM job aid
 
 **MONITORING:**
 
@@ -2209,9 +2542,9 @@ The symptoms can be managed at home with guidance. Follow the advice you were gi
 
 **FROM THE GUIDELINES:**
 
-• WHO Malaria Guidelines (NCBI Bookshelf), Page 268: Untitled
-• WHO Malaria Guidelines (NCBI Bookshelf), Page 458: Population:
-• WHO Malaria Guidelines (NCBI Bookshelf), Page 211: Treatment of severe malaria
+• WHO Malaria Guidelines (NCBI Bookshelf), Page 10: S [HIGH FIDELITY]
+• WHO Malaria Guidelines (NCBI Bookshelf), Page 61: Outcome 1 [HIGH FIDELITY]
+• WHO Malaria Guidelines (NCBI Bookshelf), Page 9: BJECTIVES
 ```
 
 #### Referral note (`referral_note`)
@@ -2223,9 +2556,9 @@ The symptoms can be managed at home with guidance. Follow the advice you were gi
 **Reason:** Routine evidence retrieval from national guidelines
 
 **Actions taken:**
-• Assess patient carefully
-• Check for danger signs (see below)
-• If unsure, refer to health facility
+• To increase to at least 90% the proportion of children under-five years with malaria,
+• To increase to at least 90% the proportion of sick children under-five years with fever and
+• Increase to at least 90% the proportion of caregivers in hard-to-reach communities who
 
 **Referral completed:** [ ]
 **Health worker received:** [ ]
@@ -2245,91 +2578,171 @@ Action: Follow advice below, monitor for changes
 #### BM25 + guardrail evidence bundle (`response` — markdown)
 
 ```
-**WHO Malaria Guidelines (NCBI Bookshelf)**
+**WHO guidelines for malaria - 13 August 2025**
 
 **Question:** Hypoglycemia in severe malaria
 
-### 1. Untitled
+### 1. S
 
-WHO guidelines for malaria - 13 August 2025 - World Health Organization (WHO)
+### S
 
-severe anaemia
+PACKAGE DELIVERED BY ICCM VHTS
 
-Haemoglobin concentration of < 5 g/100 mL (haematocrit < 15%)
+PACKAGES DELIVERED BY ALL VHTS
 
-severe falciparum
+i. Malaria diagnosis with mRDT; treatment with ACTs;
 
-malaria
+i.
 
-Acute falciparum malaria with signs of severe illness and/or evidence of vital organ dysfunction
+Home visiting
 
-single-dose regimen
+ii.
 
-Administration of a medicine as a single dose to achieve a therapeutic objective
+Mobilization of communities for utilization of health
 
-slide positivity rate
+services
 
-Proportion of blood smears found to be positive for Plasmodium among all blood smears exam...
+iii.
 
-📄 **Reference:** Page 268
+Health Promotion and Education
 
-### 2. Population:
+iv.
 
-### Population:
+Community-based case management of common ill-
 
-Population: Children with severe malaria (malaria-endemic countries)...
+health conditions
 
-📄 **Reference:** Page 458
+v.
 
-### 3. Treatment of severe malaria
+Follow up of the mothers during pregnancy and after
 
-### Treatment of severe malaria
+birth and the newborn for provision of advice,
 
-Treatment of severe malaria
+recognition of danger signs, and referral
 
-It is essential that full doses of effective parenteral (or rectal) antimalarial treatment be given promptly in the initial treatment of
+vi.
 
-severe malaria. This should be followed by a full dose of effective ACT orally. Two classes of medicine are available for parenteral
+Follow up of people who...
 
-treatment of severe malaria: artemisinin derivatives (artesunate or artemether) and the cinchona alkaloids (quinine and quinidine).
+📄 **Reference:** Page 10
 
-Parenteral artesunate is the trea...
+### 2. Outcome 1
 
-📄 **Reference:** Page 211
+### Outcome 1
 
-### 4. Systematic review summary
+Outcome 1
 
-### Systematic review summary
+Increased access to iCCM among hard to
 
-Systematic review summary
+reach communities
 
-Six studies form the basis of these recommendations: five were individual randomized controlled trials (RCTs) and one was an open-
+The proportion of newborn who receive
 
-label extension study of an included RCT. One RCT was a multicentre study evaluating three or four doses of the RTS,S/AS01 malaria
+a home visit within 48 hours of birth by a
 
-vaccine compared to no malaria vaccination. One RCT evaluated the seasonal administration of RTS,S/AS01 malaria vaccine alone
+trained VHT administers the danger signs
 
-compared to SMC alone, and also compared a combinat...
+checklist for the newborn and mother,
 
-📄 **Reference:** Page 386
+counsels, or refers as necessary.
 
-### 5. Benefits and harms
+80%
 
-### Benefits and harms
+Baseline and
 
-Benefits and harms
+Activity
 
-Malaria vaccines, provided in a four-dose schedule, have been demonstrated in clinical trials to significantly
+reports
 
-reduce clinical malaria, providing substantial added protection to that already given by existing malaria
+The proportion of children with severe
 
-preventive measures (i.e. ITNs and/or seasonal malaria chemoprevention (SMC)). In addition, pilot
+malaria, pneumonia, diarrheoa, TB, and
 
-implementation showed that the introduction of the vaccine through routine childhood immunization
+HIV or; newborn with danger signs and
 
-programmes in Ghana, Kenya and Malawi r...
+children with acute malnutrition whom
 
-📄 **Reference:** Page 157
+VHT promptly refers ...
+
+📄 **Reference:** Page 61
+
+### 3. BJECTIVES
+
+### BJECTIVES
+
+2.2 OBJECTIVES
+
+1.
+
+To increase to at least 90% the proportion of children under-five years with malaria,
+
+pneumonia, and diarrhoea receiving appropriate treatment within 24 hours of the onset of
+
+illness by 2025.
+
+2.
+
+To increase to at least 90% the proportion of sick children under-five years with fever and
+
+danger signs, suspected TB, HIV, and those with severe acute malnutrition who are
+
+identified in the community referred to health facilities.
+
+3.
+
+Increase to at least 90% t...
+
+📄 **Reference:** Page 9
+
+### 4. delivery
+
+### delivery
+
+Service
+
+delivery
+
+for especially OVC
+
+ Receiving facility well-stocked, sufficient staff
+
+work.
+
+ Timely reporting
+
+to the health center for severe or chronic
+
+cases.
+
+
+
+trained in IMNCI and inpatient facilities
+
+ Update and standardize basic iCCM training
+
+ Develop district iCCM roll out plan
+
+ 3-day refresher training for health
+
+ At least  HWs trained on iCCM in a standard 6-day
+
+ At least 2 VHT per targeted village trained
+
+materials4
+
+ Reorient national-level master ...
+
+📄 **Reference:** Page 46
+
+### 5. Outcome 2
+
+### Outcome 2
+
+Outcome 2
+
+61...
+
+📄 **Reference:** Page 61
 
 
 ---
@@ -2342,7 +2755,7 @@ Next Steps / Monitoring: Consult the full source guideline or a clinician for pa
 
 When to Refer: Per excerpts and national guidance; seek urgent care if danger signs, severe disease, or instability is suspected.
 
-Citations: Page 157, Page 211, Page 268, Page 386, Page 458
+Citations: Page 9, Page 10, Page 46, Page 61
 
 ---
 **🧪 Guardrail Brain Validation:** ✅ Passed
@@ -2357,7 +2770,7 @@ Citations: Page 157, Page 211, Page 268, Page 386, Page 458
 
 > Fluid management in severe malaria adults
 
-**Metrics:** Triage `GREEN` | Guardrail OK `True` | Confidence `0.90`
+**Metrics:** Triage `GREEN` | Guardrail OK `True` | Confidence `0.83`
 
 #### VHT standard (`vht_response`)
 
@@ -2370,10 +2783,10 @@ Citations: Page 157, Page 211, Page 268, Page 386, Page 458
 
 **WHAT TO DO (step by step):**
 
-**Step 1:** Assess patient carefully
-**Step 2:** Check for danger signs (see below)
-**Step 3:** If unsure, refer to health facility
-**Step 4:** Record all findings
+**Step 1:** To increase to at least 90% the proportion of children under-five years with malaria,
+**Step 2:** To increase to at least 90% the proportion of sick children under-five years with fever and
+**Step 3:** Increase to at least 90% the proportion of caregivers in hard-to-reach communities who
+**Step 4:** To increase to at least 90%, the proportion of VHTs trained to manage malaria, pneumonia,
 
 **MONITORING:**
 
@@ -2406,9 +2819,9 @@ The symptoms can be managed at home with guidance. Follow the advice you were gi
 
 **FROM THE GUIDELINES:**
 
-• WHO Malaria Guidelines (NCBI Bookshelf), Page 213: Additional aspects of management
-• WHO Malaria Guidelines (NCBI Bookshelf), Page 212: Management of complications
-• WHO Malaria Guidelines (NCBI Bookshelf), Page 211: Clinical assessment
+• WHO Malaria Guidelines (NCBI Bookshelf), Page 61: Outcome 1 [HIGH FIDELITY]
+• WHO Malaria Guidelines (NCBI Bookshelf), Page 10: S [HIGH FIDELITY]
+• WHO Malaria Guidelines (NCBI Bookshelf), Page 50: S
 ```
 
 #### Referral note (`referral_note`)
@@ -2420,9 +2833,9 @@ The symptoms can be managed at home with guidance. Follow the advice you were gi
 **Reason:** Routine evidence retrieval from national guidelines
 
 **Actions taken:**
-• Assess patient carefully
-• Check for danger signs (see below)
-• If unsure, refer to health facility
+• To increase to at least 90% the proportion of children under-five years with malaria,
+• To increase to at least 90% the proportion of sick children under-five years with fever and
+• Increase to at least 90% the proportion of caregivers in hard-to-reach communities who
 
 **Referral completed:** [ ]
 **Health worker received:** [ ]
@@ -2442,97 +2855,157 @@ Action: Follow advice below, monitor for changes
 #### BM25 + guardrail evidence bundle (`response` — markdown)
 
 ```
-**WHO Malaria Guidelines (NCBI Bookshelf)**
+**WHO guidelines for malaria - 13 August 2025**
 
 **Question:** Fluid management in severe malaria adults
 
-### 1. Additional aspects of management
+### 1. Outcome 1
 
-### Additional aspects of management
+### Outcome 1
 
-Additional aspects of management
+Outcome 1
 
-Fluid therapy
+Increased access to iCCM among hard to
 
-Fluid requirements should be assessed individually. Adults with severe malaria are very vulnerable to fluid overload, while children
+reach communities
 
-are more likely to be dehydrated. The fluid regimen must also be adapted to the infusion of antimalarial drugs. Rapid bolus infusion
+The proportion of newborn who receive
 
-of colloid or crystalloids is contraindicated. If available, haemofiltration should be started early for acute kidney injury or severe
+a home visit within 48 hours of birth by a
 
-metabolic...
+trained VHT administers the danger signs
 
-📄 **Reference:** Page 213
+checklist for the newborn and mother,
 
-### 2. Management of complications
+counsels, or refers as necessary.
 
-### Management of complications
+80%
 
-Management of complications
+Baseline and
 
-Severe malaria is associated with a variety of manifestations and complications, which must be recognized promptly and treated
+Activity
 
-as shown below.
+reports
 
-Immediate clinical management of severe manifestations and complications of P. falciparum malaria...
+The proportion of children with severe
 
-📄 **Reference:** Page 212
+malaria, pneumonia, diarrheoa, TB, and
 
-### 3. Clinical assessment
+HIV or; newborn with danger signs and
 
-### Clinical assessment
+children with acute malnutrition whom
 
-Clinical assessment
+VHT promptly refers ...
 
-Severe malaria is a medical emergency. An open airway should be secured in unconscious patients and breathing and circulation
+📄 **Reference:** Page 61
 
-assessed. The patient should be weighed or body weight estimated, so that medicines, including antimalarial drugs and fluids, can
+### 2. S
 
-be given appropriately. An intravenous cannula should be inserted, and blood glucose (rapid test), haematocrit or haemoglobin,
+### S
 
-parasitaemia and, in adults, renal function should be measured immed...
+PACKAGE DELIVERED BY ICCM VHTS
 
-📄 **Reference:** Page 211
+PACKAGES DELIVERED BY ALL VHTS
 
-### 4. Benefits and harms
+i. Malaria diagnosis with mRDT; treatment with ACTs;
 
-### Benefits and harms
+i.
 
-Benefits and harms
+Home visiting
 
-Is parenteral artesunate superior to parenteral quinine in preventing death from severe malaria?
+ii.
 
-Desirable effects:
+Mobilization of communities for utilization of health
 
-•
+services
 
-In children > 12 years and adults, parenteral artesunate probably prevents more deaths than
+iii.
 
-intramuscular artemether (moderate-quality evidence).
+Health Promotion and Education
 
-•
+iv.
 
-No randomized controlled trials have been conducted in children aged ≤ 12 years.
+Community-based case management of common ill-
 
---
+health conditions
 
-Is intramuscular artemether superior to parenteral quinine in preventing death from severe malaria...
+v.
 
-📄 **Reference:** Page 218
+Follow up of the mothers during pregnancy and after
 
-### 5. Publication bias: no serious.
+birth and the newborn for provision of advice,
 
-### Publication bias: no serious.
+recognition of danger signs, and referral
 
-defined as radiographically proven pneumonia, meningitis established by analysis of cerebrospinal fluid, sepsis (with positive blood
+vi.
 
-culture), or gastroenteritis with severe dehydration). Laboratory tests and other examinations (chest x-ray, lumbar puncture, blood
+Follow up of people who...
 
-culture) to exclude co-morbidities were performed only if there was a clinical suspicion/diagnosis justifying additional investigations.
+📄 **Reference:** Page 10
 
-The study included 450 total participants with three study a...
+### 3. S
 
-📄 **Reference:** Page 404
+### S
+
+8.2 TERMS OF REFERENCE FOR ICCM VHTS
+
+Any person serving as an iCCM service provider under the National iCCM program is expected to fulfill the following roles and responsibilities:
+
+a) Actively participate in and potentially lead community mobilization and engagement for health. This includes participation in key community and national
+
+health campaigns to prevent malaria, diarrheoa, pneumonia, malnutrition, and newborn illnesses.
+
+b) Apply interpersonal communication skills to reinforce...
+
+📄 **Reference:** Page 50
+
+### 4. BJECTIVES
+
+### BJECTIVES
+
+2.2 OBJECTIVES
+
+1.
+
+To increase to at least 90% the proportion of children under-five years with malaria,
+
+pneumonia, and diarrhoea receiving appropriate treatment within 24 hours of the onset of
+
+illness by 2025.
+
+2.
+
+To increase to at least 90% the proportion of sick children under-five years with fever and
+
+danger signs, suspected TB, HIV, and those with severe acute malnutrition who are
+
+identified in the community referred to health facilities.
+
+3.
+
+Increase to at least 90% t...
+
+📄 **Reference:** Page 9
+
+### 5. ACKNOWLEDGEMENTS
+
+# ACKNOWLEDGEMENTS
+
+ACKNOWLEDGEMENTS
+
+The Ministry of Health acknowledges the efforts of many stakeholders and partners
+
+who supported the development and update of different components of this guideline
+
+for integrated community case management. iCCM is a key strategy to reducing child
+
+mortality, and the iCCM TWG is commended for the successful update of the new
+
+guidelines that build on past experiences in implementing the program in the country.
+
+I acknowledge the following people for their ...
+
+📄 **Reference:** Page 6
 
 
 ---
@@ -2545,7 +3018,7 @@ Next Steps / Monitoring: Consult the full source guideline or a clinician for pa
 
 When to Refer: Per excerpts and national guidance; seek urgent care if danger signs, severe disease, or instability is suspected.
 
-Citations: Page 211, Page 212, Page 213, Page 218, Page 404
+Citations: Page 6, Page 9, Page 10, Page 50, Page 61
 
 ---
 **🧪 Guardrail Brain Validation:** ✅ Passed
@@ -2560,7 +3033,7 @@ Citations: Page 211, Page 212, Page 213, Page 218, Page 404
 
 > Exchange transfusion malaria criteria
 
-**Metrics:** Triage `GREEN` | Guardrail OK `True` | Confidence `0.90`
+**Metrics:** Triage `GREEN` | Guardrail OK `True` | Confidence `0.73`
 
 #### VHT standard (`vht_response`)
 
@@ -2609,9 +3082,9 @@ The symptoms can be managed at home with guidance. Follow the advice you were gi
 
 **FROM THE GUIDELINES:**
 
-• WHO Malaria Guidelines (NCBI Bookshelf), Page 213: Additional aspects of management
-• WHO Malaria Guidelines (NCBI Bookshelf), Page 128: Untitled
-• WHO Malaria Guidelines (NCBI Bookshelf), Page 235: Research needs
+• WHO Malaria Guidelines (NCBI Bookshelf), Page 56: (A) [HIGH FIDELITY]
+• WHO Malaria Guidelines (NCBI Bookshelf), Page 3: CONTENTS [HIGH FIDELITY]
+• WHO Malaria Guidelines (NCBI Bookshelf), Page 27: Selection of VHT for iCCM
 ```
 
 #### Referral note (`referral_note`)
@@ -2645,105 +3118,99 @@ Action: Follow advice below, monitor for changes
 #### BM25 + guardrail evidence bundle (`response` — markdown)
 
 ```
-**WHO Malaria Guidelines (NCBI Bookshelf)**
+**WHO guidelines for malaria - 13 August 2025**
 
 **Question:** Exchange transfusion malaria criteria
 
-### 1. Additional aspects of management
+### 1. (A)
 
-### Additional aspects of management
+### (A)
 
-Additional aspects of management
+(A)...
 
-Fluid therapy
+📄 **Reference:** Page 56
 
-Fluid requirements should be assessed individually. Adults with severe malaria are very vulnerable to fluid overload, while children
+### 2. CONTENTS
 
-are more likely to be dehydrated. The fluid regimen must also be adapted to the infusion of antimalarial drugs. Rapid bolus infusion
+# CONTENTS
 
-of colloid or crystalloids is contraindicated. If available, haemofiltration should be started early for acute kidney injury or severe
+CONTENTS...
 
-metabolic...
+📄 **Reference:** Page 3
 
-📄 **Reference:** Page 213
+### 3. Selection of VHT for iCCM
 
-### 2. Untitled
+### Selection of VHT for iCCM
 
-WHO guidelines for malaria - 13 August 2025 - World Health Organization (WHO)
+aids, HMIS tools, and medicines and supplies to support the implementation of their duties.
 
-post-discharge. The main outcomes of interest were the impact of PDMC on re-admission (all-cause and severe anaemia),
+Communities should have close linkages with facilities and should notify them on problems in
 
-mortality (all-cause), severe anaemia, and blood transfusion. Other outcomes of interest included confirmed clinical malaria,
+implementing iCCM, e.g., attrition, adverse reactions on use of medicines, non-performing VHTs,
 
-severe malaria, anaemia, adverse events, and parasite prevalence. Three randomized double-blind placebo-controlled trials were
+a) Selection of VHT for iCCM Villages will apply the following selection criteria to propose VHT
 
-included in the review. All the trials were con...
+candidates for iCCM training and implementation.  The VHT for iCCM must be:
 
-📄 **Reference:** Page 128
+1
 
-### 3. Research needs
+exempla...
 
-### Research needs
+📄 **Reference:** Page 27
 
-Research needs
+### 4. S
 
-•
+### S
 
-Further evidence is needed on the impact (prevalence and incidence of malaria infection at the community level ) and
+PACKAGE DELIVERED BY ICCM VHTS
 
-potential harms/unintended consequences of TDA for malaria in very low to low transmission or post-elimination settings.
+PACKAGES DELIVERED BY ALL VHTS
 
-•
+i. Malaria diagnosis with mRDT; treatment with ACTs;
 
-Evidence is needed on the acceptability, feasibility, impact (prevalence and incidence of malaria infection at the community
+i.
 
-level) and potential harms/unintended consequences (death, hospital admission, severe anaemi...
+Home visiting
 
-📄 **Reference:** Page 235
+ii.
 
-### 4. Research needs
+Mobilization of communities for utilization of health
 
-### Research needs
+services
 
-Research needs
+iii.
 
-•
+Health Promotion and Education
 
-Further evidence is needed on the impact (prevalence and incidence of malaria infection at the community level) and potential
+iv.
 
-harms/unintended consequences of RDA.
+Community-based case management of common ill-
 
-•
+health conditions
 
-Evidence is needed on the acceptability, feasibility, impact (prevalence and incidence of malaria infection at the community
+v.
 
-level) and potential harms/unintended consequences (death, hospital admission, severe anaemia or any severe adverse
+Follow up of the mothers during pregnancy and after
 
-event) of safe provision (including testing for G...
+birth and the newborn for provision of advice,
 
-📄 **Reference:** Page 245
+recognition of danger signs, and referral
 
-### 5. Research needs
+vi.
 
-### Research needs
+Follow up of people who...
 
-Research needs
+📄 **Reference:** Page 10
 
-•
+### 5. Outcome 2
 
-Further evidence is needed on the impact (incidence or prevalence of malaria infection at the community level) and
+### Outcome 2
 
-potential harms/ unintended consequences of MDA for P. vivax.
+Outcome 2
 
-•
+61...
 
-Evidence is needed on the acceptability, feasibility, impact (incidence or prevalence of malaria infection at the community
-
-level) and potential harms/unintended consequences (death, hospital admission, severe anaemia or any severe adverse
-
-event) of safe provision (including t...
-
-📄 **Reference:** Page 150
+📄 **Reference:** Page 61
 
 
 ---
@@ -2756,7 +3223,7 @@ Next Steps / Monitoring: Consult the full source guideline or a clinician for pa
 
 When to Refer: Per excerpts and national guidance; seek urgent care if danger signs, severe disease, or instability is suspected.
 
-Citations: Page 128, Page 150, Page 213, Page 235, Page 245
+Citations: Page 3, Page 10, Page 27, Page 56, Page 61
 
 ---
 **🧪 Guardrail Brain Validation:** ✅ Passed
@@ -2771,7 +3238,7 @@ Citations: Page 128, Page 150, Page 213, Page 235, Page 245
 
 > Cerebral malaria supportive care
 
-**Metrics:** Triage `GREEN` | Guardrail OK `True` | Confidence `0.90`
+**Metrics:** Triage `GREEN` | Guardrail OK `True` | Confidence `0.74`
 
 #### VHT standard (`vht_response`)
 
@@ -2820,9 +3287,14 @@ The symptoms can be managed at home with guidance. Follow the advice you were gi
 
 **FROM THE GUIDELINES:**
 
-• WHO Malaria Guidelines (NCBI Bookshelf), Page 210: 5.2.2 Treating severe malaria
-• WHO Malaria Guidelines (NCBI Bookshelf), Page 212: Continuing supportive care
-• WHO Malaria Guidelines (NCBI Bookshelf), Page 220: Continuing supportive care
+• WHO Malaria Guidelines (NCBI Bookshelf), Page 10: S [HIGH FIDELITY]
+• WHO Malaria Guidelines (NCBI Bookshelf), Page 50: S
+• WHO Malaria Guidelines (NCBI Bookshelf), Page 13: Supportive Tool:  iCCM Benchmark tool
+
+---
+**GUARDRAIL WARNINGS:**
+
+• Citation to page 1 not found in knowledge base
 ```
 
 #### Referral note (`referral_note`)
@@ -2856,93 +3328,131 @@ Action: Follow advice below, monitor for changes
 #### BM25 + guardrail evidence bundle (`response` — markdown)
 
 ```
-**WHO Malaria Guidelines (NCBI Bookshelf)**
+**WHO guidelines for malaria - 13 August 2025**
 
 **Question:** Cerebral malaria supportive care
 
-### 1. 5.2.2 Treating severe malaria
+### 1. S
 
-### 5.2.2 Treating severe malaria
+### S
 
-5.2.2 Treating severe malaria
+PACKAGE DELIVERED BY ICCM VHTS
 
-Mortality from untreated severe malaria (particularly cerebral malaria) approaches 100%. With prompt, effective antimalarial
+PACKAGES DELIVERED BY ALL VHTS
 
-treatment and supportive care, the rate falls to 10–20% overall. Within the broad definition of severe malaria some syndromes are
+i. Malaria diagnosis with mRDT; treatment with ACTs;
 
-associated with lower mortality rates (e.g. severe anaemia) and others with higher mortality rates (e.g. acidosis). The risk for death
+i.
 
-increases in the presence of multiple com...
+Home visiting
 
-📄 **Reference:** Page 210
+ii.
 
-### 2. Continuing supportive care
+Mobilization of communities for utilization of health
 
-### Continuing supportive care
+services
 
-Continuing supportive care
+iii.
 
-Patients with severe malaria require intensive nursing care, preferably in an intensive care unit where possible. Clinical
+Health Promotion and Education
 
-observations should be made as frequently
+iv.
 
-as possible and should include monitoring of vital signs, coma score and urine output.
+Community-based case management of common ill-
 
-Blood glucose should be monitored every 4 h, if possible, particularly in unconscious patients....
+health conditions
 
-📄 **Reference:** Page 212
+v.
 
-### 3. Continuing supportive care
+Follow up of the mothers during pregnancy and after
 
-### Continuing supportive care
+birth and the newborn for provision of advice,
 
-Continuing supportive care
+recognition of danger signs, and referral
 
-Patients with severe malaria require intensive nursing care, preferably in an intensive care unit where possible. Clinical
+vi.
 
-observations should be made as frequently
+Follow up of people who...
 
-as possible and should include monitoring of vital signs, coma score and urine
+📄 **Reference:** Page 10
 
-output. Blood glucose should be monitored every 4 h, if possible, particularly in unconscious patients.
+### 2. S
 
-Please refer to The use of rectal artesunate as a pre-referral treatment for severe Plas...
+### S
 
-📄 **Reference:** Page 220
+8.2 TERMS OF REFERENCE FOR ICCM VHTS
 
-### 4. Therapeutic objectives
+Any person serving as an iCCM service provider under the National iCCM program is expected to fulfill the following roles and responsibilities:
 
-### Therapeutic objectives
+a) Actively participate in and potentially lead community mobilization and engagement for health. This includes participation in key community and national
 
-Therapeutic objectives
+health campaigns to prevent malaria, diarrheoa, pneumonia, malnutrition, and newborn illnesses.
 
-The main objective of the treatment of severe malaria is to prevent the patient from dying. Secondary objectives are prevention of
+b) Apply interpersonal communication skills to reinforce...
 
-disabilities and prevention of recrudescent infection.
+📄 **Reference:** Page 50
 
-Death from severe malaria often occurs within hours of admission to a hospital or clinic, so it is essential that therapeutic
+### 3. Supportive Tool:  iCCM Benchmark tool
 
-concentrations of a highly effective antimalarial drug be achieved as soon as possible. Management of severe malaria comprises
+### Supportive Tool:  iCCM Benchmark tool
 
-mainl...
+Step 1: Regular meetings of the National iCCM TWG
 
-📄 **Reference:** Page 211
+At the national level, the mandate is to ensure continuous advocacy for increased resources, partners, and
 
-### 5. Publication bias: no serious.
+buy-in for iCCM. The national level will spearhead coordination, harmonize advocacy activities, and
 
-### Publication bias: no serious.
+disseminate policy guidelines within and outside the sector.  This step is aimed at facilitating the integration
 
-142. Inconsistency: no serious. Indirectness: no serious. Imprecision: serious. Downgraded two levels for imprecision: zero
+of iCCM services with multiple national strategies, including Child Survival, IMNCI...
 
-events in the control group. Publication bias: no serious.
+📄 **Reference:** Page 13
 
-143. [Safety outcome] Cerebral malaria assessed with positive P. falciparum rapid diagnostic test or by microscopy, with impaired
+### 4. Deliver the community sensitization to improve care-seeking behaviour:
 
-consciousness (Glasgow coma score <11 or Blantyre coma score <3 or assessed as P or U on the AVPU scale (“Alert, Voice, Pain,
+### Deliver the community sensitization to improve care-seeking behaviour:
 
-Unresponsive”). Pilot ...
+As a hub of community-based health services, VHTs should be facilitated to transfer health literacy and
 
-📄 **Reference:** Page 411
+skills between individuals and families to make informed choices and decisions for behavioural change.
+
+They should also create demand for better health services, mutual understanding, and trust among key
+
+actors within the community. Communities should Support the VHTs to:
+
+a) Deliver the community sensitization to i...
+
+📄 **Reference:** Page 27
+
+### 5. Outcome 3
+
+### Outcome 3
+
+Outcome 3
+
+Increased Knowledge of and Demand for
+
+iCCM
+
+The proportion of caregivers and
+
+community members have positive health
+
+behaviors and practices (e.g., ITN use,
+
+completed referral for pneumonia, hand-
+
+washing, safe disposal of infant fecal
+
+matter, exclusive breastfeeding).
+
+80%
+
+Evaluation
+
+report...
+
+📄 **Reference:** Page 62
 
 
 ---
@@ -2955,10 +3465,13 @@ Next Steps / Monitoring: Consult the full source guideline or a clinician for pa
 
 When to Refer: Per excerpts and national guidance; seek urgent care if danger signs, severe disease, or instability is suspected.
 
-Citations: Page 210, Page 211, Page 212, Page 220, Page 411
+Citations: Page 10, Page 13, Page 27, Page 50, Page 62
 
 ---
-**🧪 Guardrail Brain Validation:** ✅ Passed
+**🧪 Guardrail Brain Validation:**
+
+**⚠️ Warnings:**
+• Citation to page 1 not found in knowledge base
 
 ```
 
@@ -2970,7 +3483,7 @@ Citations: Page 210, Page 211, Page 212, Page 220, Page 411
 
 > Artesunate dose for severe malaria IV
 
-**Metrics:** Triage `GREEN` | Guardrail OK `True` | Confidence `0.90`
+**Metrics:** Triage `GREEN` | Guardrail OK `True` | Confidence `0.84`
 
 #### VHT standard (`vht_response`)
 
@@ -2983,10 +3496,9 @@ Citations: Page 210, Page 211, Page 212, Page 220, Page 411
 
 **WHAT TO DO (step by step):**
 
-**Step 1:** Confirm patient weight before calculating dose
-**Step 2:** Explain dosing schedule to caregiver
-**Step 3:** Observe first dose if possible
-**Step 4:** Complete full course even if symptoms improve
+**Step 1:** Application of iCCM job aid
+**Step 2:** Filling of VHT registers and
+**Step 3:** Certificates.
 
 **MONITORING:**
 
@@ -3019,9 +3531,9 @@ The symptoms can be managed at home with guidance. Follow the advice you were gi
 
 **FROM THE GUIDELINES:**
 
-• WHO Malaria Guidelines (NCBI Bookshelf), Page 155: Schedule
-• WHO Malaria Guidelines (NCBI Bookshelf), Page 211: Treatment of severe malaria
-• WHO Malaria Guidelines (NCBI Bookshelf), Page 22: Untitled
+• WHO Malaria Guidelines (NCBI Bookshelf), Page 10: S [HIGH FIDELITY]
+• WHO Malaria Guidelines (NCBI Bookshelf), Page 37: Rectal artesunate [HIGH FIDELITY]
+• WHO Malaria Guidelines (NCBI Bookshelf), Page 37: Denominator: [HIGH FIDELITY]
 ```
 
 #### Referral note (`referral_note`)
@@ -3033,9 +3545,9 @@ The symptoms can be managed at home with guidance. Follow the advice you were gi
 **Reason:** Routine evidence retrieval from national guidelines
 
 **Actions taken:**
-• Confirm patient weight before calculating dose
-• Explain dosing schedule to caregiver
-• Observe first dose if possible
+• Application of iCCM job aid
+• Filling of VHT registers and
+• Certificates.
 
 **Referral completed:** [ ]
 **Health worker received:** [ ]
@@ -3055,91 +3567,188 @@ Action: Follow advice below, monitor for changes
 #### BM25 + guardrail evidence bundle (`response` — markdown)
 
 ```
-**WHO Malaria Guidelines (NCBI Bookshelf)**
+**WHO guidelines for malaria - 13 August 2025**
 
 **Question:** Artesunate dose for severe malaria IV
 
-### 1. Schedule
+### 1. S
 
-### Schedule
+### S
 
-Schedule
+PACKAGE DELIVERED BY ICCM VHTS
 
-Malaria vaccines should be provided in a four-dose schedule in children from 5 months of age for the reduction of malaria disease and
+PACKAGES DELIVERED BY ALL VHTS
 
-burden. Countries may choose to give the first vaccine dose earlier than 5 months of age on the basis of operational considerations, to
+i. Malaria diagnosis with mRDT; treatment with ACTs;
 
-increase coverage or impact.[iv]
+i.
 
-The minimum interval between any doses is four weeks; however, to achieve prolonged protection, the fourth dose should be given
+Home visiting
 
-6–18 months after the third dose. To impr...
+ii.
 
-📄 **Reference:** Page 155
+Mobilization of communities for utilization of health
 
-### 2. Treatment of severe malaria
+services
 
-### Treatment of severe malaria
+iii.
 
-Treatment of severe malaria
+Health Promotion and Education
 
-It is essential that full doses of effective parenteral (or rectal) antimalarial treatment be given promptly in the initial treatment of
+iv.
 
-severe malaria. This should be followed by a full dose of effective ACT orally. Two classes of medicine are available for parenteral
+Community-based case management of common ill-
 
-treatment of severe malaria: artemisinin derivatives (artesunate or artemether) and the cinchona alkaloids (quinine and quinidine).
+health conditions
 
-Parenteral artesunate is the trea...
+v.
 
-📄 **Reference:** Page 211
+Follow up of the mothers during pregnancy and after
 
-### 3. Untitled
+birth and the newborn for provision of advice,
 
-WHO guidelines for malaria - 13 August 2025 - World Health Organization (WHO)
+recognition of danger signs, and referral
 
-Where complete treatment of severe malaria is not possible, but injections are available, adults and children
+vi.
 
-should be given a single intramuscular dose of artesunate, and referred to an appropriate facility for further care.
+Follow up of people who...
 
-Where intramuscular artesunate is not available, intramuscular artemether or, if that is not available,
+📄 **Reference:** Page 10
 
-intramuscular quinine should be used.
+### 2. Rectal artesunate
 
-Where intramuscular injection of artesunate is n...
+### Rectal artesunate
+
+Availability
+
+of
+
+Rectal artesunate...
+
+📄 **Reference:** Page 37
+
+### 3. Denominator:
+
+### Denominator:
+
+Numerator: Number of villages reported
+
+with stock out of rectal artesunate in the
+
+review period
+
+Denominator: Total number of villages
+
+reporting
+
+HMIS  097B
+
+Quarterly
+
+Program
+
+District
+
+Health Facility
+
+37 | P a g e...
+
+📄 **Reference:** Page 37
+
+### 4. Untitled
+
+catchment populations.  The maps should be the basis for prioritizing villages that need the iCCM
+
+approach for impact.  The
+
+HSD/in-charge
+
+of
+
+the
+
+Health Centre IV takes on
+
+the leadership role for iCCM
+
+institutionalization
+
+and
+
+works with HC III and II in-
+
+charges
+
+and
+
+Health
+
+Inspector/Assistants
+
+for
+
+advocacy at sub-county local
+
+governments and planning
+
+implementation M&E of
+
+iCCM activities.
+
+1
+
+VHT mapping and health
+
+facility readiness assessment
+
+2
+
+iCCM case load projection
+
+3
+...
 
 📄 **Reference:** Page 22
 
-### 4. Artemether
+### 5. delivery
 
-### Artemether
+### delivery
 
-Artemether
+Service
 
-Artemether is two to three times less active than its main metabolite dihydroartemisinin. Artemether can be given as an oil-
+delivery
 
-based intramuscular injection or orally. In severe falciparum malaria, the concentration of the parent compound predominates
+for especially OVC
 
-after intramuscular injection, whereas parenteral artesunate is hydrolysed rapidly and almost completely to dihydroartemisinin.
+ Receiving facility well-stocked, sufficient staff
 
-Given intramuscularly, artemether may be absorbed more slowly and more erratically than wat...
+work.
 
-📄 **Reference:** Page 217
+ Timely reporting
 
-### 5. Pre-referral treatment options (2015)
+to the health center for severe or chronic
 
-### Pre-referral treatment options (2015)
+cases.
 
-Pre-referral treatment options (2015)
+
 
-Where complete treatment of severe malaria is not possible, but injections are available, adults and children should be given a
+trained in IMNCI and inpatient facilities
 
-single intramuscular dose of artesunate, and referred to an appropriate facility for further care. Where intramuscular artesunate
+ Update and standardize basic iCCM training
 
-is not available, intramuscular artemether or, if that is not available, intramuscular quinine should be used.
+ Develop district iCCM roll out plan
 
-Where intramuscular injection of artesunate is...
+ 3-day refresher training for health
 
-📄 **Reference:** Page 220
+ At least  HWs trained on iCCM in a standard 6-day
+
+ At least 2 VHT per targeted village trained
+
+materials4
+
+ Reorient national-level master ...
+
+📄 **Reference:** Page 46
 
 
 ---
@@ -3152,7 +3761,7 @@ Next Steps / Monitoring: Consult the full source guideline or a clinician for pa
 
 When to Refer: Per excerpts and national guidance; seek urgent care if danger signs, severe disease, or instability is suspected.
 
-Citations: Page 22, Page 155, Page 211, Page 217, Page 220
+Citations: Page 10, Page 22, Page 37, Page 46
 
 ---
 **🧪 Guardrail Brain Validation:** ✅ Passed
@@ -3167,7 +3776,7 @@ Citations: Page 22, Page 155, Page 211, Page 217, Page 220
 
 > Rectal artesunate pre-referral children
 
-**Metrics:** Triage `GREEN` | Guardrail OK `True` | Confidence `0.90`
+**Metrics:** Triage `GREEN` | Guardrail OK `True` | Confidence `0.85`
 
 #### VHT standard (`vht_response`)
 
@@ -3180,10 +3789,11 @@ Citations: Page 22, Page 155, Page 211, Page 217, Page 220
 
 **WHAT TO DO (step by step):**
 
-**Step 1:** Assess patient carefully
-**Step 2:** Check for danger signs (see below)
-**Step 3:** If unsure, refer to health facility
-**Step 4:** Record all findings
+**Step 1:** Video / DVD exercises
+**Step 2:** VCR equipment, videotape, or DVD
+**Step 3:** Flip chart
+**Step 4:** Masking tape
+**Step 5:** Measuring containers litre (500 ml water bottle), spoons, cups
 
 **MONITORING:**
 
@@ -3216,9 +3826,9 @@ The symptoms can be managed at home with guidance. Follow the advice you were gi
 
 **FROM THE GUIDELINES:**
 
-• WHO Malaria Guidelines (NCBI Bookshelf), Page 219: 5.2.2.3 Pre-referral treatment options
-• WHO Malaria Guidelines (NCBI Bookshelf), Page 221: GRADE
-• WHO Malaria Guidelines (NCBI Bookshelf), Page 187: Untitled
+• WHO Malaria Guidelines (NCBI Bookshelf), Page 37: Rectal artesunate [HIGH FIDELITY]
+• WHO Malaria Guidelines (NCBI Bookshelf), Page 10: S [HIGH FIDELITY]
+• WHO Malaria Guidelines (NCBI Bookshelf), Page 60: Additional Logistics [HIGH FIDELITY]
 ```
 
 #### Referral note (`referral_note`)
@@ -3230,9 +3840,9 @@ The symptoms can be managed at home with guidance. Follow the advice you were gi
 **Reason:** Routine evidence retrieval from national guidelines
 
 **Actions taken:**
-• Assess patient carefully
-• Check for danger signs (see below)
-• If unsure, refer to health facility
+• Video / DVD exercises
+• VCR equipment, videotape, or DVD
+• Flip chart
 
 **Referral completed:** [ ]
 **Health worker received:** [ ]
@@ -3252,99 +3862,179 @@ Action: Follow advice below, monitor for changes
 #### BM25 + guardrail evidence bundle (`response` — markdown)
 
 ```
-**WHO Malaria Guidelines (NCBI Bookshelf)**
+**WHO guidelines for malaria - 13 August 2025**
 
 **Question:** Rectal artesunate pre-referral children
 
-### 1. 5.2.2.3 Pre-referral treatment options
+### 1. Rectal artesunate
 
-### 5.2.2.3 Pre-referral treatment options
+### Rectal artesunate
 
-5.2.2.3 Pre-referral treatment options
+Availability
 
-The risk for death from severe malaria is greatest in the first 24 h, yet, in most malaria-endemic countries, the transit time
+of
 
-between referral and arrival at a health facility where intravenous treatment can be administered is usually long, thus delaying
+Rectal artesunate...
 
-the start of appropriate antimalarial treatment. During this time, the patient may deteriorate or die. It is therefore recommended
+📄 **Reference:** Page 37
 
-that patients, particularl...
+### 2. S
 
-📄 **Reference:** Page 219
+### S
 
-### 2. GRADE
+PACKAGE DELIVERED BY ICCM VHTS
 
-### GRADE
+PACKAGES DELIVERED BY ALL VHTS
 
-GRADE
+i. Malaria diagnosis with mRDT; treatment with ACTs;
 
-In a systematic review of pre-referral treatment for suspected severe malaria, in a single large randomized controlled trial of 17
+i.
 
-826 children and adults in Bangladesh, Ghana and the United Republic of Tanzania, pre-referral rectal artesunate was
+Home visiting
 
-compared with placebo [286].
+ii.
 
-In comparison with placebo:
+Mobilization of communities for utilization of health
 
-•
+services
 
-Rectal artesunate reduced mortality by about 25% in children < 6 years (RR, 0.74; 95% CI, 0.59–0.93; one trial, 8050
+iii.
 
-participants, moderate- quality evidence).
+Health Promotion and Education
 
-•
+iv.
 
-Recta...
+Community-based case management of common ill-
 
-📄 **Reference:** Page 221
+health conditions
 
-### 3. Untitled
+v.
 
-WHO guidelines for malaria - 13 August 2025 - World Health Organization (WHO)
+Follow up of the mothers during pregnancy and after
 
-exposure in this vulnerable population. The available evidence for artemether + lumefantrine, SP and chloroquine does not
+birth and the newborn for provision of advice,
 
-indicate dose modification at this time, but young children should be closely monitored, as reduced drug exposure may
+recognition of danger signs, and referral
 
-increase the risk for treatment failure. Limited studies of amodiaquine and mefloquine showed no significant effect of age
+vi.
 
-on plasma concentration profiles.
+Follow up of people who...
 
-In community situati...
+📄 **Reference:** Page 10
 
-📄 **Reference:** Page 187
+### 3. Additional Logistics
 
-### 4. Pre-referral treatment options (2015)
+### Additional Logistics
 
-### Pre-referral treatment options (2015)
+Item
 
-Pre-referral treatment options (2015)
+Number
 
-Where complete treatment of severe malaria is not possible, but injections are available, adults and children should be given a
+1.
 
-single intramuscular dose of artesunate, and referred to an appropriate facility for further care. Where intramuscular artesunate
+Video / DVD exercises
 
-is not available, intramuscular artemether or, if that is not available, intramuscular quinine should be used.
+1 set / room
 
-Where intramuscular injection of artesunate is...
+2.
 
-📄 **Reference:** Page 220
+VCR equipment, videotape, or DVD
 
-### 5. Other considerations
+1 set/room
 
-### Other considerations
+3.
 
-Other considerations
+Flip chart
 
-The guideline development group could find no plausible explanation for the finding of increased mortality among older
+1 set / room
 
-children and adults in Asia who received rectal artesunate, which may be due to chance. Further trials would provide
+4.
 
-clarification but are unlikely to be done. The group was therefore unable to recommend its use in older children and adults.
+Masking tape
 
-In the absence of direct evaluations of parenteral antimalarial drugs for pre- referral ...
+2
 
-📄 **Reference:** Page 221
+5.
+
+Markers
+
+6
+
+6.
+
+Pens
+
+One person
+
+7.
+
+Measuring containers litre (500 ml water bottle), spoons, cups
+
+1 set per room
+
+8.
+
+Dolls
+
+1 per room
+
+9.
+
+MUAC Tape
+
+10. Timers
+
+Medicine and supplies
+
+11. mRDT
+
+12. ORS sachets
+
+3 / participant
+
+13. Zinc tablets
+
+Two packs /person
+
+14. ACTs tablets(blue and yellow)
+
+24 tabs...
+
+📄 **Reference:** Page 60
+
+### 4. Carry Out District Preparatory And Orientation Pre-Visit.
+
+### Carry Out District Preparatory And Orientation Pre-Visit.
+
+STEP 1: Carry Out District Preparatory And Orientation Pre-Visit.
+
+The district will receive an iCCM preparatory visit from the national level. The district will mobilize the
+
+extended DHT, CAO, ACAO Health, RDC, LCV5, Secretary for health and have them oriented on vital
+
+components of iCCM implementation by the national task force.
+
+ Introduce the iCCM guidelines and present a summary of the steps taken for their development.
+
+ Br...
+
+📄 **Reference:** Page 18
+
+### 5. Pharmaco-vigilance and medicine inspection:
+
+### Pharmaco-vigilance and medicine inspection:
+
+d) Pharmaco-vigilance and medicine inspection: Standard adverse drug forms will be used to track
+
+adverse reactions reported by VHTs. The VHT follows up sick children per protocol, including
+
+identifying possible adverse medicine reactions, and requests HF staff for investigation. The HF staff
+
+investigates possible adverse medicine reactions and documents on standard Adverse Drug Reaction
+
+Forms, reported to the DHO office and NDA Pharmaco-vigila...
+
+📄 **Reference:** Page 20
 
 
 ---
@@ -3357,7 +4047,7 @@ Next Steps / Monitoring: Consult the full source guideline or a clinician for pa
 
 When to Refer: Per excerpts and national guidance; seek urgent care if danger signs, severe disease, or instability is suspected.
 
-Citations: Page 187, Page 219, Page 220, Page 221
+Citations: Page 10, Page 18, Page 20, Page 37, Page 60
 
 ---
 **🧪 Guardrail Brain Validation:** ✅ Passed
@@ -3372,7 +4062,7 @@ Citations: Page 187, Page 219, Page 220, Page 221
 
 > Malaria in HIV coinfection
 
-**Metrics:** Triage `GREEN` | Guardrail OK `True` | Confidence `0.90`
+**Metrics:** Triage `GREEN` | Guardrail OK `True` | Confidence `0.81`
 
 #### VHT standard (`vht_response`)
 
@@ -3385,10 +4075,10 @@ Citations: Page 187, Page 219, Page 220, Page 221
 
 **WHAT TO DO (step by step):**
 
-**Step 1:** Assess patient carefully
-**Step 2:** Check for danger signs (see below)
-**Step 3:** If unsure, refer to health facility
-**Step 4:** Record all findings
+**Step 1:** To increase to at least 90% the proportion of children under-five years with malaria,
+**Step 2:** To increase to at least 90% the proportion of sick children under-five years with fever and
+**Step 3:** Increase to at least 90% the proportion of caregivers in hard-to-reach communities who
+**Step 4:** To increase to at least 90%, the proportion of VHTs trained to manage malaria, pneumonia,
 
 **MONITORING:**
 
@@ -3421,9 +4111,9 @@ The symptoms can be managed at home with guidance. Follow the advice you were gi
 
 **FROM THE GUIDELINES:**
 
-• WHO Malaria Guidelines (NCBI Bookshelf), Page 188: 5.2.1.4.3 Patients co-infected with HIV
-• WHO Malaria Guidelines (NCBI Bookshelf), Page 156: Vaccination of special populations
-• WHO Malaria Guidelines (NCBI Bookshelf), Page 230: Acceptability
+• WHO Malaria Guidelines (NCBI Bookshelf), Page 36: Denominator: [HIGH FIDELITY]
+• WHO Malaria Guidelines (NCBI Bookshelf), Page 10: S [HIGH FIDELITY]
+• WHO Malaria Guidelines (NCBI Bookshelf), Page 6: ACKNOWLEDGEMENTS
 ```
 
 #### Referral note (`referral_note`)
@@ -3435,9 +4125,9 @@ The symptoms can be managed at home with guidance. Follow the advice you were gi
 **Reason:** Routine evidence retrieval from national guidelines
 
 **Actions taken:**
-• Assess patient carefully
-• Check for danger signs (see below)
-• If unsure, refer to health facility
+• To increase to at least 90% the proportion of children under-five years with malaria,
+• To increase to at least 90% the proportion of sick children under-five years with fever and
+• Increase to at least 90% the proportion of caregivers in hard-to-reach communities who
 
 **Referral completed:** [ ]
 **Health worker received:** [ ]
@@ -3457,85 +4147,173 @@ Action: Follow advice below, monitor for changes
 #### BM25 + guardrail evidence bundle (`response` — markdown)
 
 ```
-**WHO Malaria Guidelines (NCBI Bookshelf)**
+**WHO guidelines for malaria - 13 August 2025**
 
 **Question:** Malaria in HIV coinfection
 
-### 1. 5.2.1.4.3 Patients co-infected with HIV
+### 1. Denominator:
 
-### 5.2.1.4.3 Patients co-infected with HIV
+### Denominator:
 
-5.2.1.4.3 Patients co-infected with HIV
+HIV services
 
-There is considerable geographical overlap between malaria and HIV infection, and many people are co-infected.
+Numerator: Number children under five
 
-Worsening HIV-related immunosuppression may lead to more severe manifestations of malaria. In HIV-infected pregnant
+assessed with possible exposure to HIV by the
 
-women, the adverse effects of placental malaria on birth weight are increased. In areas of stable endemic malaria, HIV-
+VHT
 
-infected patients who are partially immune to malaria may have m...
+Denominator: Number of children under
 
-📄 **Reference:** Page 188
+five seen by the VHTs in the review period
 
-### 2. Vaccination of special populations
+HMIS 097B
 
-### Vaccination of special populations
+Quarterly,
 
-Vaccination of special populations
+Anually
 
-Malnourished children may be at particular risk of malaria infection and can be vaccinated with either vaccine. RTS,S/AS01 can be
+Program
 
-given to children with HIV infection.
+District
 
-RTS,S/AS01 has been evaluated in infants with a history of preterm birth (before 37 weeks’ gestation) and/or low birth weight, in HIV-
+Sub-County
 
-exposed or in HIV-infected infants and children, and in malnourished infants and children. The vaccine was found to be...
+Health Facility...
 
-📄 **Reference:** Page 156
+📄 **Reference:** Page 36
 
-### 3. Acceptability
+### 2. S
 
-### Acceptability
+### S
 
-Acceptability
+PACKAGE DELIVERED BY ICCM VHTS
 
-The acceptability of MTaT was reported in three qualitative studies identified by the systematic review
+PACKAGES DELIVERED BY ALL VHTS
 
-(Bhamani et al unpublished evidence). One study in western Kenya found that the community engaged in
+i. Malaria diagnosis with mRDT; treatment with ACTs;
 
-an MTaT intervention reported concerns over testing in the absence of symptoms. These concerns were
+i.
 
-mostly related to the fear of covert HIV testing and some lack of understanding of the possibility of
+Home visiting
 
-asymptomatic malaria. Other issues related to acceptabi...
+ii.
 
-📄 **Reference:** Page 230
+Mobilization of communities for utilization of health
 
-### 4. 5.2.1.4.3. Patients co-infected with HIV
+services
 
-### 5.2.1.4.3. Patients co-infected with HIV
+iii.
 
-5.2.1.4.3. Patients co-infected with HIV...
+Health Promotion and Education
 
-📄 **Reference:** Page 443
+iv.
 
-### 5. Diagnosis of malaria
+Community-based case management of common ill-
 
-### Diagnosis of malaria
+health conditions
 
-Diagnosis of malaria
+v.
 
-In patients with suspected severe malaria and in other high-risk groups, such as patients living with HIV/AIDS, absence or delay of
+Follow up of the mothers during pregnancy and after
 
-parasitological diagnosis should not delay an immediate start of antimalarial treatment.
+birth and the newborn for provision of advice,
 
-At present, molecular diagnostic tools based on nucleic-acid amplification techniques (e.g. loop-mediated isothermal amplification or
+recognition of danger signs, and referral
 
-polymerase chain reaction [PCR]) do not have a role in the clinical management of malaria.
+vi.
 
-Wh...
+Follow up of people who...
 
-📄 **Reference:** Page 164
+📄 **Reference:** Page 10
+
+### 3. ACKNOWLEDGEMENTS
+
+# ACKNOWLEDGEMENTS
+
+ACKNOWLEDGEMENTS
+
+The Ministry of Health acknowledges the efforts of many stakeholders and partners
+
+who supported the development and update of different components of this guideline
+
+for integrated community case management. iCCM is a key strategy to reducing child
+
+mortality, and the iCCM TWG is commended for the successful update of the new
+
+guidelines that build on past experiences in implementing the program in the country.
+
+I acknowledge the following people for their ...
+
+📄 **Reference:** Page 6
+
+### 4. Outcome 1
+
+### Outcome 1
+
+Outcome 1
+
+Increased access to iCCM among hard to
+
+reach communities
+
+The proportion of newborn who receive
+
+a home visit within 48 hours of birth by a
+
+trained VHT administers the danger signs
+
+checklist for the newborn and mother,
+
+counsels, or refers as necessary.
+
+80%
+
+Baseline and
+
+Activity
+
+reports
+
+The proportion of children with severe
+
+malaria, pneumonia, diarrheoa, TB, and
+
+HIV or; newborn with danger signs and
+
+children with acute malnutrition whom
+
+VHT promptly refers ...
+
+📄 **Reference:** Page 61
+
+### 5. BJECTIVES
+
+### BJECTIVES
+
+2.2 OBJECTIVES
+
+1.
+
+To increase to at least 90% the proportion of children under-five years with malaria,
+
+pneumonia, and diarrhoea receiving appropriate treatment within 24 hours of the onset of
+
+illness by 2025.
+
+2.
+
+To increase to at least 90% the proportion of sick children under-five years with fever and
+
+danger signs, suspected TB, HIV, and those with severe acute malnutrition who are
+
+identified in the community referred to health facilities.
+
+3.
+
+Increase to at least 90% t...
+
+📄 **Reference:** Page 9
 
 
 ---
@@ -3548,7 +4326,7 @@ Next Steps / Monitoring: Consult the full source guideline or a clinician for pa
 
 When to Refer: Per excerpts and national guidance; seek urgent care if danger signs, severe disease, or instability is suspected.
 
-Citations: Page 156, Page 164, Page 188, Page 230, Page 443
+Citations: Page 6, Page 9, Page 10, Page 36, Page 61
 
 ---
 **🧪 Guardrail Brain Validation:** ✅ Passed
@@ -3563,7 +4341,7 @@ Citations: Page 156, Page 164, Page 188, Page 230, Page 443
 
 > Species Plasmodium vivax relapse treatment
 
-**Metrics:** Triage `GREEN` | Guardrail OK `True` | Confidence `0.90`
+**Metrics:** Triage `GREEN` | Guardrail OK `True` | Confidence `0.64`
 
 #### VHT standard (`vht_response`)
 
@@ -3612,9 +4390,9 @@ The symptoms can be managed at home with guidance. Follow the advice you were gi
 
 **FROM THE GUIDELINES:**
 
-• WHO Malaria Guidelines (NCBI Bookshelf), Page 190: knowlesi
-• WHO Malaria Guidelines (NCBI Bookshelf), Page 310: Untitled
-• WHO Malaria Guidelines (NCBI Bookshelf), Page 34: Etiology
+• WHO Malaria Guidelines (NCBI Bookshelf), Page 10: S [HIGH FIDELITY]
+• WHO Malaria Guidelines (NCBI Bookshelf), Page 62: ON [HIGH FIDELITY]
+• WHO Malaria Guidelines (NCBI Bookshelf), Page 35: Denominator: [HIGH FIDELITY]
 ```
 
 #### Referral note (`referral_note`)
@@ -3648,91 +4426,193 @@ Action: Follow advice below, monitor for changes
 #### BM25 + guardrail evidence bundle (`response` — markdown)
 
 ```
-**WHO Malaria Guidelines (NCBI Bookshelf)**
+**WHO guidelines for malaria - 13 August 2025**
 
 **Question:** Species Plasmodium vivax relapse treatment
 
-### 1. knowlesi
+### 1. S
 
-### knowlesi
+### S
 
-5.2.1.5 Uncomplicated malaria caused by P. vivax, P. ovale, P. malariae or P.
+PACKAGE DELIVERED BY ICCM VHTS
 
-knowlesi
+PACKAGES DELIVERED BY ALL VHTS
 
-Plasmodium vivax accounts for approximately half of all malaria cases outside Africa [3][250][251]. It is prevalent in the Middle
+i. Malaria diagnosis with mRDT; treatment with ACTs;
 
-East, Asia, the Western Pacific and Central and South America. With the exception of the Horn, it is rarer in Africa, where there
+i.
 
-is a high prevalence of the Duffy-negative phenotype, particularly in West Africa, although cases are reported in both
+Home visiting
 
-Mauritania and ...
+ii.
 
-📄 **Reference:** Page 190
+Mobilization of communities for utilization of health
 
-### 2. Untitled
+services
 
-WHO guidelines for malaria - 13 August 2025 - World Health Organization (WHO)
+iii.
 
-in early infancy. Clinical infectious diseases : an official publication of the Infectious Diseases Society of America 2009;48(12):1704-12
+Health Promotion and Education
 
-Pubmed Journal
+iv.
 
-256. Genton B, D'Acremont V, Rare L, Baea K, Reeder JC, Alpers MP, et al. Plasmodium vivax and mixed infections are associated with
+Community-based case management of common ill-
 
-severe malaria in children: a prospective cohort study from Papua New Guinea. PLoS medicine 2008;5(6):e127 Pubmed Journal
+health conditions
 
-257. Koch...
+v.
 
-📄 **Reference:** Page 310
+Follow up of the mothers during pregnancy and after
 
-### 3. Etiology
+birth and the newborn for provision of advice,
 
-### Etiology
+recognition of danger signs, and referral
 
-Etiology
+vi.
 
-Malaria is a life-threatening disease caused by the infection of red blood cells with protozoan parasites of the genus Plasmodium that are
+Follow up of people who...
 
-transmitted to people through the bites of infected female Anopheles mosquitoes. Four species of Plasmodium (P. falciparum, P. vivax, P.
+📄 **Reference:** Page 10
 
-malariae and P. ovale) most commonly infect humans. P. falciparum and P. vivax are the most prevalent species and P. falciparum is the
+### 2. ON
 
-most dangerous. A fifth species, P. knowlesi (a species of Pla...
+### ON
 
-📄 **Reference:** Page 34
+ON
 
-### 4. Untitled
+Improved quality of iCCM services
 
-WHO guidelines for malaria - 13 August 2025 - World Health Organization (WHO)
+The proportion of VHTs with zero
 
-272. Verma R, Commons RJ, Gupta A, Rahi M, Nitika, Bharti PK, et al. Safety and efficacy of primaquine in patients with Plasmodium
+stock-outs of first-line treatment and
 
-vivax malaria from South Asia: a systematic review and individual patient data meta-analysis. BMJ global health 2023;8(12) Pubmed
+diagnostics for malaria, pneumonia, and
 
-Journal
+diarrheoa.
 
-273. Mehdipour P, Rajasekhar M, Dini S, Zaloumis S, Abreha T, Adam I, et al. Effect of adherence to primaquine on the risk of
+75%
 
-Plasmodium vivax recur...
+Evaluation
 
-📄 **Reference:** Page 311
+report
 
-### 5. Malaria vaccine pipeline
+The proportion of VHTs giving standard
 
-### Malaria vaccine pipeline
+treatment for malaria, pneumonia, and
 
-Malaria vaccine pipeline
+diarrheoa.
 
-Two malaria vaccines are WHO-prequalified and recommended for use: RTS,S/AS01 and R21/Matrix-M. Both are pre-erythrocytic
+80%
 
-vaccines that prevent P. falciparum infection and subsequent illness and death in children; the vaccines are not designed to interrupt
+Evaluation
 
-malaria transmission. The recommended malaria vaccines prevent P. falciparum malaria. There is no known cross-protection with
+report
 
-other Plasmodium species. However, in areas where P. falci...
+The proportion of VHTs that receive
 
-📄 **Reference:** Page 153
+quarterly support supervision,
+
+mentorship, and coaching
+
+80%
+
+Evaluation
+
+report
+
+The proportion of health facilities
+
+implementing iCCM that have ...
+
+📄 **Reference:** Page 62
+
+### 3. Denominator:
+
+### Denominator:
+
+iCCM
+
+treatment
+
+rate
+
+Numerator: Number of treatments for
+
+children under five provided by iCCM
+
+conditions in twelve months in a target area
+
+by point of treatment (Community or health
+
+facility)
+
+Denominator: Number of children under 5
+
+in target areas at a given time divided by
+
+1,000.
+
+HMIS
+
+UBOS
+
+Annually
+
+Program
+
+District
+
+Health Facility...
+
+📄 **Reference:** Page 35
+
+### 4. Rectal artesunate
+
+### Rectal artesunate
+
+Availability
+
+of
+
+Rectal artesunate...
+
+📄 **Reference:** Page 37
+
+### 5. Goal
+
+### Goal
+
+Goal
+
+To increase to at least 80% the proportion
+
+of children under-five years receiving
+
+appropriate treatment for malaria,
+
+pneumonia, and diarrhoea within 24 hours
+
+of the onset of illness
+
+The proportion of children under-five
+
+years receiving appropriate treatment for
+
+malaria, pneumonia, and diarrhoea within
+
+24 hours of the onset of illness
+
+80%
+
+Baseline
+
+Activity
+
+reports
+
+MoH...
+
+📄 **Reference:** Page 61
 
 
 ---
@@ -3745,7 +4625,7 @@ Next Steps / Monitoring: Consult the full source guideline or a clinician for pa
 
 When to Refer: Per excerpts and national guidance; seek urgent care if danger signs, severe disease, or instability is suspected.
 
-Citations: Page 34, Page 153, Page 190, Page 310, Page 311
+Citations: Page 10, Page 35, Page 37, Page 61, Page 62
 
 ---
 **🧪 Guardrail Brain Validation:** ✅ Passed
@@ -3760,7 +4640,7 @@ Citations: Page 34, Page 153, Page 190, Page 310, Page 311
 
 > Monitoring after antimalarial treatment failure
 
-**Metrics:** Triage `GREEN` | Guardrail OK `True` | Confidence `0.90`
+**Metrics:** Triage `GREEN` | Guardrail OK `True` | Confidence `0.82`
 
 #### VHT standard (`vht_response`)
 
@@ -3809,9 +4689,9 @@ The symptoms can be managed at home with guidance. Follow the advice you were gi
 
 **FROM THE GUIDELINES:**
 
-• WHO Malaria Guidelines (NCBI Bookshelf), Page 224: Therapeutic efficacy
-• WHO Malaria Guidelines (NCBI Bookshelf), Page 22: Monitoring efficacy and safety of antimalarial drugs and resistance (2010)
-• WHO Malaria Guidelines (NCBI Bookshelf), Page 224: Monitoring efficacy and safety of antimalarial drugs and resistance (2010)
+• WHO Malaria Guidelines (NCBI Bookshelf), Page 61: Annex 8: Monitoring and Evaluation workplan [HIGH FIDELITY]
+• WHO Malaria Guidelines (NCBI Bookshelf), Page 10: S [HIGH FIDELITY]
+• WHO Malaria Guidelines (NCBI Bookshelf), Page 62: ON [HIGH FIDELITY]
 ```
 
 #### Referral note (`referral_note`)
@@ -3845,91 +4725,137 @@ Action: Follow advice below, monitor for changes
 #### BM25 + guardrail evidence bundle (`response` — markdown)
 
 ```
-**WHO Malaria Guidelines (NCBI Bookshelf)**
+**WHO guidelines for malaria - 13 August 2025**
 
 **Question:** Monitoring after antimalarial treatment failure
 
-### 1. Therapeutic efficacy
+### 1. Annex 8: Monitoring and Evaluation workplan
 
-### Therapeutic efficacy
+## Annex 8: Monitoring and Evaluation workplan
 
-Therapeutic efficacy
+Annex 8: Monitoring and Evaluation workplan...
 
-Monitoring of therapeutic efficacy in falciparum malaria involves assessing clinical and parasitological outcomes of treatment
+📄 **Reference:** Page 61
 
-for at least 28 days after the start of adequate treatment and monitoring for the reappearance of parasites in blood. The exact
+### 2. S
 
-duration of post-treatment follow-up is based on the elimination half- life of the partner drug in the ACT being evaluated. Tools
+### S
 
-for monitoring antimalaria drug efficacy can be found on the WHO...
+PACKAGE DELIVERED BY ICCM VHTS
 
-📄 **Reference:** Page 224
+PACKAGES DELIVERED BY ALL VHTS
 
-### 2. Monitoring efficacy and safety of antimalarial drugs and resistance (2010)
+i. Malaria diagnosis with mRDT; treatment with ACTs;
 
-### Monitoring efficacy and safety of antimalarial drugs and resistance (2010)
+i.
 
-Monitoring efficacy and safety of antimalarial drugs and resistance (2010)
+Home visiting
 
-All malaria programmes should regularly monitor the therapeutic efficacy of antimalarial drugs using the standard
+ii.
 
-WHO protocols.
+Mobilization of communities for utilization of health
 
-An antimalarial medicine that is recommended in the national malaria treatment policy should be changed if the
+services
 
-total treatment failure proportion is ≥ 10%, as assessed in vivo by monitoring therapeutic efficacy.
-...
+iii.
 
-📄 **Reference:** Page 22
+Health Promotion and Education
 
-### 3. Monitoring efficacy and safety of antimalarial drugs and resistance (2010)
+iv.
 
-### Monitoring efficacy and safety of antimalarial drugs and resistance (2010)
+Community-based case management of common ill-
 
-Monitoring efficacy and safety of antimalarial drugs and resistance (2010)
+health conditions
 
-All malaria programmes should regularly monitor the therapeutic efficacy of antimalarial drugs using the standard WHO
+v.
 
-protocols.
+Follow up of the mothers during pregnancy and after
 
-An antimalarial medicine that is recommended in the national malaria treatment policy should be changed if the total treatment
+birth and the newborn for provision of advice,
 
-failure proportion is ≥ 10%, as assessed in vivo by monitoring therapeutic efficacy.
-...
+recognition of danger signs, and referral
 
-📄 **Reference:** Page 224
+vi.
 
-### 4. National adaptation and implementation (2010)
+Follow up of people who...
 
-### National adaptation and implementation (2010)
+📄 **Reference:** Page 10
 
-National adaptation and implementation (2010)
+### 3. ON
 
-The choice of ACTs in a country or region should be based on optimal efficacy, safety and adherence.
+### ON
 
-An antimalarial medicine that is recommended in the national malaria treatment policy should be changed if the total
+ON
 
-treatment failure proportion is ≥ 10%, as assessed in vivo by monitoring therapeutic efficacy.
+Improved quality of iCCM services
 
-Introduction of a new antimalarial medicine in the national treatment policy should be...
+The proportion of VHTs with zero
 
-📄 **Reference:** Page 22
+stock-outs of first-line treatment and
 
-### 5. National adaptation and implementation (2010)
+diagnostics for malaria, pneumonia, and
 
-### National adaptation and implementation (2010)
+diarrheoa.
 
-National adaptation and implementation (2010)
+75%
 
-The choice of ACTs in a country or region should be based on optimal efficacy, safety and adherence.
+Evaluation
 
-An antimalarial medicine that is recommended in the national malaria treatment policy should be changed if the total treatment failure
+report
 
-proportion is ≥ 10%, as assessed in vivo by monitoring therapeutic efficacy.
+The proportion of VHTs giving standard
 
-Introduction of a new antimalarial medicine in the national treatment policy should be...
+treatment for malaria, pneumonia, and
 
-📄 **Reference:** Page 227
+diarrheoa.
+
+80%
+
+Evaluation
+
+report
+
+The proportion of VHTs that receive
+
+quarterly support supervision,
+
+mentorship, and coaching
+
+80%
+
+Evaluation
+
+report
+
+The proportion of health facilities
+
+implementing iCCM that have ...
+
+📄 **Reference:** Page 62
+
+### 4. ICCM MONITORING AND EVALUATION FRAMEWORK
+
+# ICCM MONITORING AND EVALUATION FRAMEWORK
+
+7 ICCM MONITORING AND EVALUATION FRAMEWORK...
+
+📄 **Reference:** Page 29
+
+### 5. Collection and Storage of medicines:
+
+### Collection and Storage of medicines:
+
+recovery, development of resistance, adverse medicine reactions, and overall failure of the program.
+
+VHTs will be provided with training on the rational use of iCCM medicines. This will include case
+
+definition/diagnosis, dispensing, record keeping, patient counseling, referral, patient follow-up, adverse
+
+drug reaction monitoring (Pharmaco-vigilance), inventory management to avoid expiries and stockouts.
+
+This will be reinforced by the use of appropria...
+
+📄 **Reference:** Page 28
 
 
 ---
@@ -3942,7 +4868,7 @@ Next Steps / Monitoring: Consult the full source guideline or a clinician for pa
 
 When to Refer: Per excerpts and national guidance; seek urgent care if danger signs, severe disease, or instability is suspected.
 
-Citations: Page 22, Page 224, Page 227
+Citations: Page 10, Page 28, Page 29, Page 61, Page 62
 
 ---
 **🧪 Guardrail Brain Validation:** ✅ Passed
@@ -3957,7 +4883,7 @@ Citations: Page 22, Page 224, Page 227
 
 > Quality assurance microscopy
 
-**Metrics:** Triage `GREEN` | Guardrail OK `True` | Confidence `0.90`
+**Metrics:** Triage `GREEN` | Guardrail OK `True` | Confidence `0.86`
 
 #### VHT standard (`vht_response`)
 
@@ -3970,10 +4896,8 @@ Citations: Page 22, Page 224, Page 227
 
 **WHAT TO DO (step by step):**
 
-**Step 1:** Assess patient carefully
-**Step 2:** Check for danger signs (see below)
-**Step 3:** If unsure, refer to health facility
-**Step 4:** Record all findings
+**Step 1:** Conducting data quality audits (DQA)
+**Step 2:** Short-term M&E Technical Assistance
 
 **MONITORING:**
 
@@ -4006,9 +4930,9 @@ The symptoms can be managed at home with guidance. Follow the advice you were gi
 
 **FROM THE GUIDELINES:**
 
-• WHO Malaria Guidelines (NCBI Bookshelf), Page 165: Untitled
-• WHO Malaria Guidelines (NCBI Bookshelf), Page 225: General guiding principles for choosing a case management strategy and tools
-• WHO Malaria Guidelines (NCBI Bookshelf), Page 164: Parasitological diagnosis
+• WHO Malaria Guidelines (NCBI Bookshelf), Page 47: assurance [HIGH FIDELITY]
+• WHO Malaria Guidelines (NCBI Bookshelf), Page 44: x [HIGH FIDELITY]
+• WHO Malaria Guidelines (NCBI Bookshelf), Page 48: :
 ```
 
 #### Referral note (`referral_note`)
@@ -4020,9 +4944,8 @@ The symptoms can be managed at home with guidance. Follow the advice you were gi
 **Reason:** Routine evidence retrieval from national guidelines
 
 **Actions taken:**
-• Assess patient carefully
-• Check for danger signs (see below)
-• If unsure, refer to health facility
+• Conducting data quality audits (DQA)
+• Short-term M&E Technical Assistance
 
 **Referral completed:** [ ]
 **Health worker received:** [ ]
@@ -4042,107 +4965,163 @@ Action: Follow advice below, monitor for changes
 #### BM25 + guardrail evidence bundle (`response` — markdown)
 
 ```
-**WHO Malaria Guidelines (NCBI Bookshelf)**
+**WHO guidelines for malaria - 13 August 2025**
 
 **Question:** Quality assurance microscopy
 
-### 1. Untitled
+### 1. assurance
 
-WHO guidelines for malaria - 13 August 2025 - World Health Organization (WHO)
+### assurance
 
-•
+Support
 
-high sensitivity, if the performance of microscopy is high;
+Supervision
 
-•
+and
 
-differentiation of Plasmodia species;
+quality
 
-•
+assurance
 
-determination of parasite densities – notably identification of hyperparasitaemia;
+VHT
 
-•
+using
 
-detection of gametocytaemia;
+supervisor’s
 
-•
+Check-list
 
-allows monitoring of responses to therapy and
+and
 
-•
+supervisor’s summary form
 
-can be used to diagnose many other conditions.
+ Submit supervisor’s summary form to DHO
 
-Good performance of microscopy can be difficult to maintain, because of the requirements for a...
+ Replenish VHW stocks as needed
 
-📄 **Reference:** Page 165
+ Orient all staff to support the VHTs
 
-### 2. General guiding principles for choosing a case management strategy and tools
+Coverage Chart
 
-### General guiding principles for choosing a case management strategy and tools
+ the pool of trained district supervisors to
 
-General guiding principles for choosing a case management strategy and tools
+performance
 
-Choosing a diagnostic strategy
+and
 
-The two methods currently considered suitable for routine patient management are light microscopy and RDTs. Different strategies
+obtain
 
-may be adopted in different health care settings. The choice between RDTs and microscopy depends on local circumstances,
+accurate,
 
-including the skills available, the patient case-load, t...
+timely
 
-📄 **Reference:** Page 225
+information about cases and necessary supplies
 
-### 3. Parasitological diagnosis
+ Developing and disseminating the guidelines for
 
-### Parasitological diagnosis
+ensure an optimal ratio of supervisors to
 
-Parasitological diagnosis
+H...
 
-The benefit of parasitological diagnosis relies entirely on an appropriate management response of health care providers. The two
+📄 **Reference:** Page 47
 
-methods used routinely for parasitological diagnosis of malaria are light microscopy and immunochromatographic RDTs. The latter
+### 2. x
 
-detect parasite-specific antigens or enzymes that are either genus or species specific.
+### x
 
-Both microscopy and RDTs must be supported by a quality assurance programme. Antimalarial trea...
+12. Conducting data quality audits (DQA)
 
-📄 **Reference:** Page 164
+x
 
-### 4. Guidance
+x
 
-### Guidance
+x
 
-Guidance
+x
 
-The practical guidance on the use of qualitative near-patient tests for G6PD deficiency should include
+x
 
-all aspects of safe implementation of a new diagnostic test e.g. implementation plan, clear national
+iCCM TWG
 
-guidelines, quality assurance and prequalification of tests, training of users, quality assurance of
+DHI
 
-testing, and selection of the type of health services where these tests should be deployed. In addition
+Improved Data quality
 
-the guidance should also include specific information on the an...
+Incorporated in DHI
 
-📄 **Reference:** Page 196
+13. Short-term M&E Technical Assistance
 
-### 5. Untitled
+x
 
-WHO guidelines for malaria - 13 August 2025 - World Health Organization (WHO)
+iCCM TWG
 
-200. Malaria diagnosis: memorandum from a WHO meeting. Bulletin of the World Health Organization 1988;66(5):575-94 Pubmed
+IPs
 
-201. Malaria microscopy quality assurance manual, version 2. Geneva: World Health Organization 2016. Website
+TA procured
 
-202. Kawamoto F, Billingsley PF. Rapid diagnosis of malaria by fluorescence microscopy. Parasitology today (Personal ed.)
+44 | P a g e...
 
-1992;8(2):69-71 Pubmed
+📄 **Reference:** Page 44
 
-203. Malaria diagnosis: new perspectives....
+### 3. :
 
-📄 **Reference:** Page 307
+### :
+
+referral and counter-referral system for iCCM. Integrate iCCM within existing quality improvement processes.
+
+f)
+
+Communication and social mobilization: The TWG shall develop and use a communication and social mobilization plan and strategy and materials and
+
+messages for iCCM. The plan should also guide reporting and information flow to promote iCCM service demand, utilization, and feedback on iCCM
+
+management and service delivery quality in the country.
+
+g) Supervision and performance q...
+
+📄 **Reference:** Page 48
+
+### 4. HECKS
+
+### HECKS
+
+only meaningful and worthwhile if used for evidence-based decision-making from community to national
+
+levels. To be useful, information must be based on quality data, and it also must be communicated
+
+effectively to policymakers and other interested stakeholders. The iCCM M&E data thus needs to be
+
+manageable and timely, reliable, and specific to the activities in question, and the results need to be well
+
+understood. The key to effective iCCM data use involves linking the data to the...
+
+📄 **Reference:** Page 41
+
+### 5. RINCIPLES
+
+### RINCIPLES
+
+7.1.3 PRINCIPLES
+
+1
+
+iCCM Data is collected based on needs within the general management processes.
+
+2
+
+Work along the iCCM logframe measured by the corresponding indicators
+
+3
+
+Build iCCM M&E into the national HMIS framework so as not to overwhelm providers or make monitoring an additional activity by utilizing existing
+
+touchpoints
+
+4
+
+Minimal tolerance for insufficient data by building quality assurance processes to test the data for quality and giving constant feedback on acce...
+
+📄 **Reference:** Page 31
 
 
 ---
@@ -4155,7 +5134,7 @@ Next Steps / Monitoring: Consult the full source guideline or a clinician for pa
 
 When to Refer: Per excerpts and national guidance; seek urgent care if danger signs, severe disease, or instability is suspected.
 
-Citations: Page 164, Page 165, Page 196, Page 225, Page 307
+Citations: Page 31, Page 41, Page 44, Page 47, Page 48
 
 ---
 **🧪 Guardrail Brain Validation:** ✅ Passed
@@ -4170,7 +5149,7 @@ Citations: Page 164, Page 165, Page 196, Page 225, Page 307
 
 > Integrated community case management fever
 
-**Metrics:** Triage `GREEN` | Guardrail OK `True` | Confidence `0.90`
+**Metrics:** Triage `GREEN` | Guardrail OK `True` | Confidence `0.95`
 
 #### VHT standard (`vht_response`)
 
@@ -4218,9 +5197,9 @@ The symptoms can be managed at home with guidance. Follow the advice you were gi
 
 **FROM THE GUIDELINES:**
 
-• WHO Malaria Guidelines (NCBI Bookshelf), Page 164: Untitled
-• WHO Malaria Guidelines (NCBI Bookshelf), Page 227: Other operational issues in managing effective treatment
-• WHO Malaria Guidelines (NCBI Bookshelf), Page 225: General guiding principles for choosing a case management strategy and tools
+• WHO Malaria Guidelines (NCBI Bookshelf), Page 5: FOREWORD
+• WHO Malaria Guidelines (NCBI Bookshelf), Page 5: FOREWORD
+• WHO Malaria Guidelines (NCBI Bookshelf), Page 6: ACKNOWLEDGEMENTS
 ```
 
 #### Referral note (`referral_note`)
@@ -4254,111 +5233,93 @@ Action: Follow advice below, monitor for changes
 #### BM25 + guardrail evidence bundle (`response` — markdown)
 
 ```
-**WHO Malaria Guidelines (NCBI Bookshelf)**
+**WHO guidelines for malaria - 13 August 2025**
 
 **Question:** Integrated community case management fever
 
-### 1. Untitled
+### 1. FOREWORD
 
-WHO guidelines for malaria - 13 August 2025 - World Health Organization (WHO)
+expanded package to include TB and HIV assessment. This document is to guide policymakers, managers, districts, health workers, communities, NGOs, and all other stakeholders on how to implement integrated community case management (iCCM) of childhood malaria, pneumonia, and diarrheoa to reduce under mortality and take actions to introduce, implement, monitor
 
-In malaria-endemic areas, malaria should be suspected in any patient presenting with a history of fever or temperature ≥ 37.5 °C and
+and evaluate iCCM at all levels of health services delivery chain. It describes activities
 
-no other obvious cause. In areas in which malaria transmission is stable (or during the high-transmission period of seasonal malaria),
+for sensitization and advocacy, capacity build...
 
-malaria should also be suspected in children with palmar pallor or a haemoglobin concentration of < 8 g/dL. High-transmission settings
+📄 **Reference:** Page 5
 
-include many pa...
+### 2. FOREWORD
 
-📄 **Reference:** Page 164
+# FOREWORD
 
-### 2. Other operational issues in managing effective treatment
+FOREWORD
 
-### Other operational issues in managing effective treatment
+Integrated community case management (iCCM) of childhood infection saves lives in
 
-Other operational issues in managing effective treatment
+hard-to-reach communities in Uganda.  The objective of this strategy is to strengthen
 
-Individual patients derive the maximum benefit from an ACT if they can access it within 24–48 h of the onset of malaria symptoms.
+iCCM implementation and and set the path to institutionalizing rapid reduction in
 
-The impact in reducing transmission at a population level depends on high coverage rates and the transmission intensity. Thus, to
+under five mortality in the national and district health during 2020 to 2060.  The
 
-optimize the benefits of deploying ACTs, they should be available in the public health delivery system, the private se...
+Village health teams in remote poor urban and rural communities provide the needed
 
-📄 **Reference:** Page 227
+lifesaving treatments to sick children within 24 hours wi...
 
-### 3. General guiding principles for choosing a case management strategy and tools
+📄 **Reference:** Page 5
 
-### General guiding principles for choosing a case management strategy and tools
+### 3. ACKNOWLEDGEMENTS
 
-General guiding principles for choosing a case management strategy and tools
+# ACKNOWLEDGEMENTS
 
-Choosing a diagnostic strategy
+ACKNOWLEDGEMENTS
 
-The two methods currently considered suitable for routine patient management are light microscopy and RDTs. Different strategies
+The Ministry of Health acknowledges the efforts of many stakeholders and partners
 
-may be adopted in different health care settings. The choice between RDTs and microscopy depends on local circumstances,
+who supported the development and update of different components of this guideline
 
-including the skills available, the patient case-load, t...
+for integrated community case management. iCCM is a key strategy to reducing child
 
-📄 **Reference:** Page 225
+mortality, and the iCCM TWG is commended for the successful update of the new
 
-### 4. Global vector control response 2017–2030
+guidelines that build on past experiences in implementing the program in the country.
 
-### Global vector control response 2017–2030
+I acknowledge the following people for their ...
 
-Global vector control response 2017–2030
+📄 **Reference:** Page 6
 
-The vision of WHO and the broader infectious diseases community is a world free of human suffering from vector-borne diseases. In
+### 4. ONTEXT
 
-2017, the World Health Assembly welcomed the Global vector control response 2017–2030 [16] (GVCR) and adopted a resolution to
+### ONTEXT
 
-promote an integrated approach to the control of vector-borne diseases. The approach builds on the concept of integrated vector
+1.1 CONTEXT
 
-management (IVM), but wit...
+Children compose 17.2% of Uganda's population but account for 40% of the disease burden in the country.
 
-📄 **Reference:** Page 37
+Uganda has steadily reduced child mortality rates between 1995 and 2016 from 156 to 64 per 1000 live
 
-### 5. Untitled
+births. On average, about 350 children under five years of age lose their lives per day, of which a quarter die
 
-WHO guidelines for malaria - 13 August 2025 - World Health Organization (WHO)
+of malaria, pneumonia, and diarrhoea. Annually, these three diseases account for half of all the under 5
 
-G6PD
+OPD attendances1. and together contribute over 17...
 
-glucose-6-phosphate dehydrogenase
+📄 **Reference:** Page 8
 
-HBHI
+### 5. Carry out Focus Group Discussion:
 
-High burden to high impact approach
+### Carry out Focus Group Discussion:
 
-HFCA
+will be held. These will be community lead and in attendance will be the public and service
 
-health-facility catchment area
+providers. The fora will be used to give feedback and accountability and develop action plans on
 
-HRP2
+how to bridge gaps within the iCCM program in those respective communities. The communities
 
-histidine-rich protein 2
+will decide who will be responsible for following up the action plans, including the timelines to do
 
-ICER
+so. On an annual basis, recurring gaps will be picked to inform iCCM planni...
 
-incremental cost-effectiveness ratio
-
-IHR
-
-International Health Regulation
-
-IPTi
-
-intermittent preventive treatment in infants, now referred to as perennial malaria chemoprevention (PMC)
-
-IPTp
-
-intermittent preventive treatment in pregnancy
-
-IPTsc
-
-intermittent...
-
-📄 **Reference:** Page 28
+📄 **Reference:** Page 27
 
 
 ---
@@ -4371,7 +5332,7 @@ Next Steps / Monitoring: Consult the full source guideline or a clinician for pa
 
 When to Refer: Per excerpts and national guidance; seek urgent care if danger signs, severe disease, or instability is suspected.
 
-Citations: Page 28, Page 37, Page 164, Page 225, Page 227
+Citations: Page 5, Page 6, Page 8, Page 27
 
 ---
 **🧪 Guardrail Brain Validation:** ✅ Passed
@@ -4386,7 +5347,7 @@ Citations: Page 28, Page 37, Page 164, Page 225, Page 227
 
 > Ethics of placebo-controlled malaria trials
 
-**Metrics:** Triage `GREEN` | Guardrail OK `True` | Confidence `0.90`
+**Metrics:** Triage `GREEN` | Guardrail OK `True` | Confidence `0.83`
 
 #### VHT standard (`vht_response`)
 
@@ -4435,9 +5396,9 @@ The symptoms can be managed at home with guidance. Follow the advice you were gi
 
 **FROM THE GUIDELINES:**
 
-• WHO Malaria Guidelines (NCBI Bookshelf), Page 280: Untitled
-• WHO Malaria Guidelines (NCBI Bookshelf), Page 108: Untitled
-• WHO Malaria Guidelines (NCBI Bookshelf), Page 453: parasitaemia
+• WHO Malaria Guidelines (NCBI Bookshelf), Page 64: Activity 4.2.6 [HIGH FIDELITY]
+• WHO Malaria Guidelines (NCBI Bookshelf), Page 10: S [HIGH FIDELITY]
+• WHO Malaria Guidelines (NCBI Bookshelf), Page 46: SUMMARY OF ROLES AND RESPONSIBILITIES [HIGH FIDELITY]
 ```
 
 #### Referral note (`referral_note`)
@@ -4471,97 +5432,123 @@ Action: Follow advice below, monitor for changes
 #### BM25 + guardrail evidence bundle (`response` — markdown)
 
 ```
-**WHO Malaria Guidelines (NCBI Bookshelf)**
+**WHO guidelines for malaria - 13 August 2025**
 
 **Question:** Ethics of placebo-controlled malaria trials
 
-### 1. Untitled
+### 1. Activity 4.2.6
 
-WHO guidelines for malaria - 13 August 2025 - World Health Organization (WHO)
+### Activity 4.2.6
 
-•
+Activity 4.2.6 Dissemination of
 
-Dr Anna Maria van Eijk, Liverpool School of Tropical Medicine, Liverpool, United Kingdom of Great Britain and Northern Ireland
+implementation research findings
 
-Perennial Malaria Chemoprevention (PMC) (formerly Intermittent Preventive Treatment in infants or IPTi)
+Number of research dissemination
 
-•
+meetings held
 
-Dr Christina Carlson, Division of Parasitic Diseases and Malaria, Centers for Disease Control and Prevention, Atlanta, United
+5
 
-States of America
+Meeting
 
-•
+proceedings
 
-Dr Laura Steinhardt, Malaria Bran...
+MOH...
 
-📄 **Reference:** Page 280
+📄 **Reference:** Page 64
 
-### 2. Untitled
+### 2. S
 
-WHO guidelines for malaria - 13 August 2025 - World Health Organization (WHO)
+### S
 
-supplemented by a cross-cutting review on chemoprevention and drug resistance (Plowe unpublished evidence), a civil society
+PACKAGE DELIVERED BY ICCM VHTS
 
-consultation report on chemoprevention (CS4ME unpublished evidence) and contributions from the GDG membership, which
+PACKAGES DELIVERED BY ALL VHTS
 
-included former and current national malaria programme representatives. The GDG was supported by a Steering Group, which
+i. Malaria diagnosis with mRDT; treatment with ACTs;
 
-included representatives from the WHO Departments for Se...
+i.
 
-📄 **Reference:** Page 108
+Home visiting
 
-### 3. parasitaemia
+ii.
 
-### parasitaemia
+Mobilization of communities for utilization of health
 
-P. vivax
+services
 
-parasitaemia
+iii.
 
-Relative risk 0.02
+Health Promotion and Education
 
-(CI 95% 0 — 0.26)
+iv.
 
-Based on data from 951
+Community-based case management of common ill-
 
-participants in 1 studies.
+health conditions
 
-(Randomized controlled)...
+v.
 
-📄 **Reference:** Page 453
+Follow up of the mothers during pregnancy and after
 
-### 4. Anaemia in third
+birth and the newborn for provision of advice,
 
-### Anaemia in third
+recognition of danger signs, and referral
 
-Anaemia in third
+vi.
 
-Relative risk 0.95
+Follow up of people who...
 
-(CI 95% 0.9 — 1.01)
+📄 **Reference:** Page 10
 
-Based on data from 951
+### 3. SUMMARY OF ROLES AND RESPONSIBILITIES
 
-participants in 1 studies.
+# SUMMARY OF ROLES AND RESPONSIBILITIES
 
-(Randomized controlled)...
+8 SUMMARY OF ROLES AND RESPONSIBILITIES...
 
-📄 **Reference:** Page 453
+📄 **Reference:** Page 46
 
-### 5. Untitled
+### 4. Outcome 3
 
-WHO guidelines for malaria - 13 August 2025 - World Health Organization (WHO)
+### Outcome 3
 
-post-discharge. The main outcomes of interest were the impact of PDMC on re-admission (all-cause and severe anaemia),
+Outcome 3
 
-mortality (all-cause), severe anaemia, and blood transfusion. Other outcomes of interest included confirmed clinical malaria,
+Increased Knowledge of and Demand for
 
-severe malaria, anaemia, adverse events, and parasite prevalence. Three randomized double-blind placebo-controlled trials were
+iCCM
 
-included in the review. All the trials were con...
+The proportion of caregivers and
 
-📄 **Reference:** Page 128
+community members have positive health
+
+behaviors and practices (e.g., ITN use,
+
+completed referral for pneumonia, hand-
+
+washing, safe disposal of infant fecal
+
+matter, exclusive breastfeeding).
+
+80%
+
+Evaluation
+
+report...
+
+📄 **Reference:** Page 62
+
+### 5. Outcome 2
+
+### Outcome 2
+
+Outcome 2
+
+61...
+
+📄 **Reference:** Page 61
 
 
 ---
@@ -4574,7 +5561,7 @@ Next Steps / Monitoring: Consult the full source guideline or a clinician for pa
 
 When to Refer: Per excerpts and national guidance; seek urgent care if danger signs, severe disease, or instability is suspected.
 
-Citations: Page 108, Page 128, Page 280, Page 453
+Citations: Page 10, Page 46, Page 61, Page 62, Page 64
 
 ---
 **🧪 Guardrail Brain Validation:** ✅ Passed
@@ -4589,7 +5576,7 @@ Citations: Page 108, Page 128, Page 280, Page 453
 
 > Vector control bed nets IRS
 
-**Metrics:** Triage `GREEN` | Guardrail OK `True` | Confidence `0.90`
+**Metrics:** Triage `GREEN` | Guardrail OK `True` | Confidence `0.78`
 
 #### VHT standard (`vht_response`)
 
@@ -4638,9 +5625,9 @@ The symptoms can be managed at home with guidance. Follow the advice you were gi
 
 **FROM THE GUIDELINES:**
 
-• WHO Malaria Guidelines (NCBI Bookshelf), Page 297: Untitled
-• WHO Malaria Guidelines (NCBI Bookshelf), Page 298: Untitled
-• WHO Malaria Guidelines (NCBI Bookshelf), Page 338: measurements
+• WHO Malaria Guidelines (NCBI Bookshelf), Page 47: Control [HIGH FIDELITY]
+• WHO Malaria Guidelines (NCBI Bookshelf), Page 24: Support Supervision:
+• WHO Malaria Guidelines (NCBI Bookshelf), Page 49: EAM
 ```
 
 #### Referral note (`referral_note`)
@@ -4674,91 +5661,127 @@ Action: Follow advice below, monitor for changes
 #### BM25 + guardrail evidence bundle (`response` — markdown)
 
 ```
-**WHO Malaria Guidelines (NCBI Bookshelf)**
+**WHO guidelines for malaria - 13 August 2025**
 
 **Question:** Vector control bed nets IRS
 
-### 1. Untitled
+### 1. Control
 
-WHO guidelines for malaria - 13 August 2025 - World Health Organization (WHO)
+### Control
 
-26. REX Consortium. Heterogeneity of selection and the evolution of resistance. Trends in ecology & evolution 2013;28(2):110-8 Pubmed
+Quality
 
-Journal
+Assurance
 
-27. Sternberg ED, Thomas MB. Insights from agriculture for the management of insecticide resistance in disease vectors. Evolutionary
+and Quality
 
-applications 2018;11(4):404-414 Pubmed Journal
+Control
 
-28. Huijben S, Paaijmans KP. Putting evolution in elimination: Winning our ongoing battle with ...
+strictly adhered to.
 
-📄 **Reference:** Page 297
+ Government should ensure that policies are
 
-### 2. Untitled
+adhered to.
 
-WHO guidelines for malaria - 13 August 2025 - World Health Organization (WHO)
+47...
 
-44. Snow RW, Lindsay SW, Hayes RJ, Greenwood BM. Permethrin-treated bed nets (mosquito nets) prevent malaria in Gambian children.
+📄 **Reference:** Page 47
 
-Transactions of The Royal Society of Tropical Medicine and Hygiene 1988;82(6):838-842 Pubmed Journal Website
+### 2. Support Supervision:
 
-45. Russell TL, Lwetoijera DW, Maliti D, Chipwaza B, Kihonda J, Charlwood JD, et al. Impact of promoting longer-lasting insecticide
+### Support Supervision:
 
-treatment of bed nets upon malaria transmission...
+to the VHTs will be done immediately after the training on iCCM. Subsequently, VHTs will be supplied
 
-📄 **Reference:** Page 298
+with commodities based on their consumption rate. The health facilities will follow proper inventory
 
-### 3. measurements
+management procedures to replenish medicine stocks to VHTs, including cross-checking VHT registers
 
-### measurements
+and consumption logs to ensure appropriate accountability of the medicines. Health Facilities will also
 
-measurements
+ensure the availability of drugs and supplies to handle referred ...
 
-IRS
+📄 **Reference:** Page 24
 
-IRS
+### 3. EAM
 
-0.01) in intervention villages. (Data on
+### EAM
 
-numbers of participants at follow-up not
+quality of iCCM service delivery. Facilitate learning across communities (village to village, Facility to Facility) to promote and scale up best practices in
 
-provided)...
+iCCM
 
-📄 **Reference:** Page 338
+f)
 
-### 4. Acceptability
+Procurement and Supplies management: iCCM commodities should be integrated into existing district quantification, procurement, supply chain to the
 
-### Acceptability
+"last mile," inventory control, resupply, and logistics management information system (LMIS). Standard operating procedures and tools should be adhered
 
-Acceptability
+to to support sustain...
 
-The systematic review reported that wall decolourization, bad smell, an increase in bed bug nuisance,
+📄 **Reference:** Page 49
 
-and contamination of food grains were reported by study participants in India after spraying with
+### 4. VHT supervisory visit
 
-DDT [78]. However, these factors may depend on the insecticide and formulation used. In another study
+## VHT supervisory visit
 
-conducted in Pakistan [56], no persistent odour or residue was reported after spraying with the pyrethroid
+Annex 4:
 
-insecticide alpha-cypermethrin. In this same study, i...
+VHT supervisory visit
 
-📄 **Reference:** Page 68
+VHTs are volunteers, so supervision should be planned when they are available.   Before a supervisory visit, a supervisor should prepare
 
-### 5. 4.1.1 Interventions recommended for large-scale deployment
+to enable him or her to be thorough and helpful.
 
-### 4.1.1 Interventions recommended for large-scale deployment
+ Review past performance of the VHT
 
-4.1.1 Interventions recommended for large-scale deployment
+ Collect appropriate checklists and reporting forms to use during the supervision and the report from
 
-Interventions that are recommended for large-scale deployment in terms of malaria vector control are those that have proven
+the previous visit.
 
-protective efficacy to reduce or prevent infection and/or disease in humans and are broadly applicable for populations at risk of
+ Collect supplies, equipment, and/or materials that the VHT needs.
 
-malaria in most epidemiological and ecological settings.
+ Know dates of any r...
 
-Vector control interventions applicable for all populations at...
+📄 **Reference:** Page 58
 
-📄 **Reference:** Page 41
+### 5. EVEL ACTIVITIES
+
+### EVEL ACTIVITIES
+
+5.1 NATIONAL LEVEL ACTIVITIES
+
+Form the national iCCM Technical Working Group that will:
+
+a)
+
+Advocate and mobilize resources
+
+b) Sensitize and orient districts and other stakeholders
+
+c)
+
+Develop and monitor implementation TORs for
+
+the iCCM focal persons
+
+d) Design and oversee national iCCM rollout plans
+
+e)
+
+Building initial capacity for district training and
+
+supervision
+
+f)
+
+Monitor, supervise, and evaluate national iCCM
+
+program
+
+g) Utilize iCCM data for decision makin...
+
+📄 **Reference:** Page 12
 
 
 ---
@@ -4771,7 +5794,7 @@ Next Steps / Monitoring: Consult the full source guideline or a clinician for pa
 
 When to Refer: Per excerpts and national guidance; seek urgent care if danger signs, severe disease, or instability is suspected.
 
-Citations: Page 41, Page 68, Page 297, Page 298, Page 338
+Citations: Page 12, Page 24, Page 47, Page 49, Page 58
 
 ---
 **🧪 Guardrail Brain Validation:** ✅ Passed
@@ -4786,7 +5809,7 @@ Citations: Page 41, Page 68, Page 297, Page 298, Page 338
 
 > Elimination strategies and surveillance
 
-**Metrics:** Triage `GREEN` | Guardrail OK `True` | Confidence `0.90`
+**Metrics:** Triage `GREEN` | Guardrail OK `True` | Confidence `0.76`
 
 #### VHT standard (`vht_response`)
 
@@ -4799,10 +5822,11 @@ Citations: Page 41, Page 68, Page 297, Page 298, Page 338
 
 **WHAT TO DO (step by step):**
 
-**Step 1:** Assess patient carefully
-**Step 2:** Check for danger signs (see below)
-**Step 3:** If unsure, refer to health facility
-**Step 4:** Record all findings
+**Step 1:** What are other roles that community-based health workers can play apart from managing the top
+**Step 2:** What are the best ways to improve and sustain the performance of VHTs?
+**Step 3:** What are the costs and performance of different training methods for (illiterate/literate) VHTs?
+**Step 4:** What is the optimal number of VHTs to give near-universal coverage to a given geographic area?
+**Step 5:** Which factors reduce attrition?
 
 **MONITORING:**
 
@@ -4835,9 +5859,14 @@ The symptoms can be managed at home with guidance. Follow the advice you were gi
 
 **FROM THE GUIDELINES:**
 
-• WHO Malaria Guidelines (NCBI Bookshelf), Page 228: 6. Interventions in the final phase of elimination and prevention of re-establishment
-• WHO Malaria Guidelines (NCBI Bookshelf), Page 30: Scope
-• WHO Malaria Guidelines (NCBI Bookshelf), Page 146: (2022)
+• WHO Malaria Guidelines (NCBI Bookshelf), Page 45: VHTs
+• WHO Malaria Guidelines (NCBI Bookshelf), Page 63: Activity 3.1.2. [HIGH FIDELITY]
+• WHO Malaria Guidelines (NCBI Bookshelf), Page 12: CTIVITIES
+
+---
+**GUARDRAIL WARNINGS:**
+
+• Citation to page 1 not found in knowledge base
 ```
 
 #### Referral note (`referral_note`)
@@ -4849,9 +5878,9 @@ The symptoms can be managed at home with guidance. Follow the advice you were gi
 **Reason:** Routine evidence retrieval from national guidelines
 
 **Actions taken:**
-• Assess patient carefully
-• Check for danger signs (see below)
-• If unsure, refer to health facility
+• What are other roles that community-based health workers can play apart from managing the top
+• What are the best ways to improve and sustain the performance of VHTs?
+• What are the costs and performance of different training methods for (illiterate/literate) VHTs?
 
 **Referral completed:** [ ]
 **Health worker received:** [ ]
@@ -4871,95 +5900,177 @@ Action: Follow advice below, monitor for changes
 #### BM25 + guardrail evidence bundle (`response` — markdown)
 
 ```
-**WHO Malaria Guidelines (NCBI Bookshelf)**
+**WHO guidelines for malaria - 13 August 2025**
 
 **Question:** Elimination strategies and surveillance
 
-### 1. 6. Interventions in the final phase of elimination and prevention of re-establishment
+### 1. VHTs
 
-### 6. Interventions in the final phase of elimination and prevention of re-establishment
+### VHTs
 
-6. Interventions in the final phase of elimination and prevention of re-establishment
+A. VHTs
 
-The Global technical strategy for malaria 2016-2030 [4] urges all malaria-endemic countries to accelerate towards elimination and
+1.
 
-attainment of malaria-free status. WHO recommends that all countries ensure access to malaria prevention, diagnosis and treatment as
+What are other roles that community-based health workers can play apart from managing the top
 
-part of universal health coverage; recommendations relate...
+killers, such as community-based surveillance, immunization, management of cholera, and preparing
 
-📄 **Reference:** Page 228
+families for emergencies/outbreaks?
 
-### 2. Scope
+2.
 
-### Scope
+What are the best ways to improve and sustain the performance of VHTs?
 
-Scope
+3.
 
-The consolidated WHO Guidelines for malaria bring together all recommendations for malaria, including prevention using vector control,
+What are the costs and performance of different training methods for (illiterate/literate) VHTs?
 
-preventive chemotherapy and the vaccine; diagnosis, treatment and elimination strategies. The Guidelines also provide links to other
+4.
 
-resources including unpublished evidence reviewed at the time of formulating recommendations, guidance and information on strategic
+What is the optimal number of VHTs to give near-universal covera...
 
-use of information to drive impact, surveillance, monitoring and evaluation, op...
+📄 **Reference:** Page 45
 
-📄 **Reference:** Page 30
+### 2. Activity 3.1.2.
 
-### 3. (2022)
+### Activity 3.1.2.
 
-### (2022)
+Activity 3.1.1. Develop and disseminate an
 
-MDA to reduce transmission of P. vivax (2022)
+iCCM communication strategy
 
-In areas with P. vivax transmission, antimalarial medicine can be given as chemoprevention through mass drug administration
+Number of approved communication
 
-(MDA) to reduce transmission.
+strategies
 
-•
+1
 
-MDA may quickly reduce transmission of P. vivax, but the effect wanes within 1–3 months. Therefore, if MDA is
+Approved
 
-implemented, it should be one of several components of a robust malaria elimination programme (including, at minimum,
+communica
 
-good coverage of case-based surveillance with parasi...
+tion strategy
 
-📄 **Reference:** Page 146
+MOH,
 
-### 4. (2022)
+Partners
 
-### (2022)
+To develop a strategy in
 
-MDA to reduce transmission of P. vivax (2022)
+year one to be integrated
 
-In areas with P. vivax transmission, antimalarial medicine can be given as chemoprevention through mass drug
+into the national
 
-administration (MDA) to reduce transmission.
+communication strategy.
 
-Remark:
+Dissemination to be done
 
-•
+throughout the years
 
-MDA may quickly reduce transmission of P. vivax, but the effect wanes within 1–3 months. Therefore, if MDA is
+Activity 3.1.2. Print and disseminate
 
-implemented, it should be one of several components of a robust malaria elimination programme (including, at
+guidelines for sensitization and mobilization
 
-minimum, good coverage of case-based surveillance wi...
+for iCCM at all levels
 
-📄 **Reference:** Page 15
+The number of guidelines disseminated.
 
-### 5. Untitled
+Activity
 
-WHO guidelines for malaria - 13 August 2025 - World Health Organization (WHO)
+...
 
-problem-solving approach using local data to identify recommendations that are relevant at a country level and based on local
+📄 **Reference:** Page 63
 
-context, defining stratum-specific packages of interventions that optimize impact and are prioritized for resource allocation. This shift
+### 3. CTIVITIES
 
-moves away from overly prescriptive recommendations and will clearly distinguish evidence-informed recommendations from contextual
+### CTIVITIES
 
-considerations. The con...
+5.6 VHT LEVEL ACTIVITIES
 
-📄 **Reference:** Page 36
+a)
+
+Home visiting
+
+b) Mobilization of communities for utilization of
+
+f)
+
+Follow up of people who have been discharged
+
+from health facility and those on long term
+
+treatment
+
+g) Distribution of health commodities
+
+h) Community information management
+
+i)
+
+Disease surveillance
+
+health services
+
+c)
+
+Health Promotion and Education
+
+d) Community-based case management of common
+
+ill-health conditions
+
+e)
+
+Follow up of the mothers during pregnancy and
+
+after bi...
+
+📄 **Reference:** Page 12
+
+### 4. Supportive Tool:  iCCM Benchmark tool
+
+### Supportive Tool:  iCCM Benchmark tool
+
+Step 1: Regular meetings of the National iCCM TWG
+
+At the national level, the mandate is to ensure continuous advocacy for increased resources, partners, and
+
+buy-in for iCCM. The national level will spearhead coordination, harmonize advocacy activities, and
+
+disseminate policy guidelines within and outside the sector.  This step is aimed at facilitating the integration
+
+of iCCM services with multiple national strategies, including Child Survival, IMNCI...
+
+📄 **Reference:** Page 13
+
+### 5. Activity 3.1.3.
+
+### Activity 3.1.3.
+
+Activity 3.1.3. Conduct sensitization
+
+meetings for traditional and civic leaders
+
+regarding iCCM
+
+Number of sensitization meetings
+
+conducted
+
+1,920
+
+Activity
+
+reports
+
+MOH,
+
+Partners
+
+20 leaders per district...
+
+📄 **Reference:** Page 63
 
 
 ---
@@ -4972,10 +6083,13 @@ Next Steps / Monitoring: Consult the full source guideline or a clinician for pa
 
 When to Refer: Per excerpts and national guidance; seek urgent care if danger signs, severe disease, or instability is suspected.
 
-Citations: Page 15, Page 30, Page 36, Page 146, Page 228
+Citations: Page 12, Page 13, Page 45, Page 63
 
 ---
-**🧪 Guardrail Brain Validation:** ✅ Passed
+**🧪 Guardrail Brain Validation:**
+
+**⚠️ Warnings:**
+• Citation to page 1 not found in knowledge base
 
 ```
 
@@ -4991,31 +6105,31 @@ Citations: Page 15, Page 30, Page 36, Page 146, Page 228
 
 | # | Triage | Guardrail OK | Confidence | VHT chars | Referral chars | Quick chars |
 |---|--------|--------------|------------|-----------|----------------|-------------|
-| 1 | GREEN | True | 0.90 | 1448 | 380 | 123 |
-| 2 | GREEN | True | 0.90 | 1456 | 380 | 123 |
-| 3 | GREEN | True | 0.90 | 1452 | 380 | 123 |
-| 4 | GREEN | True | 0.90 | 1455 | 380 | 123 |
-| 5 | GREEN | True | 0.90 | 1476 | 380 | 123 |
-| 6 | GREEN | True | 0.90 | 1467 | 380 | 123 |
-| 7 | GREEN | True | 0.90 | 1508 | 380 | 123 |
-| 8 | GREEN | True | 0.90 | 1432 | 380 | 123 |
-| 9 | GREEN | True | 0.90 | 1440 | 380 | 123 |
-| 10 | GREEN | True | 0.90 | 1471 | 380 | 123 |
-| 11 | GREEN | True | 0.90 | 1519 | 380 | 123 |
-| 12 | GREEN | True | 0.90 | 1460 | 380 | 123 |
-| 13 | GREEN | True | 0.90 | 1555 | 380 | 123 |
-| 14 | GREEN | True | 0.90 | 1597 | 380 | 123 |
-| 15 | GREEN | True | 0.90 | 1458 | 380 | 123 |
-| 16 | GREEN | True | 0.90 | 1477 | 380 | 123 |
-| 17 | GREEN | True | 0.90 | 1453 | 380 | 123 |
-| 18 | GREEN | True | 0.90 | 1456 | 380 | 123 |
-| 19 | GREEN | True | 0.90 | 1499 | 380 | 123 |
-| 20 | GREEN | True | 0.90 | 1473 | 380 | 123 |
-| 21 | GREEN | True | 0.90 | 1422 | 380 | 123 |
-| 22 | GREEN | True | 0.90 | 1546 | 380 | 123 |
-| 23 | GREEN | True | 0.90 | 1468 | 380 | 123 |
-| 24 | GREEN | True | 0.90 | 1436 | 380 | 123 |
-| 25 | GREEN | True | 0.90 | 1428 | 380 | 123 |
+| 1 | GREEN | True | 0.84 | 1495 | 380 | 123 |
+| 2 | GREEN | True | 0.95 | 1651 | 443 | 123 |
+| 3 | GREEN | True | 1.00 | 2298 | 565 | 123 |
+| 4 | GREEN | True | 0.89 | 1586 | 404 | 123 |
+| 5 | GREEN | True | 0.93 | 1532 | 380 | 123 |
+| 6 | GREEN | True | 0.93 | 1511 | 391 | 123 |
+| 7 | GREEN | True | 0.79 | 1513 | 380 | 123 |
+| 8 | GREEN | True | 0.90 | 1362 | 326 | 123 |
+| 9 | GREEN | True | 0.97 | 1586 | 374 | 123 |
+| 10 | GREEN | True | 0.94 | 1375 | 326 | 123 |
+| 11 | GREEN | True | 0.88 | 1567 | 380 | 123 |
+| 12 | GREEN | True | 0.89 | 1488 | 380 | 123 |
+| 13 | GREEN | True | 0.91 | 2871 | 399 | 123 |
+| 14 | GREEN | True | 0.95 | 1598 | 380 | 123 |
+| 15 | GREEN | True | 0.95 | 1609 | 404 | 123 |
+| 16 | GREEN | True | 0.68 | 1420 | 377 | 123 |
+| 17 | GREEN | True | 0.90 | 1571 | 418 | 123 |
+| 18 | GREEN | True | 0.70 | 1540 | 380 | 123 |
+| 19 | GREEN | True | 0.87 | 1729 | 484 | 123 |
+| 20 | GREEN | True | 0.91 | 1586 | 396 | 123 |
+| 21 | GREEN | True | 0.83 | 1566 | 399 | 123 |
+| 22 | GREEN | True | 0.81 | 1516 | 380 | 123 |
+| 23 | GREEN | True | 0.89 | 1505 | 380 | 123 |
+| 24 | GREEN | True | 0.96 | 1647 | 435 | 123 |
+| 25 | GREEN | True | 0.92 | 1510 | 380 | 123 |
 
 ### Full queries and formatted outputs
 
@@ -5025,7 +6139,7 @@ Citations: Page 15, Page 30, Page 36, Page 146, Page 228
 
 > Integrated management of childhood illness pneumonia classification
 
-**Metrics:** Triage `GREEN` | Guardrail OK `True` | Confidence `0.90`
+**Metrics:** Triage `GREEN` | Guardrail OK `True` | Confidence `0.84`
 
 #### VHT standard (`vht_response`)
 
@@ -5074,9 +6188,9 @@ The symptoms can be managed at home with guidance. Follow the advice you were gi
 
 **FROM THE GUIDELINES:**
 
-• Uganda Clinical Guidelines 2023, Page 37: IPT
-• Uganda Clinical Guidelines 2023, Page 932: 17.4  INTEGRATED COMMUNITY CASE MANAGEMENT
-• Uganda Clinical Guidelines 2023, Page 878: Childhood Illness
+• Uganda Clinical Guidelines 2023, Page 893: Childhood Illness
+• Uganda Clinical Guidelines 2023, Page 929: 17.4  INTEGRATED COMMUNITY CASE MANAGEMENT [HIGH FIDELITY]
+• Uganda Clinical Guidelines 2023, Page 876: Childhood Illness [HIGH FIDELITY]
 ```
 
 #### Referral note (`referral_note`)
@@ -5114,83 +6228,69 @@ Action: Follow advice below, monitor for changes
 
 **Question:** Integrated management of childhood illness pneumonia classification
 
-### 1. IPT
+### 1. Childhood Illness
 
-### IPT
+### Childhood Illness
 
-HBV
+Uganda Clinical Guidelines 2023
 
-Hepatitis B Virus
+CHAPTER 17: Childhood Illness
 
-HC
+CLINICAL FEATURES
 
-Health Centre
+CLASSIFY AS
 
-Hct/Ht
+MANAGEMENT
 
-Haematocrit
+No signs of
 
-HCW
+severe disease
 
-Health Care Worker
+or pneumonia
 
-HDU
+
 
-High Dependency Unit
+If wheezing give an inhaled
 
-HE
+bronchodilator (salbutamol
 
-Hepatic Encephalopathy
+inhaler every 3-4 hours as
 
-HepB
+necessary) for 5 days
 
-Hepatitis B
+Cough or
 
-HHS
+Cold (No
 
-Hyperosmolar Hyperglycaemic State
+pneumo­
 
-Hib
+nia)
 
-Haemophilus Influenzae Type B
+Most likely
 
-HIV
+viral so no
 
-Human Immunodeficiency Virus
+antibiotics
 
-HPV
+needed
 
-Human Papilloma Virus
+
 
-HR
+Soothe throat/relieve
 
-Heart Rate
+cough with safe remedy
 
-HRP
+
 
-High-Risk Pregnancy
+If coughing for more
 
-HRS
+than 14 days or recurrent
 
-Hepatorenal Syndrome
+wheezing, refer for possible
 
-HSV
+T...
 
-Herpes Simplex Virus
-
-HVS
-
-High Vaginal  Swab
-
-ICCM
-
-Integrated Community Case Management
-
-ICU
-
-Intensive Care  Uni...
-
-📄 **Reference:** Page 37
+📄 **Reference:** Page 893
 
 ### 2. 17.4  INTEGRATED COMMUNITY CASE MANAGEMENT
 
@@ -5216,37 +6316,9 @@ monia and diarrhoea
 
 ...
 
-📄 **Reference:** Page 932
+📄 **Reference:** Page 929
 
 ### 3. Childhood Illness
-
-### Childhood Illness
-
-Uganda Clinical Guidelines 2023
-
-CHAPTER 17: Childhood Illness
-
--
-
-Pinch the skin of the
-
-abdomen. Does it go
-
-back
-
--
-
-Very slowly? (takes >2
-
-seconds)
-
--
-
-Slowly? (up to 2 seconds)...
-
-📄 **Reference:** Page 878
-
-### 4. Childhood Illness
 
 ### Childhood Illness
 
@@ -5270,17 +6342,47 @@ eyes
 
 FOLLOW UP in 2 days:...
 
-📄 **Reference:** Page 879
+📄 **Reference:** Page 876
 
-### 5. Childhood Illness
+### 4. Childhood Illness
 
 ### Childhood Illness
 
 Uganda Clinical Guidelines 2023
 
-CHAPTER 17: Childhood Illness...
+CHAPTER 17: Childhood Illness
 
-📄 **Reference:** Page 897
+CLINICAL FEATURES
+
+CLASSIFY AS
+
+MANAGEMENT
+
+~
+
+Or very
+
+low
+
+weight
+
+for age
+
+
+
+a child aged 6 months
+
+or more...
+
+📄 **Reference:** Page 907
+
+### 5. 17.4  Integrated Community Case Management................................863
+
+### 17.4  Integrated Community Case Management................................863
+
+17.4  Integrated Community Case Management................................863...
+
+📄 **Reference:** Page 16
 
 
 ---
@@ -5293,7 +6395,7 @@ Next Steps / Monitoring: Consult the full source guideline or a clinician for pa
 
 When to Refer: Per excerpts and national guidance; seek urgent care if danger signs, severe disease, or instability is suspected.
 
-Citations: Page 37, Page 878, Page 879, Page 897, Page 932
+Citations: Page 16, Page 876, Page 893, Page 907, Page 929
 
 ---
 **🧪 Guardrail Brain Validation:** ✅ Passed
@@ -5308,7 +6410,7 @@ Citations: Page 37, Page 878, Page 879, Page 897, Page 932
 
 > Diarrhea dehydration ORS zinc treatment plan
 
-**Metrics:** Triage `GREEN` | Guardrail OK `True` | Confidence `0.90`
+**Metrics:** Triage `GREEN` | Guardrail OK `True` | Confidence `0.95`
 
 #### VHT standard (`vht_response`)
 
@@ -5321,10 +6423,11 @@ Citations: Page 37, Page 878, Page 879, Page 897, Page 932
 
 **WHAT TO DO (step by step):**
 
-**Step 1:** Assess patient carefully
-**Step 2:** Check for danger signs (see below)
-**Step 3:** If unsure, refer to health facility
-**Step 4:** Record all findings
+**Step 1:** Give zinc for 10 days: Child < 6 months: 10 mg per day;
+**Step 2:** If child exclusively breastfed, give ORS or safe
+**Step 3:** In addition to the usual fluid intake, give ORS after
+**Step 4:** Give the mother 2 packets to use at home
+**Step 5:** Giving ORS is especially important if the child
 
 **MONITORING:**
 
@@ -5357,9 +6460,9 @@ The symptoms can be managed at home with guidance. Follow the advice you were gi
 
 **FROM THE GUIDELINES:**
 
-• Uganda Clinical Guidelines 2023, Page 75: Plan A (No dehydration and for prevention)
-• Uganda Clinical Guidelines 2023, Page 77: Plan C (Severe dehydration)
-• Uganda Clinical Guidelines 2023, Page 75: ORS
+• Uganda Clinical Guidelines 2023, Page 897: Note: [HIGH FIDELITY]
+• Uganda Clinical Guidelines 2023, Page 75: Plan A (No dehydration and for prevention) [HIGH FIDELITY]
+• Uganda Clinical Guidelines 2023, Page 77: Plan C (Severe dehydration) [HIGH FIDELITY]
 ```
 
 #### Referral note (`referral_note`)
@@ -5371,9 +6474,9 @@ The symptoms can be managed at home with guidance. Follow the advice you were gi
 **Reason:** Routine evidence retrieval from national guidelines
 
 **Actions taken:**
-• Assess patient carefully
-• Check for danger signs (see below)
-• If unsure, refer to health facility
+• Give zinc for 10 days: Child < 6 months: 10 mg per day;
+• If child exclusively breastfed, give ORS or safe
+• In addition to the usual fluid intake, give ORS after
 
 **Referral completed:** [ ]
 **Health worker received:** [ ]
@@ -5397,7 +6500,25 @@ Action: Follow advice below, monitor for changes
 
 **Question:** Diarrhea dehydration ORS zinc treatment plan
 
-### 1. Plan A (No dehydration and for prevention)
+### 1. Note:
+
+### Note:
+
+Note:
+
+ The current recommendation for treatment of diarrhoea is
+
+oral rehydration salts (ORS) and zinc salts (Zn sulphate, Zn
+
+gluconate or Zn acetate).
+
+- Give zinc for 10 days: Child < 6 months: 10 mg per day;
+
+Child > 6 months: 20 mg per day...
+
+📄 **Reference:** Page 897
+
+### 2. Plan A (No dehydration and for prevention)
 
 ### Plan A (No dehydration and for prevention)
 
@@ -5425,7 +6546,7 @@ Give extra fluids: as much as the child will take
 
 📄 **Reference:** Page 75
 
-### 2. Plan C (Severe dehydration)
+### 3. Plan C (Severe dehydration)
 
 ### Plan C (Severe dehydration)
 
@@ -5437,7 +6558,41 @@ LOC...
 
 📄 **Reference:** Page 77
 
-### 3. ORS
+### 4. ORS
+
+### ORS
+
+Zinc Tablets and
+
+ORS
+
+Diarrhoea
+
+Zinc
+
+< 14 days without
+
+blood
+
+2-6 months: ½ tab once a day
+
+for 10 days
+
+6 months to 5 years: 1 tab
+
+once a day for 10 days ORS
+
+As much as the chid wants but
+
+at least ½ cup after each loose
+
+stool
+
+864...
+
+📄 **Reference:** Page 930
+
+### 5. ORS
 
 ### ORS
 
@@ -5469,46 +6624,6 @@ If child vomits, wait 10 minutes, then give more slowly
 
 📄 **Reference:** Page 75
 
-### 4. Emergencies and Trauma
-
-### Emergencies and Trauma
-
-Uganda Clinical Guidelines 2023
-
-CHAPTER 1: Emergencies and Trauma
-
-TREATMENT
-
-LOC
-
-If mother must leave before completing the child’s treatment
-
-
-
-Show her how to prepare ORS at home and how much
-
-ORS to give to finish the 4-hour treatment
-
-- Give her enough packets to complete this and 2
-
-more to complete Plan A at home
-
-
-
-Counsel mother on the 4 rules of home treatment: extra
-
-fluids, continue feeding, zinc, when to return...
-
-📄 **Reference:** Page 77
-
-### 5. Management
-
-### Management
-
-Management...
-
-📄 **Reference:** Page 75
-
 
 ---
 
@@ -5520,7 +6635,7 @@ Next Steps / Monitoring: Consult the full source guideline or a clinician for pa
 
 When to Refer: Per excerpts and national guidance; seek urgent care if danger signs, severe disease, or instability is suspected.
 
-Citations: Page 75, Page 77
+Citations: Page 75, Page 77, Page 897, Page 930
 
 ---
 **🧪 Guardrail Brain Validation:** ✅ Passed
@@ -5535,7 +6650,7 @@ Citations: Page 75, Page 77
 
 > HIV antiretroviral therapy first-line regimen adults
 
-**Metrics:** Triage `GREEN` | Guardrail OK `True` | Confidence `0.90`
+**Metrics:** Triage `GREEN` | Guardrail OK `True` | Confidence `1.00`
 
 #### VHT standard (`vht_response`)
 
@@ -5548,10 +6663,10 @@ Citations: Page 75, Page 77
 
 **WHAT TO DO (step by step):**
 
-**Step 1:** Assess patient carefully
-**Step 2:** Check for danger signs (see below)
-**Step 3:** If unsure, refer to health facility
-**Step 4:** Record all findings
+**Step 1:** For recipients of care on  NNRTI-based First Line regimen whose VL is not suppressed, switch
+**Step 2:** All PLHIV should receive resistance testing to inform the prescription of 2ndand 3rd-line medicines.
+**Step 3:** Since all 3rd-line PLHIV will have prior PI Exposure, DRV/r will be taken twice a day.
+**Step 4:** For all PLHIV failing first-line ART, optimize the second-line ART using HIVDR test
 
 **MONITORING:**
 
@@ -5582,49 +6697,11 @@ The symptoms can be managed at home with guidance. Follow the advice you were gi
 • Record all patients you see
 • Keep your VHT kit and referral forms ready
 
-**FROM THE GUIDELINES:**
+**EXACT DOSING (copy from guidelines — do not change numbers):**
 
-• Uganda Clinical Guidelines 2023, Page 444: ment regimen
-• Uganda Clinical Guidelines 2023, Page 444: Important:
-• Uganda Clinical Guidelines 2023, Page 444: Susceptible TB: 1st line treatment regimens
-```
+### 3.1.5 Recommended First Line Regimens in Adults, Adolescents,
 
-#### Referral note (`referral_note`)
-
-```
-**VHT REFERRAL NOTE**
-
-**Triage:** 🟢 GREEN (Manage at Community Level)
-**Reason:** Routine evidence retrieval from national guidelines
-
-**Actions taken:**
-• Assess patient carefully
-• Check for danger signs (see below)
-• If unsure, refer to health facility
-
-**Referral completed:** [ ]
-**Health worker received:** [ ]
-
----
-_This is a VHT referral. Please assess patient promptly._
-```
-
-#### Quick summary (`quick_summary`)
-
-```
-MANAGE AT HOME
-Reason: Routine evidence retrieval from national guidelines
-Action: Follow advice below, monitor for changes
-```
-
-#### BM25 + guardrail evidence bundle (`response` — markdown)
-
-```
-**Uganda Clinical Guidelines 2023**
-
-**Question:** HIV antiretroviral therapy first-line regimen adults
-
-### 1. ment regimen
+3.1.5 Recommended First Line Regimens in Adults, Adolescents,
 
 ### ment regimen
 
@@ -5660,49 +6737,123 @@ CD4>100 cells/L
 
 2HPM
 
-378...
+377
 
-📄 **Reference:** Page 444
+**FROM THE GUIDELINES:**
 
-### 2. Important:
+• Uganda Clinical Guidelines 2023, Page 272: 3.1.5 Recommended First Line Regimens in Adults, Adolescents, [EXACT DOSING]
+• Uganda Clinical Guidelines 2023, Page 443: ment regimen [EXACT DOSING]
+• Uganda Clinical Guidelines 2023, Page 290: HIV/AIDS and Sexually Transmitted Infections [HIGH FIDELITY]
+```
 
-### Important:
+#### Referral note (`referral_note`)
 
-Important: The choice of regimen now depends on rifampicin
+```
+**VHT REFERRAL NOTE**
 
-sensitivity and not on the previous history of treatment:
+**Triage:** 🟢 GREEN (Manage at Community Level)
+**Reason:** Routine evidence retrieval from national guidelines
 
-
+**Actions taken:**
+• For recipients of care on  NNRTI-based First Line regimen whose VL is not suppressed, switch
+• All PLHIV should receive resistance testing to inform the prescription of 2ndand 3rd-line medicines.
+• Since all 3rd-line PLHIV will have prior PI Exposure, DRV/r will be taken twice a day.
 
-All patients without rifampicin resistance (either new or re-treat­
+**Referral completed:** [ ]
+**Health worker received:** [ ]
 
-ments) are treated with 1st line regimen.
+---
+_This is a VHT referral. Please assess patient promptly._
+```
 
-
+#### Quick summary (`quick_summary`)
 
-Patients with rifampicin resistance (either new or re- treatments)
+```
+MANAGE AT HOME
+Reason: Routine evidence retrieval from national guidelines
+Action: Follow advice below, monitor for changes
+```
 
-are treated with second line medication in a designated MDR-TB
+#### BM25 + guardrail evidence bundle (`response` — markdown)
 
-treatment facility....
+```
+**Uganda Clinical Guidelines 2023**
 
-📄 **Reference:** Page 444
+**Question:** HIV antiretroviral therapy first-line regimen adults
 
-### 3. Susceptible TB: 1st line treatment regimens
+### 1. 3.1.5 Recommended First Line Regimens in Adults, Adolescents,
 
-### Susceptible TB: 1st line treatment regimens
+### 3.1.5 Recommended First Line Regimens in Adults, Adolescents,
 
-Susceptible TB: 1st line treatment regimens
+3.1.5 Recommended First Line Regimens in Adults, Adolescents,...
 
-For patients without rifampicin resistance to  Gene Xpert MTB/Rif (both
+📄 **Reference:** Page 272
 
-new and re-treatment cases).
+### 2. ment regimen
 
-New cases not belonging to priority (risk) groups and in which diagnosis
+### ment regimen
 
-was done by sputum examination will also be treated with this regimen....
+Alternative 1st-line treat­
 
-📄 **Reference:** Page 444
+ment regimen
+
+All forms of TB in children
+
+(2 months to 16 years) with
+
+non-severe disease
+
+2 HRE(Z)
+
+2RH
+
+G e n e r a l
+
+Hospital and
+
+above
+
+All forms of TB in adults
+
+above 12 years, weight
+
+>40 Kgs, if HIV positive
+
+CD4>100 cells/L
+
+2 HPMZ
+
+2HPM
+
+377...
+
+📄 **Reference:** Page 443
+
+### 3. HIV/AIDS and Sexually Transmitted Infections
+
+### HIV/AIDS and Sexually Transmitted Infections
+
+Uganda Clinical Guidelines 2023
+
+CHAPTER 3: HIV/AIDS and Sexually Transmitted Infections
+
+•	 For recipients of care on  NNRTI-based First Line regimen whose VL is not suppressed, switch
+
+without a second VL but conduct IAC to improve adherence to new regimen.
+
+•	 All PLHIV should receive resistance testing to inform the prescription of 2ndand 3rd-line medicines.
+
++ FTC + LPV/r
+
+NOTE: For details
+
+implementat ion
+
+on the third-line
+
+Please see the...
+
+📄 **Reference:** Page 290
 
 ### 4. HIV/AIDS and Sexually Transmitted Infections
 
@@ -5791,7 +6942,7 @@ Next Steps / Monitoring: Consult the full source guideline or a clinician for pa
 
 When to Refer: Per excerpts and national guidance; seek urgent care if danger signs, severe disease, or instability is suspected.
 
-Citations: Page 268, Page 289, Page 444
+Citations: Page 268, Page 272, Page 289, Page 290, Page 443
 
 ---
 **🧪 Guardrail Brain Validation:** ✅ Passed
@@ -5806,7 +6957,7 @@ Citations: Page 268, Page 289, Page 444
 
 > Tuberculosis treatment regimen and contact investigation
 
-**Metrics:** Triage `GREEN` | Guardrail OK `True` | Confidence `0.90`
+**Metrics:** Triage `GREEN` | Guardrail OK `True` | Confidence `0.89`
 
 #### VHT standard (`vht_response`)
 
@@ -5819,10 +6970,11 @@ Citations: Page 268, Page 289, Page 444
 
 **WHAT TO DO (step by step):**
 
-**Step 1:** Assess patient carefully
-**Step 2:** Check for danger signs (see below)
-**Step 3:** If unsure, refer to health facility
-**Step 4:** Record all findings
+**Step 1:** Persons living with HIV
+**Step 2:** Child & adult contacts of pulmonary TB patients
+**Step 3:** Assess for cough, fever, weight loss and nights
+**Step 4:** If any of the TB symptoms are present, do
+**Step 5:** evaluation for TB
 
 **MONITORING:**
 
@@ -5855,9 +7007,9 @@ The symptoms can be managed at home with guidance. Follow the advice you were gi
 
 **FROM THE GUIDELINES:**
 
-• Uganda Clinical Guidelines 2023, Page 166: Investigation
-• Uganda Clinical Guidelines 2023, Page 497: Investigation
-• Uganda Clinical Guidelines 2023, Page 452: 5.3.2.3	 Tuberculosis Preventive Treatment
+• Uganda Clinical Guidelines 2023, Page 451: 5.3.2.3	 Tuberculosis Preventive Treatment [HIGH FIDELITY]
+• Uganda Clinical Guidelines 2023, Page 9: Untitled [HIGH FIDELITY]
+• Uganda Clinical Guidelines 2023, Page 318: 3.1.10.1	 Tuberculosis and HIV Co-Infection
 ```
 
 #### Referral note (`referral_note`)
@@ -5869,9 +7021,9 @@ The symptoms can be managed at home with guidance. Follow the advice you were gi
 **Reason:** Routine evidence retrieval from national guidelines
 
 **Actions taken:**
-• Assess patient carefully
-• Check for danger signs (see below)
-• If unsure, refer to health facility
+• Persons living with HIV
+• Child & adult contacts of pulmonary TB patients
+• Assess for cough, fever, weight loss and nights
 
 **Referral completed:** [ ]
 **Health worker received:** [ ]
@@ -5895,23 +7047,7 @@ Action: Follow advice below, monitor for changes
 
 **Question:** Tuberculosis treatment regimen and contact investigation
 
-### 1. Investigation
-
-### Investigation
-
-Investigation...
-
-📄 **Reference:** Page 166
-
-### 2. Investigation
-
-### Investigation
-
-Investigation...
-
-📄 **Reference:** Page 497
-
-### 3. 5.3.2.3	 Tuberculosis Preventive Treatment
+### 1. 5.3.2.3	 Tuberculosis Preventive Treatment
 
 ### 5.3.2.3	 Tuberculosis Preventive Treatment
 
@@ -5935,53 +7071,63 @@ of people:
 
 Do not use TPT in cases ...
 
-📄 **Reference:** Page 452
+📄 **Reference:** Page 451
 
-### 4. HIV/AIDS and Sexually Transmitted Infections
-
-### HIV/AIDS and Sexually Transmitted Infections
+### 2. Untitled
 
 Uganda Clinical Guidelines 2023
 
-CHAPTER 3: HIV/AIDS and Sexually Transmitted Infections
+5.3.2.1 Anti-TB Drugs Side Effects..........................................................................381
 
-ARV regimen substitution for patients initiating TB treatment while on ART
+5.3.2.2 Prevention and Infection Control of TB........................................................384
 
-Age Group
+5.3.2.3 Tuberculosis Preventive Treatment................................................................385
 
-Regimen When Di­
+5.3.2.5 TB Preventive Treatment Dosing Chart........................................................386...
 
-agnosed With Tb
+📄 **Reference:** Page 9
 
-Recommended Action/ Sub­
+### 3. 3.1.10.1	 Tuberculosis and HIV Co-Infection
 
-stitution
+### 3.1.10.1	 Tuberculosis and HIV Co-Infection
 
-Adults, Preg­
+3.1.10.1	 Tuberculosis and HIV Co-Infection
 
-n a n t  a n d
+Active TB may be present when ART needs to be initiated or it may
 
-Breastfeeding
+develop during treatment.
 
-Women and
+TB and HIV care for co-infected patients should be provided in an
 
-Adolescents
+integrated manner under one roof by one care team (one-stop-shop).
 
-If on LPV/r based
+Co-management of TB and HIV is complicated by:
 
-regimen
+~
 
-Continue the same regimen but
+Drug interactions between rifampicin and both the NNRTI
 
-double the dose of DTG (give
+and PI classes
 
-DTG twice daily)
+~
 
-If on ATV/r based
+Immune reconstitution inflammatory syndrome (IRIS)...
 
-regim...
+📄 **Reference:** Page 318
 
-📄 **Reference:** Page 320
+### 4. 5.3 Tuberculosis (Tb).....................................................................366
+
+### 5.3 Tuberculosis (Tb).....................................................................366
+
+5.3 Tuberculosis (Tb).....................................................................366
+
+5.3.1Definition, Clinical Features and Diagnosis of TB..............................................366
+
+5.3.1.1Tuberculosis in Children and adolescents.......................................................372
+
+5.3.1.2Drug-Resistant TB.........................................................................
+
+📄 **Reference:** Page 8
 
 ### 5. Contact tracing
 
@@ -5997,7 +7143,7 @@ Tracing of contacts of TB patients
 
 Routine screening of health workers for latent & active TB...
 
-📄 **Reference:** Page 451
+📄 **Reference:** Page 450
 
 
 ---
@@ -6010,7 +7156,7 @@ Next Steps / Monitoring: Consult the full source guideline or a clinician for pa
 
 When to Refer: Per excerpts and national guidance; seek urgent care if danger signs, severe disease, or instability is suspected.
 
-Citations: Page 166, Page 320, Page 451, Page 452, Page 497
+Citations: Page 8, Page 9, Page 318, Page 450, Page 451
 
 ---
 **🧪 Guardrail Brain Validation:** ✅ Passed
@@ -6025,7 +7171,7 @@ Citations: Page 166, Page 320, Page 451, Page 452, Page 497
 
 > Malaria uncomplicated case management ACT dosing children
 
-**Metrics:** Triage `GREEN` | Guardrail OK `True` | Confidence `0.90`
+**Metrics:** Triage `GREEN` | Guardrail OK `True` | Confidence `0.93`
 
 #### VHT standard (`vht_response`)
 
@@ -6074,9 +7220,9 @@ The symptoms can be managed at home with guidance. Follow the advice you were gi
 
 **FROM THE GUIDELINES:**
 
-• Uganda Clinical Guidelines 2023, Page 235: Treatment of uncomplicated malaria
-• Uganda Clinical Guidelines 2023, Page 235: Management of Malaria
-• Uganda Clinical Guidelines 2023, Page 775: Management of Malaria in Pregnancy
+• Uganda Clinical Guidelines 2023, Page 235: Management of Malaria [HIGH FIDELITY]
+• Uganda Clinical Guidelines 2023, Page 235: Treatment of uncomplicated malaria [HIGH FIDELITY]
+• Uganda Clinical Guidelines 2023, Page 929: 17.4  INTEGRATED COMMUNITY CASE MANAGEMENT [HIGH FIDELITY]
 ```
 
 #### Referral note (`referral_note`)
@@ -6114,21 +7260,7 @@ Action: Follow advice below, monitor for changes
 
 **Question:** Malaria uncomplicated case management ACT dosing children
 
-### 1. Treatment of uncomplicated malaria
-
-### Treatment of uncomplicated malaria
-
-Treatment of uncomplicated malaria
-
-The following tables contain dosages for medicines used in treatment of
-
-uncomplicated malaria.
-
-169...
-
-📄 **Reference:** Page 235
-
-### 2. Management of Malaria
+### 1. Management of Malaria
 
 ### Management of Malaria
 
@@ -6170,7 +7302,47 @@ All age groups or patient categories First li...
 
 📄 **Reference:** Page 235
 
-### 3. Management of Malaria in Pregnancy
+### 2. Treatment of uncomplicated malaria
+
+### Treatment of uncomplicated malaria
+
+Treatment of uncomplicated malaria
+
+The following tables contain dosages for medicines used in treatment of
+
+uncomplicated malaria.
+
+169...
+
+📄 **Reference:** Page 235
+
+### 3. 17.4  INTEGRATED COMMUNITY CASE MANAGEMENT
+
+### 17.4  INTEGRATED COMMUNITY CASE MANAGEMENT
+
+17.4  INTEGRATED COMMUNITY CASE MANAGEMENT
+
+Integrated Community Case Management (iCCM) of malaria, pneumo­
+
+nia and diarrhoea is a recently adopted strategy for the treatment of
+
+common childhood illness at community level by trained Community
+
+Health Workers since 2010. It addresses a gap in delivery of curative
+
+services to children below 5 years allowing:
+
+
+
+prompt and accessible treatment of uncomplicated malaria, pneu­
+
+monia and diarrhoea
+
+...
+
+📄 **Reference:** Page 929
+
+### 4. Management of Malaria in Pregnancy
 
 ### Management of Malaria in Pregnancy
 
@@ -6224,45 +7396,35 @@ trimester
 
 HC2
 
-709...
+706...
 
-📄 **Reference:** Page 775
+📄 **Reference:** Page 772
 
-### 4. Infectious Diseases
+### 5. 2.5.3.3 Management of Complications of Severe Malaria
 
-### Infectious Diseases
+### 2.5.3.3 Management of Complications of Severe Malaria
 
-Uganda Clinical Guidelines 2023
+2.5.3.3 Management of Complications of Severe Malaria
 
-CHAPTER 2: Infectious Diseases...
+Dosage of IM artemether
 
-📄 **Reference:** Page 235
+COMPLICATION
 
-### 5. 17.4  INTEGRATED COMMUNITY CASE MANAGEMENT
+TREATMENT
 
-### 17.4  INTEGRATED COMMUNITY CASE MANAGEMENT
+Hyperpyrexia
 
-17.4  INTEGRATED COMMUNITY CASE MANAGEMENT
+Give paracetamol 1 g every 6 hours Child: 10 mg/
 
-Integrated Community Case Management (iCCM) of malaria, pneumo­
+kg + tepid sponging + fanning
 
-nia and diarrhoea is a recently adopted strategy for the treatment of
+Convulsions
 
-common childhood illness at community level by trained Community
+Give diazepam 0.2 mg/kg (max 10 mg) slow IV or
 
-Health Workers since 2010. It addresses a gap in delivery of curative
+(in adults) IM or 0.5 mg/kg rectally...
 
-services to children below 5 years allowing:
-
-
-
-prompt and accessible treatment of uncomplicated malaria, pneu­
-
-monia and diarrhoea
-
-...
-
-📄 **Reference:** Page 932
+📄 **Reference:** Page 241
 
 
 ---
@@ -6275,7 +7437,7 @@ Next Steps / Monitoring: Consult the full source guideline or a clinician for pa
 
 When to Refer: Per excerpts and national guidance; seek urgent care if danger signs, severe disease, or instability is suspected.
 
-Citations: Page 235, Page 775, Page 932
+Citations: Page 235, Page 241, Page 772, Page 929
 
 ---
 **🧪 Guardrail Brain Validation:** ✅ Passed
@@ -6290,7 +7452,7 @@ Citations: Page 235, Page 775, Page 932
 
 > Postpartum hemorrhage emergency management oxytocin
 
-**Metrics:** Triage `GREEN` | Guardrail OK `True` | Confidence `0.90`
+**Metrics:** Triage `GREEN` | Guardrail OK `True` | Confidence `0.93`
 
 #### VHT standard (`vht_response`)
 
@@ -6303,10 +7465,8 @@ Citations: Page 235, Page 775, Page 932
 
 **WHAT TO DO (step by step):**
 
-**Step 1:** Assess patient carefully
-**Step 2:** Check for danger signs (see below)
-**Step 3:** If unsure, refer to health facility
-**Step 4:** Record all findings
+**Step 1:** Resuscitation and management of obstetric haemorrhage and
+**Step 2:** Identification and management of underlying causes
 
 **MONITORING:**
 
@@ -6339,9 +7499,9 @@ The symptoms can be managed at home with guidance. Follow the advice you were gi
 
 **FROM THE GUIDELINES:**
 
-• Uganda Clinical Guidelines 2023, Page 789: and no signs of infection
-• Uganda Clinical Guidelines 2023, Page 812: 16.4.6 Postpartum Haemorrhage (PPH)
-• Uganda Clinical Guidelines 2023, Page 789: Obstetric Conditions
+• Uganda Clinical Guidelines 2023, Page 809: 16.4.6 Postpartum Haemorrhage (PPH) [HIGH FIDELITY]
+• Uganda Clinical Guidelines 2023, Page 811: Management [HIGH FIDELITY]
+• Uganda Clinical Guidelines 2023, Page 789: 16.3.6       Antepartum Haemorrhage (APH) – Abruptio Placentae [HIGH FIDELITY]
 ```
 
 #### Referral note (`referral_note`)
@@ -6353,9 +7513,8 @@ The symptoms can be managed at home with guidance. Follow the advice you were gi
 **Reason:** Routine evidence retrieval from national guidelines
 
 **Actions taken:**
-• Assess patient carefully
-• Check for danger signs (see below)
-• If unsure, refer to health facility
+• Resuscitation and management of obstetric haemorrhage and
+• Identification and management of underlying causes
 
 **Referral completed:** [ ]
 **Health worker received:** [ ]
@@ -6379,7 +7538,105 @@ Action: Follow advice below, monitor for changes
 
 **Question:** Postpartum hemorrhage emergency management oxytocin
 
-### 1. and no signs of infection
+### 1. 16.4.6 Postpartum Haemorrhage (PPH)
+
+### 16.4.6 Postpartum Haemorrhage (PPH)
+
+16.4.6 Postpartum Haemorrhage (PPH)    ICD10 CODE: O72
+
+Vaginal bleeding of more than 500 mL after vaginal delivery or >1000
+
+mL after caesarean section.
+
+743...
+
+📄 **Reference:** Page 809
+
+### 2. Management
+
+### Management
+
+Management
+
+The principles of management include two major components:
+
+1.
+
+Resuscitation and management of obstetric haemorrhage and
+
+possibly hypovolemic shock
+
+2.
+
+Identification and management of underlying causes
+
+TREATMENT
+
+LOC
+
+First aid
+
+HC3
+
+
+
+Check uterus to see if contracted f Massage uterus (to
+
+expel clots) f Give oxytocin 10 IU IM or IV slowly Give
+
+tranexamic acid 1gm IV slowly over 10 mins but within
+
+3 hours after delivery of the baby
+
+
+
+Empty the bladder
+
+
+
+S...
+
+📄 **Reference:** Page 811
+
+### 3. 16.3.6       Antepartum Haemorrhage (APH) – Abruptio Placentae
+
+### 16.3.6       Antepartum Haemorrhage (APH) – Abruptio Placentae
+
+16.3.6       Antepartum Haemorrhage (APH) – Abruptio Placentae...
+
+📄 **Reference:** Page 789
+
+### 4. Postpartum care services
+
+### Postpartum care services
+
+Postpartum care services
+
+The mother and baby should be seen at 6 hours after birth and again
+
+before discharge if in a health facility (and anytime the mother reports
+
+concern about herself and her baby) or approximately 6 hours after
+
+delivery at home.
+
+The routine follow-up visits are at 6 days and 6 weeks, and have the
+
+following components:
+
+
+
+Counselling
+
+
+
+Assessment and management of observed or reported prob­
+
+lems. Check for hypertension, anaemia, vagina...
+
+📄 **Reference:** Page 827
+
+### 5. and no signs of infection
 
 ### and no signs of infection
 
@@ -6411,171 +7668,7 @@ obstetric management) for induction with oxytocin (see
 
 section 16.4.2)...
 
-📄 **Reference:** Page 789
-
-### 2. 16.4.6 Postpartum Haemorrhage (PPH)
-
-### 16.4.6 Postpartum Haemorrhage (PPH)
-
-16.4.6 Postpartum Haemorrhage (PPH)    ICD10 CODE: O72
-
-Vaginal bleeding of more than 500 mL after vaginal delivery or >1000
-
-mL after caesarean section.
-
-746...
-
-📄 **Reference:** Page 812
-
-### 3. Obstetric Conditions
-
-### Obstetric Conditions
-
-Uganda Clinical Guidelines 2023
-
-CHAPTER 16: Obstetric Conditions
-
-MANAGEMENT
-
-LOC
-
-
-
-Refer all patients to hospital and keep in hospital until
-
-delivery
-
-HC4...
-
-📄 **Reference:** Page 789
-
-### 4. Check for vaginal bleeding and possible uterine/urinary tract or febrile infection
-
-### Check for vaginal bleeding and possible uterine/urinary tract or febrile infection
-
-Check for vaginal bleeding and possible uterine/urinary tract or febrile infection
-
-otics
-
-months
-
-Postpartum
-
-Postpartum
-
-Moderate
-
-No Anae­
-
-6 weeks
-
-minutes
-
-bleeing
-
-delivery
-
-soaked
-
-1 pad
-
-bleeding
-
-
-
-More
-
-than
-
-after
-
-in 5
-
-
-
-Still
-
-
-
-Hb 7-11
-
-
-
-Hb >11
-
-g/dL or
-
-
-
-Palmar
-
-juctival­
-
-or con­
-
-pallor
-
-pallor
-
-g/dL
-
-
-
-No
-
-
-
-Heavy vaginal
-
-vaginal bleed­
-
-
-
-Heavy/ light
-
-ing after 6
-
-
-
-Look for
-
-...
-
-📄 **Reference:** Page 837
-
-### 5. Cervix not favourable
-
-### Cervix not favourable
-
-Cervix not favourable
-
-
-
-Ripen cervix using either
-
-
-
-Misoprostol 25 micrograms inserted vaginally every
-
-6 hours for 2 doses, if no response increase to 50
-
-micrograms every 6 hours, max 200 micrograms in
-
-24 hours – stop when in established labour
-
-
-
-Or misoprostol 20 micrograms orally (dissolve 1 200
-
-microgram tablet in 200 mL of water and give 20 mL)
-
-every 2 hours until labour starts or max 24 hours
-
-
-
-Or Foley catheter: insert Foley catheter through internal...
-
-📄 **Reference:** Page 807
+📄 **Reference:** Page 786
 
 
 ---
@@ -6588,7 +7681,7 @@ Next Steps / Monitoring: Consult the full source guideline or a clinician for pa
 
 When to Refer: Per excerpts and national guidance; seek urgent care if danger signs, severe disease, or instability is suspected.
 
-Citations: Page 789, Page 807, Page 812, Page 837
+Citations: Page 786, Page 789, Page 809, Page 811, Page 827
 
 ---
 **🧪 Guardrail Brain Validation:** ✅ Passed
@@ -6603,7 +7696,7 @@ Citations: Page 789, Page 807, Page 812, Page 837
 
 > Family planning contraceptive counseling methods
 
-**Metrics:** Triage `GREEN` | Guardrail OK `True` | Confidence `0.90`
+**Metrics:** Triage `GREEN` | Guardrail OK `True` | Confidence `0.79`
 
 #### VHT standard (`vht_response`)
 
@@ -6652,9 +7745,9 @@ The symptoms can be managed at home with guidance. Follow the advice you were gi
 
 **FROM THE GUIDELINES:**
 
-• Uganda Clinical Guidelines 2023, Page 751: Family Planning (FP)
-• Uganda Clinical Guidelines 2023, Page 725: 15.1.10  Summary of Medical Eligibility for Contraceptives
-• Uganda Clinical Guidelines 2023, Page 730: 15.2  Overview Of Key Contraceptive Methods
+• Uganda Clinical Guidelines 2023, Page 727: 15.2  Overview Of Key Contraceptive Methods [HIGH FIDELITY]
+• Uganda Clinical Guidelines 2023, Page 726: Family Planning (FP) [HIGH FIDELITY]
+• Uganda Clinical Guidelines 2023, Page 265: Family planning [HIGH FIDELITY]
 ```
 
 #### Referral note (`referral_note`)
@@ -6692,7 +7785,25 @@ Action: Follow advice below, monitor for changes
 
 **Question:** Family planning contraceptive counseling methods
 
-### 1. Family Planning (FP)
+### 1. 15.2  Overview Of Key Contraceptive Methods
+
+### 15.2  Overview Of Key Contraceptive Methods
+
+15.2  Overview Of Key Contraceptive Methods
+
+The following sections contain an overview of mainstream contraceptive
+
+methods and how to manage side effects
+
+of each (in case they occur). Side effects are one of most common reasons
+
+why women stop using contraception, and the health worker should
+
+be able to counsel the patient and address her concerns appropriately....
+
+📄 **Reference:** Page 727
+
+### 2. Family Planning (FP)
 
 ### Family Planning (FP)
 
@@ -6700,13 +7811,107 @@ Uganda Clinical Guidelines 2023
 
 CHAPTER 15: Family Planning (FP)
 
-INSTRUCTIONS
+Contraceptives
 
-LOC...
+Coc
 
-📄 **Reference:** Page 751
+Pop
 
-### 2. 15.1.10  Summary of Medical Eligibility for Contraceptives
+Poi
+
+Poim
+
+Cuiud
+
+Peurperal sepsis
+
+Y
+
+Y
+
+Y
+
+Y
+
+N
+
+Age And Pregnancy History (Parity)
+
+Adolescents (menarche
+
+to age < 18 years)
+
+Condition
+
+Y
+
+Y
+
+Y
+
+Y
+
+Y
+
+Nulliparity
+
+Y
+
+Y
+
+Y
+
+Y
+
+Y
+
+Parous
+
+Y
+
+Y
+
+Y
+
+Y
+
+Y
+
+Pregnancy
+
+NA
+
+NA
+
+NA
+
+NA
+
+NA...
+
+📄 **Reference:** Page 726
+
+### 3. Family planning
+
+### Family planning
+
+Family planning
+
+Encourage PLHIV to discuss their
+
+reproductive choices and support
+
+them to adopt those which do not
+
+compromise their health. For women
+
+who choose to conceive, link them
+
+to eMTCT services....
+
+📄 **Reference:** Page 265
+
+### 4. 15.1.10  Summary of Medical Eligibility for Contraceptives
 
 ### 15.1.10  Summary of Medical Eligibility for Contraceptives
 
@@ -6724,57 +7929,39 @@ effective contraception methods for women with medical conditions or
 
 medially-relevan...
 
-📄 **Reference:** Page 725
+📄 **Reference:** Page 722
 
-### 3. 15.2  Overview Of Key Contraceptive Methods
+### 5. Family Planning (FP)
 
-### 15.2  Overview Of Key Contraceptive Methods
+### Family Planning (FP)
 
-15.2  Overview Of Key Contraceptive Methods
+Uganda Clinical Guidelines 2023
 
-The following sections contain an overview of mainstream contraceptive
+CHAPTER 15: Family Planning (FP)
 
-methods and how to manage side effects
+INSTRUCTIONS
 
-of each (in case they occur). Side effects are one of most common reasons
-
-why women stop using contraception, and the health worker should
-
-be able to counsel the patient and address her concerns appropriately....
-
-📄 **Reference:** Page 730
-
-### 4. Methods all couples (except a few) can safely use
-
-### Methods all couples (except a few) can safely use
-
-Methods all couples (except a few) can safely use
-
-Emergency contraceptive pill (for emergency use only) Bilateral Tubal
-
-Ligation (BTL) and Vasectomy
-
-Barrier methods (condoms, diaphragm) Lactational amenorrhoea
-
-method (LAM)
-
-Fertility awareness (FAM) and Standard days methods...
-
-📄 **Reference:** Page 730
-
-### 5. Oral contraceptives
-
-### Oral contraceptives
-
-Oral contraceptives
+LOC
 
 
 
-Combined oral contraceptive (see Family Planning,
+Supply at least 40 female condoms to each client
 
-section 15.2.3)...
+per month
 
-📄 **Reference:** Page 1062
+
+
+Advise client to return for more before they are finished
+
+
+
+In case of hypersensitivity, avoid use and change to
+
+another FP method
+
+HC2...
+
+📄 **Reference:** Page 730
 
 
 ---
@@ -6787,7 +7974,7 @@ Next Steps / Monitoring: Consult the full source guideline or a clinician for pa
 
 When to Refer: Per excerpts and national guidance; seek urgent care if danger signs, severe disease, or instability is suspected.
 
-Citations: Page 725, Page 730, Page 751, Page 1062
+Citations: Page 265, Page 722, Page 726, Page 727, Page 730
 
 ---
 **🧪 Guardrail Brain Validation:** ✅ Passed
@@ -6815,10 +8002,7 @@ Citations: Page 725, Page 730, Page 751, Page 1062
 
 **WHAT TO DO (step by step):**
 
-**Step 1:** Assess patient carefully
-**Step 2:** Check for danger signs (see below)
-**Step 3:** If unsure, refer to health facility
-**Step 4:** Record all findings
+**Step 1:** Diastolic of 90 mmHg and systolic of 140 mmHg
 
 **MONITORING:**
 
@@ -6851,9 +8035,9 @@ The symptoms can be managed at home with guidance. Follow the advice you were gi
 
 **FROM THE GUIDELINES:**
 
-• Uganda Clinical Guidelines 2023, Page 54: Chronic Care
-• Uganda Clinical Guidelines 2023, Page 830: Postpartum care services
-• Uganda Clinical Guidelines 2023, Page 296: Management
+• Uganda Clinical Guidelines 2023, Page 378: Management of hypertension [HIGH FIDELITY]
+• Uganda Clinical Guidelines 2023, Page 372: Prevention [HIGH FIDELITY]
+• Uganda Clinical Guidelines 2023, Page 1106: Hypertension
 ```
 
 #### Referral note (`referral_note`)
@@ -6865,9 +8049,7 @@ The symptoms can be managed at home with guidance. Follow the advice you were gi
 **Reason:** Routine evidence retrieval from national guidelines
 
 **Actions taken:**
-• Assess patient carefully
-• Check for danger signs (see below)
-• If unsure, refer to health facility
+• Diastolic of 90 mmHg and systolic of 140 mmHg
 
 **Referral completed:** [ ]
 **Health worker received:** [ ]
@@ -6891,7 +8073,149 @@ Action: Follow advice below, monitor for changes
 
 **Question:** Hypertension diagnosis and management primary care
 
-### 1. Chronic Care
+### 1. Management of hypertension
+
+### Management of hypertension
+
+Management of hypertension...
+
+📄 **Reference:** Page 378
+
+### 2. Prevention
+
+### Prevention
+
+Prevention
+
+ Management of risk factors
+
+ Early diagnosis and treatment of the cause (e.g. hypertension)
+
+ Treatment adherence...
+
+📄 **Reference:** Page 372
+
+### 3. Hypertension
+
+### Hypertension
+
+Hypertension
+
+- Diastolic of 90 mmHg and systolic of 140 mmHg
+
+are acceptable
+
+- If
+
+hypertension
+
+not
+
+adequately
+
+controlled,
+
+there is risk of vasoconstriction, hypovolaemia,
+
+exaggerated
+
+vasoactive
+
+response
+
+to
+
+stress
+
+leading to hypo or hypertension, hypertensive
+
+complications during anaesthesia
+
+
+
+Control hypertension pre-operatively
+
+
+
+Patient should take antihypertensive medicines on schedule
+
+even on the day of operation
+
+
+
+General anaesthesia technique is prefe...
+
+📄 **Reference:** Page 1106
+
+### 4. Classify and treat as directed below Check for hypertension
+
+### Classify and treat as directed below Check for hypertension
+
+Classify and treat as directed below Check for hypertension
+
+Blood Pressure
+
+
+
+Diastolic
+
+
+
+Diastolic
+
+
+
+Diastolic
+
+readings
+
+mmHg
+
+mmHg
+
+
+
+2 read­
+
+mmHg
+
+on 2
+
+
+
+110
+
+
+
+<90
+
+ings
+
+
+
+90
+
+BP
+
+BP
+
+BP
+
+on
+
+repeat after
+
+
+
+Diastolic BP
+
+
+
+90 mmHg,...
+
+📄 **Reference:** Page 832
+
+### 5. Chronic Care
 
 ### Chronic Care
 
@@ -6925,108 +8249,6 @@ patient...
 
 📄 **Reference:** Page 54
 
-### 2. Postpartum care services
-
-### Postpartum care services
-
-Postpartum care services
-
-The mother and baby should be seen at 6 hours after birth and again
-
-before discharge if in a health facility (and anytime the mother reports
-
-concern about herself and her baby) or approximately 6 hours after
-
-delivery at home.
-
-The routine follow-up visits are at 6 days and 6 weeks, and have the
-
-following components:
-
-
-
-Counselling
-
-
-
-Assessment and management of observed or reported prob­
-
-lems. Check for hypertension, anaemia, vagina...
-
-📄 **Reference:** Page 830
-
-### 3. Management
-
-### Management
-
-Management
-
-All HIV services for pregnant mothers are offered in the MCH clinic.
-
-After delivery, mother and baby will remain in the MCH postnatal clinic
-
-till HIV status of the child is
-
-confirmed, then they will be transferred to the general ART clinic.
-
-The current policy aims at elimination of Mother-to-Child Transmission
-
-(eMTCT) through provision of a continuum of care with the following
-
-elements:
-
-- Primary HIV prevention for men, women and adolescents
-
-- Prevention of un...
-
-📄 **Reference:** Page 296
-
-### 4. Differential diagnosis
-
-### Differential diagnosis
-
-Differential diagnosis
-
-~
-
-Aphthous ulcer
-
-~
-
-Other causes of genital sores, e.g., syphilis
-
-~
-
-Other causes of meningoencephalitis...
-
-📄 **Reference:** Page 1046
-
-### 5. Management
-
-### Management
-
-
-
-Investigation of uveitis is broad and requires a high index of
-
-suspicion
-
-
-
-Diagnosis of uveitis requires expertise and can only be confirmed
-
-by slit lamp examinations
-
-Management
-
-TREATMENT
-
-LOC
-
-If at HC2 and HC3...
-
-📄 **Reference:** Page 995
-
 
 ---
 
@@ -7038,7 +8260,7 @@ Next Steps / Monitoring: Consult the full source guideline or a clinician for pa
 
 When to Refer: Per excerpts and national guidance; seek urgent care if danger signs, severe disease, or instability is suspected.
 
-Citations: Page 54, Page 296, Page 830, Page 995, Page 1046
+Citations: Page 54, Page 372, Page 378, Page 832, Page 1106
 
 ---
 **🧪 Guardrail Brain Validation:** ✅ Passed
@@ -7053,7 +8275,7 @@ Citations: Page 54, Page 296, Page 830, Page 995, Page 1046
 
 > Diabetes mellitus type 2 glycemic targets
 
-**Metrics:** Triage `GREEN` | Guardrail OK `True` | Confidence `0.90`
+**Metrics:** Triage `GREEN` | Guardrail OK `True` | Confidence `0.97`
 
 #### VHT standard (`vht_response`)
 
@@ -7066,10 +8288,11 @@ Citations: Page 54, Page 296, Page 830, Page 995, Page 1046
 
 **WHAT TO DO (step by step):**
 
-**Step 1:** Assess patient carefully
-**Step 2:** Check for danger signs (see below)
-**Step 3:** If unsure, refer to health facility
-**Step 4:** Record all findings
+**Step 1:** Fasting blood sugar <7 mmol/l
+**Step 2:** Postprandial sugar <10 mmol/l
+**Step 3:** HbA1c <7% (7.5 % for elderly)
+**Step 4:** DKA is characterized by ketosis, acidosis, and hyperglycaemia.
+**Step 5:** HHS is characterized by hyperglycaemia, severe
 
 **MONITORING:**
 
@@ -7102,9 +8325,9 @@ The symptoms can be managed at home with guidance. Follow the advice you were gi
 
 **FROM THE GUIDELINES:**
 
-• Uganda Clinical Guidelines 2023, Page 778: Therapeutic targets
-• Uganda Clinical Guidelines 2023, Page 537: Diabetes Mellitus
-• Uganda Clinical Guidelines 2023, Page 541: Treatment targets
+• Uganda Clinical Guidelines 2023, Page 539: Treatment targets [HIGH FIDELITY]
+• Uganda Clinical Guidelines 2023, Page 542: glycaemic State (HHS) [HIGH FIDELITY]
+• Uganda Clinical Guidelines 2023, Page 535: Diabetes Mellitus [HIGH FIDELITY]
 ```
 
 #### Referral note (`referral_note`)
@@ -7116,9 +8339,9 @@ The symptoms can be managed at home with guidance. Follow the advice you were gi
 **Reason:** Routine evidence retrieval from national guidelines
 
 **Actions taken:**
-• Assess patient carefully
-• Check for danger signs (see below)
-• If unsure, refer to health facility
+• Fasting blood sugar <7 mmol/l
+• Postprandial sugar <10 mmol/l
+• HbA1c <7% (7.5 % for elderly)
 
 **Referral completed:** [ ]
 **Health worker received:** [ ]
@@ -7142,45 +8365,7 @@ Action: Follow advice below, monitor for changes
 
 **Question:** Diabetes mellitus type 2 glycemic targets
 
-### 1. Therapeutic targets
-
-### Therapeutic targets
-
-Therapeutic targets
-
-~
-
-Pre prandial blood glucose <5.3 mmol/L
-
-~
-
-1-hour postprandial glucose <7.8 mmol/L
-
-~
-
-2-hour postprandial glucose <6.4 mmol/L...
-
-📄 **Reference:** Page 778
-
-### 2. Diabetes Mellitus
-
-### Diabetes Mellitus
-
-8.1.3
-
-Diabetes Mellitus
-
-ICD10 CODE: E08-E13
-
-Metabolic disease resulting from insulin insufficiency or ineffectiveness,
-
-due to decreased insulin secretion, or peripheral resistance to the action
-
-of insulin, or a combination of the two....
-
-📄 **Reference:** Page 537
-
-### 3. Treatment targets
+### 1. Treatment targets
 
 ### Treatment targets
 
@@ -7222,63 +8407,83 @@ Insulin short
 
 acting, r...
 
+📄 **Reference:** Page 539
+
+### 2. glycaemic State (HHS)
+
+### glycaemic State (HHS)
+
+8.1.4
+
+Diabetic Ketoacidosis (DKA) and Hyperosmolar Hyper­
+
+glycaemic State (HHS)    ICD10 CODE: E10.1 AND E11.0
+
+Acute metabolic complications of diabetes mellitus:
+
+- DKA is characterized by ketosis, acidosis, and hyperglycaemia.
+
+It is more common in type 1 diabetes.
+
+- HHS is characterized by hyperglycaemia, severe
+
+- dehydration and hypovolemia, but no ketosis and acidosis. It
+
+is more common in type 2 diabetes.
+
+476...
+
+📄 **Reference:** Page 542
+
+### 3. Diabetes Mellitus
+
+### Diabetes Mellitus
+
+8.1.3
+
+Diabetes Mellitus
+
+ICD10 CODE: E08-E13
+
+Metabolic disease resulting from insulin insufficiency or ineffectiveness,
+
+due to decreased insulin secretion, or peripheral resistance to the action
+
+of insulin, or a combination of the two....
+
+📄 **Reference:** Page 535
+
+### 4. Note
+
+### Note
+
+Note
+
+ Look out for diabetes mellitus as a consequence of damage
+
+to the pancreas
+
+397...
+
+📄 **Reference:** Page 463
+
+### 5. Caution
+
+### Caution
+
+Caution
+
+ Oral antidiabetic medicines are NOT used in type 1.
+
+Metformin can be used but only under specialist advice
+
+Management of Type 2 Diabetes
+
+TREATMENT
+
+LOC...
+
 📄 **Reference:** Page 541
-
-### 4. 15.1.6  Obtain and Record Client History
-
-### 15.1.6  Obtain and Record Client History
-
-15.1.6  Obtain and Record Client History
-
-The primary objectives are:
-
-~
-
-To obtain client’s personal and social data and information
-
-on health status
-
-~
-
-To identify abnormalities/problems requiring treatment or
-
-referral
-
-For FP clients, it is important to pay particular attention to information
-
-outlined in the table below:
-
-HISTORY
-
-INFORMATION NEEDED
-
-Social History
-
-~
-
-Smoking? How many ummarized per
-
-day?
-
-~
-
-Drinking? How much alcohol per da...
-
-📄 **Reference:** Page 721
-
-### 5. 8 ENDOCRINE AND METABOLIC DISEASES..................................468
-
-### 8 ENDOCRINE AND METABOLIC DISEASES..................................468
-
-8 ENDOCRINE AND METABOLIC DISEASES..................................468
-
-8.1.1 Addison’s Disease..........................................................................................468
-
-8.1.2 Cushing’s Syndrome.......................................................................................470
-
-8.1.3 Diabetes Mellitus............................................................................................4...
-
-📄 **Reference:** Page 10
 
 
 ---
@@ -7291,7 +8496,7 @@ Next Steps / Monitoring: Consult the full source guideline or a clinician for pa
 
 When to Refer: Per excerpts and national guidance; seek urgent care if danger signs, severe disease, or instability is suspected.
 
-Citations: Page 10, Page 537, Page 541, Page 721, Page 778
+Citations: Page 463, Page 535, Page 539, Page 541, Page 542
 
 ---
 **🧪 Guardrail Brain Validation:** ✅ Passed
@@ -7306,7 +8511,7 @@ Citations: Page 10, Page 537, Page 541, Page 721, Page 778
 
 > Acute stroke referral and supportive care
 
-**Metrics:** Triage `GREEN` | Guardrail OK `True` | Confidence `0.90`
+**Metrics:** Triage `GREEN` | Guardrail OK `True` | Confidence `0.94`
 
 #### VHT standard (`vht_response`)
 
@@ -7319,10 +8524,7 @@ Citations: Page 10, Page 537, Page 541, Page 721, Page 778
 
 **WHAT TO DO (step by step):**
 
-**Step 1:** Assess patient carefully
-**Step 2:** Check for danger signs (see below)
-**Step 3:** If unsure, refer to health facility
-**Step 4:** Record all findings
+**Step 1:** Sodium bicarbonate 1 mEq/kg bolus followed by
 
 **MONITORING:**
 
@@ -7355,9 +8557,9 @@ The symptoms can be managed at home with guidance. Follow the advice you were gi
 
 **FROM THE GUIDELINES:**
 
-• Uganda Clinical Guidelines 2023, Page 394: If stroke clinically haemorrhagic
-• Uganda Clinical Guidelines 2023, Page 394: Chronic care of ischaemic stroke
-• Uganda Clinical Guidelines 2023, Page 394: If ischaemic stroke
+• Uganda Clinical Guidelines 2023, Page 1033: Supportive care [HIGH FIDELITY]
+• Uganda Clinical Guidelines 2023, Page 145: Supportive care [HIGH FIDELITY]
+• Uganda Clinical Guidelines 2023, Page 183: Supportive care [HIGH FIDELITY]
 ```
 
 #### Referral note (`referral_note`)
@@ -7369,9 +8571,7 @@ The symptoms can be managed at home with guidance. Follow the advice you were gi
 **Reason:** Routine evidence retrieval from national guidelines
 
 **Actions taken:**
-• Assess patient carefully
-• Check for danger signs (see below)
-• If unsure, refer to health facility
+• Sodium bicarbonate 1 mEq/kg bolus followed by
 
 **Referral completed:** [ ]
 **Health worker received:** [ ]
@@ -7395,95 +8595,123 @@ Action: Follow advice below, monitor for changes
 
 **Question:** Acute stroke referral and supportive care
 
-### 1. If stroke clinically haemorrhagic
+### 1. Supportive care
 
-### If stroke clinically haemorrhagic
+### Supportive care
 
-If stroke clinically haemorrhagic
+Supportive care...
 
-
+📄 **Reference:** Page 1033
 
-Supportive care as above
+### 2. Supportive care
 
-
+### Supportive care
 
-Refer for CT scan and neurosurgical evaluation...
-
-📄 **Reference:** Page 394
-
-### 2. Chronic care of ischaemic stroke
-
-### Chronic care of ischaemic stroke
-
-Chronic care of ischaemic stroke
-
-
-
-Early mobilization and physiotherapy f Aspirin 75-100
-
-mg once daily for life f Atorvastatin 40 mg daily for life
-
-
-
-Control of risk factors
-
-328...
-
-📄 **Reference:** Page 394
-
-### 3. If ischaemic stroke
-
-### If ischaemic stroke
-
-If ischaemic stroke
+Supportive care
 
 H
 
 
 
-Aspirin 150-300 mg every 24 hours
+Oxygen therapy
 
 
 
-In the acute phase, treat hypertension only if extreme
-
-(more than 220/120) or if there are other complications
-
-(pulmonary oedema, angina, etc), otherwise re-start
-
-antihypertensive 24 hours after the event and reduce
-
-blood pressure slowly
+IV fluids for hypotension
 
 
 
-Consider DVT prophylaxis with enoxaparin 40 mg
+Charcoal may be useful but only if given within 1 hour
 
-SC daily...
+from ingestion and if the patient is not drowsy (risk of
 
-📄 **Reference:** Page 394
+inhalation)
 
-### 4. Cardiovascular Diseases
+
 
-### Cardiovascular Diseases
+Refer for ventilatory support if necessary
 
-Uganda Clinical Guidelines 2023
+
 
-CHAPTER 4: Cardiovascular Diseases...
+Alkalinisation to increase renal excretion
 
-📄 **Reference:** Page 394
+- Sodium bicarbonate 1 mEq/kg bolus followed by
 
-### 5. Management of stable angina
+RR
 
-### Management of stable angina
+infusion (specialist only)...
 
-Management of stable angina
+📄 **Reference:** Page 145
 
-TREATMENT
+### 3. Supportive care
 
-LOC...
+### Supportive care
 
-📄 **Reference:** Page 394
+Supportive care
+
+H
+
+
+
+Keep baby warm
+
+117...
+
+📄 **Reference:** Page 183
+
+### 4. Supportive therapy
+
+### Supportive therapy
+
+Supportive therapy
+
+
+
+Treat anaphylactic shock (see section 1.1.1)
+
+
+
+Treat swelling if significant as necessary, using ice packs
+
+or cold compresses
+
+
+
+Give analgesics prn
+
+
+
+Reassure and immobilise the patient
+
+HC3...
+
+📄 **Reference:** Page 93
+
+### 5. Referral criteria
+
+### Referral criteria
+
+Referral criteria
+
+~
+
+If pain does not respond to above measures, refer to pal­
+
+liative care specialist
+
+~
+
+Refer for radiotherapy at national referral hospital for se­
+
+vere bone pain not responding to above medications
+
+~
+
+Refer for surgery if the cause of pain is amenable to sur­
+
+gery...
+
+📄 **Reference:** Page 694
 
 
 ---
@@ -7496,7 +8724,7 @@ Next Steps / Monitoring: Consult the full source guideline or a clinician for pa
 
 When to Refer: Per excerpts and national guidance; seek urgent care if danger signs, severe disease, or instability is suspected.
 
-Citations: Page 394
+Citations: Page 93, Page 145, Page 183, Page 694, Page 1033
 
 ---
 **🧪 Guardrail Brain Validation:** ✅ Passed
@@ -7511,7 +8739,7 @@ Citations: Page 394
 
 > Syndromic management sexually transmitted infections
 
-**Metrics:** Triage `GREEN` | Guardrail OK `True` | Confidence `0.90`
+**Metrics:** Triage `GREEN` | Guardrail OK `True` | Confidence `0.88`
 
 #### VHT standard (`vht_response`)
 
@@ -7560,9 +8788,9 @@ The symptoms can be managed at home with guidance. Follow the advice you were gi
 
 **FROM THE GUIDELINES:**
 
-• Uganda Clinical Guidelines 2023, Page 343: HIV/AIDS and Sexually Transmitted Infections
-• Uganda Clinical Guidelines 2023, Page 317: HIV/AIDS and Sexually Transmitted Infections
-• Uganda Clinical Guidelines 2023, Page 349: HIV/AIDS and Sexually Transmitted Infections
+• Uganda Clinical Guidelines 2023, Page 362: HIV/AIDS and Sexually Transmitted Infections [HIGH FIDELITY]
+• Uganda Clinical Guidelines 2023, Page 297: HIV/AIDS and Sexually Transmitted Infections [HIGH FIDELITY]
+• Uganda Clinical Guidelines 2023, Page 361: HIV/AIDS and Sexually Transmitted Infections [HIGH FIDELITY]
 ```
 
 #### Referral note (`referral_note`)
@@ -7608,7 +8836,7 @@ Uganda Clinical Guidelines 2023
 
 CHAPTER 3: HIV/AIDS and Sexually Transmitted Infections...
 
-📄 **Reference:** Page 343
+📄 **Reference:** Page 362
 
 ### 2. HIV/AIDS and Sexually Transmitted Infections
 
@@ -7618,7 +8846,7 @@ Uganda Clinical Guidelines 2023
 
 CHAPTER 3: HIV/AIDS and Sexually Transmitted Infections...
 
-📄 **Reference:** Page 317
+📄 **Reference:** Page 297
 
 ### 3. HIV/AIDS and Sexually Transmitted Infections
 
@@ -7626,13 +8854,9 @@ CHAPTER 3: HIV/AIDS and Sexually Transmitted Infections...
 
 Uganda Clinical Guidelines 2023
 
-CHAPTER 3: HIV/AIDS and Sexually Transmitted Infections
+CHAPTER 3: HIV/AIDS and Sexually Transmitted Infections...
 
-TREATMENT
-
-LOC...
-
-📄 **Reference:** Page 349
+📄 **Reference:** Page 361
 
 ### 4. HIV/AIDS and Sexually Transmitted Infections
 
@@ -7640,27 +8864,9 @@ LOC...
 
 Uganda Clinical Guidelines 2023
 
-CHAPTER 3: HIV/AIDS and Sexually Transmitted Infections
+CHAPTER 3: HIV/AIDS and Sexually Transmitted Infections...
 
-Candida vaginitis and bacterial vaginosis are NOT sexually transmitted
-
-diseases, even though sexual activity is a risk factor.
-
-~
-
-Gonorrhoea causes cervicitis and rarely vaginitis. Thereis a
-
-purulent thin mucoid slightly yellow pus discharge with no
-
-smell and non-itchy
-
-~
-
-Chlamydia causes cervicitis which may present with a non-
-
-itchy, thin, colourless...
-
-📄 **Reference:** Page 346
+📄 **Reference:** Page 329
 
 ### 5. HIV/AIDS and Sexually Transmitted Infections
 
@@ -7668,13 +8874,9 @@ itchy, thin, colourless...
 
 Uganda Clinical Guidelines 2023
 
-CHAPTER 3: HIV/AIDS and Sexually Transmitted Infections
+CHAPTER 3: HIV/AIDS and Sexually Transmitted Infections...
 
-TREATMENT
-
-LOC...
-
-📄 **Reference:** Page 356
+📄 **Reference:** Page 284
 
 
 ---
@@ -7687,7 +8889,7 @@ Next Steps / Monitoring: Consult the full source guideline or a clinician for pa
 
 When to Refer: Per excerpts and national guidance; seek urgent care if danger signs, severe disease, or instability is suspected.
 
-Citations: Page 317, Page 343, Page 346, Page 349, Page 356
+Citations: Page 284, Page 297, Page 329, Page 361, Page 362
 
 ---
 **🧪 Guardrail Brain Validation:** ✅ Passed
@@ -7702,7 +8904,7 @@ Citations: Page 317, Page 343, Page 346, Page 349, Page 356
 
 > Cervical cancer screening VIA HPV
 
-**Metrics:** Triage `GREEN` | Guardrail OK `True` | Confidence `0.90`
+**Metrics:** Triage `GREEN` | Guardrail OK `True` | Confidence `0.89`
 
 #### VHT standard (`vht_response`)
 
@@ -7751,9 +8953,9 @@ The symptoms can be managed at home with guidance. Follow the advice you were gi
 
 **FROM THE GUIDELINES:**
 
-• Uganda Clinical Guidelines 2023, Page 677: Screening for Cervical Cancer
-• Uganda Clinical Guidelines 2023, Page 675: Prevention of Infections
-• Uganda Clinical Guidelines 2023, Page 674: Oncogenic Infections
+• Uganda Clinical Guidelines 2023, Page 674: Screening for Cervical Cancer
+• Uganda Clinical Guidelines 2023, Page 674: owing if using VIA as a screening method:
+• Uganda Clinical Guidelines 2023, Page 679: Cervical Cancer [HIGH FIDELITY]
 ```
 
 #### Referral note (`referral_note`)
@@ -7811,49 +9013,39 @@ suspicious for cancer, VIA negative and VIA positive
 
  It uses readily ava...
 
-📄 **Reference:** Page 677
+📄 **Reference:** Page 674
 
-### 2. Prevention of Infections
+### 2. owing if using VIA as a screening method:
 
-### Prevention of Infections
+### owing if using VIA as a screening method:
 
-Prevention of Infections
+Consider the following if using VIA as a screening method:
 
-The following infections are associated with causing certain types of
+ Women <25 years of age should be screened only if they are
 
-cancer:
+at high risk for disease: HIV positive, early sexual exposure,
 
-~
+multiple partners, previous abnormal screening results, cervical
 
-Viral Hepatitis B/C: cancer of the liver
+intraepithelial neoplasia (CIN)
 
-~
+ VIA is not appropriate for women >50 years
 
-Human Papilloma Virus (HPV): cervical cancer
+ Screening is advised every 3-5 years in case of normal results,
 
-~
+but after 1 years in case of abnormal results and treat...
 
-Helicobacter Pylori: stomach cancer
+📄 **Reference:** Page 674
 
-HIV/AIDS: aggressive lymphoma subtypes, Kaposi’s sarcoma, anorectal
+### 3. Cervical Cancer
 
-cancer, cervical cancer, etc
+### Cervical Cancer
 
-~
+Cervical Cancer...
 
-Schistosomiasis: increases risk of bladder cancer
+📄 **Reference:** Page 679
 
-~
-
-Liver Fluke: increases risk of cholangio-carcinoma
-
-~
-
-Preventative measur...
-
-📄 **Reference:** Page 675
-
-### 3. Oncogenic Infections
+### 4. Oncogenic Infections
 
 ### Oncogenic Infections
 
@@ -7879,59 +9071,29 @@ anorectal cancer, cervical cancer, etc.
 
  Pre...
 
-📄 **Reference:** Page 674
+📄 **Reference:** Page 671
 
-### 4. owing if using VIA as a screening method:
+### 5. Screening for Breast Cancer
 
-### owing if using VIA as a screening method:
+### Screening for Breast Cancer
 
-Consider the following if using VIA as a screening method:
+Screening for Breast Cancer
 
- Women <25 years of age should be screened only if they are
+Screening / health checkup for breast cancer involves:
 
-at high risk for disease: HIV positive, early sexual exposure,
+Breast Self-Examination (BSE): a simple, quick examination done by the
 
-multiple partners, previous abnormal screening results, cervical
+client herself, aimed at early detection of lumps. Regular (monthly-not
 
-intraepithelial neoplasia (CIN)
+during menstruation, at least seven days after ending the menstruation)
 
- VIA is not appropriate for women >50 years
+and correct technique of breast examination is important and easy to
 
- Screening is advised every 3-5 years in case of normal results,
+teach and administer. Health workers should note that BSE is not a
 
-but after 1 years in case of abnormal results and treat...
+standard screening test fo...
 
-📄 **Reference:** Page 677
-
-### 5. Oncology
-
-### Oncology
-
-Uganda Clinical Guidelines 2023
-
-CHAPTER 12: Oncology
-
-ing, early diagnosis, pre-cancer treatment or cancer management, and
-
-referral to avoid or reduce complications associated with the cancer.
-
-Secondary prevention strategies relate to the discovery and control of
-
-cancerous or pre-cancerous lesions.
-
-Early detection of cancer greatly increases the chances for successful
-
-treatment and cure. It comprises of:
-
-~
-
-Early diagnosis in symptomatic populations
-
-~
-
-Screening in asymptom...
-
-📄 **Reference:** Page 676
+📄 **Reference:** Page 673
 
 
 ---
@@ -7944,7 +9106,7 @@ Next Steps / Monitoring: Consult the full source guideline or a clinician for pa
 
 When to Refer: Per excerpts and national guidance; seek urgent care if danger signs, severe disease, or instability is suspected.
 
-Citations: Page 674, Page 675, Page 676, Page 677
+Citations: Page 671, Page 673, Page 674, Page 679
 
 ---
 **🧪 Guardrail Brain Validation:** ✅ Passed
@@ -7959,7 +9121,7 @@ Citations: Page 674, Page 675, Page 676, Page 677
 
 > Routine immunization schedule infants Uganda
 
-**Metrics:** Triage `GREEN` | Guardrail OK `True` | Confidence `0.90`
+**Metrics:** Triage `GREEN` | Guardrail OK `True` | Confidence `0.91`
 
 #### VHT standard (`vht_response`)
 
@@ -7972,10 +9134,8 @@ Citations: Page 674, Page 675, Page 676, Page 677
 
 **WHAT TO DO (step by step):**
 
-**Step 1:** Assess patient carefully
-**Step 2:** Check for danger signs (see below)
-**Step 3:** If unsure, refer to health facility
-**Step 4:** Record all findings
+**Step 1:** Give this as early as possible in life, preferably at birth
+**Step 2:** Do NOT give BCG vaccine to any child with clinical signs
 
 **MONITORING:**
 
@@ -8006,11 +9166,181 @@ The symptoms can be managed at home with guidance. Follow the advice you were gi
 • Record all patients you see
 • Keep your VHT kit and referral forms ready
 
+**EXACT DOSING (copy from guidelines — do not change numbers):**
+
+### 18.1.1   National Immunization Schedule
+
+18.1.1   National Immunization Schedule
+
+Adapted from the UNEPI/MOH Immunization Schedule, 2022
+
+Vaccine Or
+
+Antigen
+
+Age
+
+Dose & Mode Of
+
+Administration
+
+Mode Of Ad­
+
+ministration
+
+Site Of Ad­
+
+ministration
+
+BCG
+
+At birth
+
+(or first
+
+contact)
+
+0-11 months: 0.05 mL
+
+Above 11
+
+months: 0.1 mL
+
+Intradermally Right Up­
+
+per Arm
+
+Hepatitis
+
+B
+
+At
+
+birth(first
+
+contact
+
+within
+
+the first
+
+7 days of
+
+life)
+
+0.5 ml IM
+
+Intramus­
+
+cular
+
+Outer
+
+aspect of
+
+left thigh
+
+Oral Polio
+
+4 doses: at birth,
+
+6,
+
+10, and
+
+14 weeks
+
+2 drops
+
+Orally
+
+Mouth
+
+Inactivat­
+
+ed Polio
+
+Vaccine
+
+(IPV)
+
+2 doses: At 6 and
+
+14
+
+Weeks of
+
+age
+
+0.5 mL
+
+Intramus­
+
+cular
+
+Outer
+
+aspect of
+
+right thigh; 2.5 cm
+
+away from
+
+PCV site
+
+872
+
+### Routine TT vaccine schedule and the period of protection
+
+Routine TT vaccine schedule and the period of protection
+
+TT DOSE
+
+WHEN GIVEN
+
+DURATION AND
+
+LEVELS
+
+OF PROTECTION
+
+Td1
+
+At first contact with woman of childbearing
+
+age or as early as possible during pregnancy
+
+None
+
+Td2
+
+At least 4 weeks after Td1
+
+3 years; 80% protection
+
+Td3
+
+At least 6 months after Td2
+
+5 years; 95% protection
+
+Td4
+
+At least 1 year after Td3
+
+10 years; 99% protection
+
+Td5
+
+At least 1 year after Td4
+
+30 years; 99% protection
+
 **FROM THE GUIDELINES:**
 
-• Uganda Clinical Guidelines 2023, Page 16: 18.1  Routine Childhood Vaccination...............................................875
-• Uganda Clinical Guidelines 2023, Page 305: HIV/AIDS and Sexually Transmitted Infections
-• Uganda Clinical Guidelines 2023, Page 305: 3.1.9.2 HIV-exposed infant care services
+• Uganda Clinical Guidelines 2023, Page 939: General principles of routine childhood immunization [HIGH FIDELITY]
+• Uganda Clinical Guidelines 2023, Page 886: Check immunization card and classify [HIGH FIDELITY]
+• Uganda Clinical Guidelines 2023, Page 938: 18.1.1   National Immunization Schedule [EXACT DOSING]
 ```
 
 #### Referral note (`referral_note`)
@@ -8022,9 +9352,8 @@ The symptoms can be managed at home with guidance. Follow the advice you were gi
 **Reason:** Routine evidence retrieval from national guidelines
 
 **Actions taken:**
-• Assess patient carefully
-• Check for danger signs (see below)
-• If unsure, refer to health facility
+• Give this as early as possible in life, preferably at birth
+• Do NOT give BCG vaccine to any child with clinical signs
 
 **Referral completed:** [ ]
 **Health worker received:** [ ]
@@ -8048,99 +9377,37 @@ Action: Follow advice below, monitor for changes
 
 **Question:** Routine immunization schedule infants Uganda
 
-### 1. 18.1  Routine Childhood Vaccination...............................................875
+### 1. General principles of routine childhood immunization
 
-### 18.1  Routine Childhood Vaccination...............................................875
+### General principles of routine childhood immunization
 
-18 IMMUNIZATION......................................................................875
+General principles of routine childhood immunization
 
-18.1  Routine Childhood Vaccination...............................................875
+~
 
-18.1.1   National Immunization Schedule.................................................................875
+The aim is to ensure that all target age groups complete
 
-18.1.2  Hepatitis B Vaccination...............................................................................881
+their immunization schedule as above
 
-18.1.3  ...
+~
 
-📄 **Reference:** Page 16
+Age for vaccinations: Give each vaccine at the recom­
 
-### 2. HIV/AIDS and Sexually Transmitted Infections
+mended age or if this is not possible, at any first contact
 
-### HIV/AIDS and Sexually Transmitted Infections
+with the child after this age
 
-Uganda Clinical Guidelines 2023
+~
 
-CHAPTER 3: HIV/AIDS and Sexually Transmitted Infections
+BCG vaccination
 
-Service
+- Give this as early as possible in life, preferably at birth
 
-Description
+- Do NOT give BCG vaccine to any child with clinical sig...
 
-• 8 ANC visits
+📄 **Reference:** Page 939
 
-• Two weeks after
-
-initiating ART
-
-• Synchronize ART
-
-refills and adherence
-
-support with the ANC
-
-visits
-
-• After that, monthly
-
-until delivery
-
-• Follow routine
-
-MCH schedule after
-
-delivery together
-
-with the exposed
-
-infant visit schedule...
-
-📄 **Reference:** Page 305
-
-### 3. 3.1.9.2 HIV-exposed infant care services
-
-### 3.1.9.2 HIV-exposed infant care services
-
-3.1.9.2 HIV-exposed infant care services
-
-Service
-
-Description
-
-Identification of
-
-HIV-exposed in­
-
-fants
-
-• Identify all HIV-exposed infants; document the
-
-HIV status of the mother in the child card and
-
-mothers’ passport. Infants whose HIV status
-
-is not documented or is unknown should be
-
-offered rapid HIV testing; including those whose
-
-mothers did not receive eMTCT services or have
-
-become newly infected after pregnancy. Rapid
-
-diagnostic tests ...
-
-📄 **Reference:** Page 305
-
-### 4. Check immunization card and classify
+### 2. Check immunization card and classify
 
 ### Check immunization card and classify
 
@@ -8216,33 +9483,149 @@ Per Sched­
 
 ule...
 
-📄 **Reference:** Page 889
+📄 **Reference:** Page 886
 
-### 5. Prevention
+### 3. 18.1.1   National Immunization Schedule
 
-### Prevention
+### 18.1.1   National Immunization Schedule
 
-Prevention
+18.1.1   National Immunization Schedule
 
-~
+Adapted from the UNEPI/MOH Immunization Schedule, 2022
 
-Educate parents on the importance of following the routine
+Vaccine Or
 
-childhood immunisation schedule:
+Antigen
 
-~
+Age
 
-Ensure good nutrition
+Dose & Mode Of
 
-~
+Administration
 
-Avoid overcrowding
+Mode Of Ad­
 
-~
+ministration
 
-Booster doses of vaccine in exposed infants...
+Site Of Ad­
 
-📄 **Reference:** Page 423
+ministration
+
+BCG
+
+At birth
+
+(or first
+
+contact)
+
+0-11 months: 0.05 mL
+
+Above 11
+
+months: 0.1 mL
+
+Intradermally Right Up­
+
+per Arm
+
+Hepatitis
+
+B
+
+At
+
+birth(first
+
+contact
+
+within
+
+the first
+
+7 days of
+
+life)
+
+0.5 ml IM
+
+Intramus­
+
+cular
+
+Outer
+
+aspect of
+
+left...
+
+📄 **Reference:** Page 938
+
+### 4. Routine TT vaccine schedule and the period of protection
+
+### Routine TT vaccine schedule and the period of protection
+
+Routine TT vaccine schedule and the period of protection
+
+TT DOSE
+
+WHEN GIVEN
+
+DURATION AND
+
+LEVELS
+
+OF PROTECTION
+
+Td1
+
+At first contact with woman of childbearing
+
+age or as early as possible during pregnancy
+
+None
+
+Td2
+
+At least 4 weeks after Td1
+
+3 years; 80% protection
+
+Td3
+
+At least 6 months after Td2
+
+5 years; 95% protection
+
+Td4
+
+At least 1 year after Td3
+
+10 years; 99% protection
+
+Td5
+
+At least 1 year after Td4
+
+30 years; 99%...
+
+📄 **Reference:** Page 946
+
+### 5. 18.1  Routine Childhood Vaccination...............................................872
+
+### 18.1  Routine Childhood Vaccination...............................................872
+
+18 IMMUNIZATION......................................................................872
+
+18.1  Routine Childhood Vaccination...............................................872
+
+18.1.1   National Immunization Schedule.................................................................872
+
+18.1.2  Hepatitis B Vaccination...............................................................................878
+
+18.1.3  ...
+
+📄 **Reference:** Page 16
 
 
 ---
@@ -8255,7 +9638,7 @@ Next Steps / Monitoring: Consult the full source guideline or a clinician for pa
 
 When to Refer: Per excerpts and national guidance; seek urgent care if danger signs, severe disease, or instability is suspected.
 
-Citations: Page 16, Page 305, Page 423, Page 889
+Citations: Page 16, Page 886, Page 938, Page 939, Page 946
 
 ---
 **🧪 Guardrail Brain Validation:** ✅ Passed
@@ -8270,7 +9653,7 @@ Citations: Page 16, Page 305, Page 423, Page 889
 
 > Severe acute malnutrition inpatient management
 
-**Metrics:** Triage `GREEN` | Guardrail OK `True` | Confidence `0.90`
+**Metrics:** Triage `GREEN` | Guardrail OK `True` | Confidence `0.95`
 
 #### VHT standard (`vht_response`)
 
@@ -8319,9 +9702,9 @@ The symptoms can be managed at home with guidance. Follow the advice you were gi
 
 **FROM THE GUIDELINES:**
 
-• Uganda Clinical Guidelines 2023, Page 17: 19.2  Malnutrition.........................................................................890
-• Uganda Clinical Guidelines 2023, Page 959: 19.2.1.2  Assessing Malnutrition in Children 6 months to 5 years
-• Uganda Clinical Guidelines 2023, Page 963: 19.2.2   Management of Acute Malnutrition in Children
+• Uganda Clinical Guidelines 2023, Page 962: 19.2.2.3  Management of Complicated Severe Acute Malnutri­ [HIGH FIDELITY]
+• Uganda Clinical Guidelines 2023, Page 960: 19.2.2   Management of Acute Malnutrition in Children [HIGH FIDELITY]
+• Uganda Clinical Guidelines 2023, Page 960: 19.2.2.1   Management of Moderate Acute Malnutrition [HIGH FIDELITY]
 ```
 
 #### Referral note (`referral_note`)
@@ -8359,87 +9742,23 @@ Action: Follow advice below, monitor for changes
 
 **Question:** Severe acute malnutrition inpatient management
 
-### 1. 19.2  Malnutrition.........................................................................890
+### 1. 19.2.2.3  Management of Complicated Severe Acute Malnutri­
 
-### 19.2  Malnutrition.........................................................................890
+### 19.2.2.3  Management of Complicated Severe Acute Malnutri­
 
-19.2  Malnutrition.........................................................................890
+19.2.2.3  Management of Complicated Severe Acute Malnutri­...
 
-19.2.1  Introduction on Malnutrition........................................................................890
+📄 **Reference:** Page 962
 
-19.2.1.1 Classification of Malnutrition......................................................................892
-
-19.2.1.2 Assessing Malnutrition in Children 6 months to 5 years.................
-
-📄 **Reference:** Page 17
-
-### 2. 19.2.1.2  Assessing Malnutrition in Children 6 months to 5 years
-
-### 19.2.1.2  Assessing Malnutrition in Children 6 months to 5 years
-
-19.2.1.2  Assessing Malnutrition in Children 6 months to 5 years
-
-The 4 key features used to diagnose acute malnutrition are:
-
-
-
-Weight-for-Height/Length (WFH/L) using WHO growth standards
-
-charts (see section 15.5). It is the best indicator for diagnosing
-
-acute malnutrition.
-
-
-
-Mean Upper Arm Circumference (MUAC) in mm using a measuring
-
-tape (see section 17.5)
-
-
-
-Oedema of both feet (kwashiorkor with or without severe wa...
-
-📄 **Reference:** Page 959
-
-### 3. 19.2.2   Management of Acute Malnutrition in Children
+### 2. 19.2.2   Management of Acute Malnutrition in Children
 
 ### 19.2.2   Management of Acute Malnutrition in Children
 
 19.2.2   Management of Acute Malnutrition in Children...
 
-📄 **Reference:** Page 963
+📄 **Reference:** Page 960
 
-### 4. Weight for-Height/Length
-
-### Weight for-Height/Length
-
-Weight for-Height/Length
-
-r
-
-Used to diagnose acute malnutrition
-
-r
-
-The cut-off for severe acute malnutrition is -3 z-scores and be­
-
-low. These children are at a high risk of mortality, but respond
-
-quickly and safely to re-feeding using therapeutic foods following
-
-recommended guidelines.
-
-r
-
-The cut-off for moderate acute malnutrition is -2 to -3 z-scores
-
-below.
-
-868...
-
-📄 **Reference:** Page 934
-
-### 5. 19.2.2.1   Management of Moderate Acute Malnutrition
+### 3. 19.2.2.1   Management of Moderate Acute Malnutrition
 
 ### 19.2.2.1   Management of Moderate Acute Malnutrition
 
@@ -8461,7 +9780,53 @@ If child has any feeding problem, counsel and follow up
 
 in 7 days (see section 17.3.12.4)...
 
-📄 **Reference:** Page 963
+📄 **Reference:** Page 960
+
+### 4. If the child has moderate acute malnutrition:
+
+### If the child has moderate acute malnutrition:
+
+If the child has moderate acute malnutrition:
+
+
+
+Advise the mother to continue RUTF. Counsel her
+
+to start other foods according to the age appropriate
+
+feeding recommendations (see section 17.3.12.3)
+
+
+
+Tell her to return in 14 days. Continue to see the
+
+child every 14 days until the child has no more acute
+
+malnutrition...
+
+📄 **Reference:** Page 962
+
+### 5. Malnutrition
+
+### Malnutrition
+
+Moderate Acute
+
+Malnutrition
+
+~
+
+WFH/L between -3 and -2 z-scores
+
+~
+
+Or MUAC 115 up to 125 mm
+
+~
+
+Or low weight for age...
+
+📄 **Reference:** Page 957
 
 
 ---
@@ -8474,7 +9839,7 @@ Next Steps / Monitoring: Consult the full source guideline or a clinician for pa
 
 When to Refer: Per excerpts and national guidance; seek urgent care if danger signs, severe disease, or instability is suspected.
 
-Citations: Page 17, Page 934, Page 959, Page 963
+Citations: Page 957, Page 960, Page 962
 
 ---
 **🧪 Guardrail Brain Validation:** ✅ Passed
@@ -8489,7 +9854,7 @@ Citations: Page 17, Page 934, Page 959, Page 963
 
 > Tuberculosis preventive therapy isoniazid
 
-**Metrics:** Triage `GREEN` | Guardrail OK `True` | Confidence `0.90`
+**Metrics:** Triage `GREEN` | Guardrail OK `True` | Confidence `0.95`
 
 #### VHT standard (`vht_response`)
 
@@ -8502,10 +9867,11 @@ Citations: Page 17, Page 934, Page 959, Page 963
 
 **WHAT TO DO (step by step):**
 
-**Step 1:** Assess patient carefully
-**Step 2:** Check for danger signs (see below)
-**Step 3:** If unsure, refer to health facility
-**Step 4:** Record all findings
+**Step 1:** Persons living with HIV
+**Step 2:** Child & adult contacts of pulmonary TB patients
+**Step 3:** Assess for cough, fever, weight loss and nights
+**Step 4:** If any of the TB symptoms are present, do
+**Step 5:** evaluation for TB
 
 **MONITORING:**
 
@@ -8538,9 +9904,9 @@ The symptoms can be managed at home with guidance. Follow the advice you were gi
 
 **FROM THE GUIDELINES:**
 
-• Uganda Clinical Guidelines 2023, Page 37: IPT
-• Uganda Clinical Guidelines 2023, Page 316: TB preventive therapy (TPT)
-• Uganda Clinical Guidelines 2023, Page 452: 5.3.2.3	 Tuberculosis Preventive Treatment
+• Uganda Clinical Guidelines 2023, Page 316: TB preventive therapy (TPT) [HIGH FIDELITY]
+• Uganda Clinical Guidelines 2023, Page 264: TPT (TB Preventive treatment) [HIGH FIDELITY]
+• Uganda Clinical Guidelines 2023, Page 451: 5.3.2.3	 Tuberculosis Preventive Treatment [HIGH FIDELITY]
 ```
 
 #### Referral note (`referral_note`)
@@ -8552,9 +9918,9 @@ The symptoms can be managed at home with guidance. Follow the advice you were gi
 **Reason:** Routine evidence retrieval from national guidelines
 
 **Actions taken:**
-• Assess patient carefully
-• Check for danger signs (see below)
-• If unsure, refer to health facility
+• Persons living with HIV
+• Child & adult contacts of pulmonary TB patients
+• Assess for cough, fever, weight loss and nights
 
 **Referral completed:** [ ]
 **Health worker received:** [ ]
@@ -8578,85 +9944,7 @@ Action: Follow advice below, monitor for changes
 
 **Question:** Tuberculosis preventive therapy isoniazid
 
-### 1. IPT
-
-### IPT
-
-HBV
-
-Hepatitis B Virus
-
-HC
-
-Health Centre
-
-Hct/Ht
-
-Haematocrit
-
-HCW
-
-Health Care Worker
-
-HDU
-
-High Dependency Unit
-
-HE
-
-Hepatic Encephalopathy
-
-HepB
-
-Hepatitis B
-
-HHS
-
-Hyperosmolar Hyperglycaemic State
-
-Hib
-
-Haemophilus Influenzae Type B
-
-HIV
-
-Human Immunodeficiency Virus
-
-HPV
-
-Human Papilloma Virus
-
-HR
-
-Heart Rate
-
-HRP
-
-High-Risk Pregnancy
-
-HRS
-
-Hepatorenal Syndrome
-
-HSV
-
-Herpes Simplex Virus
-
-HVS
-
-High Vaginal  Swab
-
-ICCM
-
-Integrated Community Case Management
-
-ICU
-
-Intensive Care  Uni...
-
-📄 **Reference:** Page 37
-
-### 2. TB preventive therapy (TPT)
+### 1. TB preventive therapy (TPT)
 
 ### TB preventive therapy (TPT)
 
@@ -8686,109 +9974,7 @@ delivery, INH prophylaxis is not required.
 
 📄 **Reference:** Page 316
 
-### 3. 5.3.2.3	 Tuberculosis Preventive Treatment
-
-### 5.3.2.3	 Tuberculosis Preventive Treatment
-
-5.3.2.3	 Tuberculosis Preventive Treatment
-
-Tuberculosis preventive treatment is recommended to prevent the
-
-development of active TB disease in an individual who has latent TB
-
-infection (LTBI).
-
-Uganda  guidelines for programmatic management of Latent TB infection
-
-recommend TB preventive treatment (TPT ) in the following categories
-
-of people:
-
-- Persons living with HIV
-
-- Child & adult contacts of pulmonary TB patients
-
-Do not use TPT in cases ...
-
-📄 **Reference:** Page 452
-
-### 4. 5.3.2.5	 TB Preventive Treatment Dosing Chart
-
-### 5.3.2.5	 TB Preventive Treatment Dosing Chart
-
-5.3.2.5	 TB Preventive Treatment Dosing Chart
-
-Medicine frequency
-
-& duration
-
-Formulation
-
-Dose of TPT
-
-medicine
-
-(mgs)
-
-Dose/
-
-weight
-
-Recom
-
-3HP (once weekly
-
-rifapentine plus isoni­
-
-azid for 3 months)
-
-Fixed Doze
-
-Combination
-
-(FDC) Tablet
-
-Rifapentine
-
-300mg/ Iso­
-
-niazid 300mg
-
-3–5.9
-
-Single medicine
-
-Pyridoxine
-
-25mg/day
-
-tablet
-
-6H (daily isoniazid
-
-for 6 months)
-
-3–5.9
-
-kgs
-
-Isoniazid 100
-
-mg
-
-<10 years
-
-0.5
-
-Single medicine
-
-10mg/kg
-
-...
-
-📄 **Reference:** Page 454
-
-### 5. TPT (TB Preventive treatment)
+### 2. TPT (TB Preventive treatment)
 
 ### TPT (TB Preventive treatment)
 
@@ -8820,6 +10006,56 @@ entine and isoniazid (1HP).)
 
 📄 **Reference:** Page 264
 
+### 3. 5.3.2.3	 Tuberculosis Preventive Treatment
+
+### 5.3.2.3	 Tuberculosis Preventive Treatment
+
+5.3.2.3	 Tuberculosis Preventive Treatment
+
+Tuberculosis preventive treatment is recommended to prevent the
+
+development of active TB disease in an individual who has latent TB
+
+infection (LTBI).
+
+Uganda  guidelines for programmatic management of Latent TB infection
+
+recommend TB preventive treatment (TPT ) in the following categories
+
+of people:
+
+- Persons living with HIV
+
+- Child & adult contacts of pulmonary TB patients
+
+Do not use TPT in cases ...
+
+📄 **Reference:** Page 451
+
+### 4. Untitled
+
+Uganda Clinical Guidelines 2023
+
+5.3.2.1 Anti-TB Drugs Side Effects..........................................................................381
+
+5.3.2.2 Prevention and Infection Control of TB........................................................384
+
+5.3.2.3 Tuberculosis Preventive Treatment................................................................385
+
+5.3.2.5 TB Preventive Treatment Dosing Chart........................................................386...
+
+📄 **Reference:** Page 9
+
+### 5. Isoniazid
+
+### Isoniazid
+
+Isoniazid
+
+Hepatitis, peripheral neuropathy...
+
+📄 **Reference:** Page 447
+
 
 ---
 
@@ -8831,7 +10067,7 @@ Next Steps / Monitoring: Consult the full source guideline or a clinician for pa
 
 When to Refer: Per excerpts and national guidance; seek urgent care if danger signs, severe disease, or instability is suspected.
 
-Citations: Page 37, Page 264, Page 316, Page 452, Page 454
+Citations: Page 9, Page 264, Page 316, Page 447, Page 451
 
 ---
 **🧪 Guardrail Brain Validation:** ✅ Passed
@@ -8846,7 +10082,7 @@ Citations: Page 37, Page 264, Page 316, Page 452, Page 454
 
 > Depression screening and management primary care
 
-**Metrics:** Triage `GREEN` | Guardrail OK `True` | Confidence `0.90`
+**Metrics:** Triage `GREEN` | Guardrail OK `True` | Confidence `0.68`
 
 #### VHT standard (`vht_response`)
 
@@ -8859,10 +10095,8 @@ Citations: Page 37, Page 264, Page 316, Page 452, Page 454
 
 **WHAT TO DO (step by step):**
 
-**Step 1:** Assess patient carefully
-**Step 2:** Check for danger signs (see below)
-**Step 3:** If unsure, refer to health facility
-**Step 4:** Record all findings
+**Step 1:** Symptom screening or CXR
+**Step 2:** All individuals seeking health care should be screened for TB at each
 
 **MONITORING:**
 
@@ -8895,9 +10129,9 @@ The symptoms can be managed at home with guidance. Follow the advice you were gi
 
 **FROM THE GUIDELINES:**
 
-• Uganda Clinical Guidelines 2023, Page 719: ceive
-• Uganda Clinical Guidelines 2023, Page 676: Screening for Breast Cancer
-• Uganda Clinical Guidelines 2023, Page 214: COVID-19 screening and triage process at health facilities
+• Uganda Clinical Guidelines 2023, Page 590: Depression [HIGH FIDELITY]
+• Uganda Clinical Guidelines 2023, Page 845: Management [HIGH FIDELITY]
+• Uganda Clinical Guidelines 2023, Page 580: Depression [HIGH FIDELITY]
 ```
 
 #### Referral note (`referral_note`)
@@ -8909,9 +10143,8 @@ The symptoms can be managed at home with guidance. Follow the advice you were gi
 **Reason:** Routine evidence retrieval from national guidelines
 
 **Actions taken:**
-• Assess patient carefully
-• Check for danger signs (see below)
-• If unsure, refer to health facility
+• Symptom screening or CXR
+• All individuals seeking health care should be screened for TB at each
 
 **Referral completed:** [ ]
 **Health worker received:** [ ]
@@ -8935,7 +10168,103 @@ Action: Follow advice below, monitor for changes
 
 **Question:** Depression screening and management primary care
 
-### 1. ceive
+### 1. Depression
+
+### Depression
+
+9.2.2
+
+Depression
+
+ICD10 CODE: F32, F33
+
+A common disorder characterised by low mood, loss of interest and
+
+enjoyment and reduced energy leading to diminished activity and in
+
+severe forms, difficult day-to-day functioning.
+
+524...
+
+📄 **Reference:** Page 590
+
+### 2. Management
+
+### Management
+
+Management
+
+TREATMENT
+
+LOC
+
+
+
+Routine assessment for depressive symptoms during post
+
+natal visits or at least once at 6 weeks
+
+
+
+Counselling and reassurance at first contact and review
+
+after 2 weeks
+
+
+
+If persisting, refer for specialized treatment...
+
+📄 **Reference:** Page 845
+
+### 3. Depression
+
+### Depression
+
+Depression
+
+~
+
+As for depression described above, but with a history of
+
+manic episode
+
+~
+
+High index of suspicion for bipolar in early onset depres­
+
+sion with family history of bipolar illness
+
+~
+
+Differential diagnosis
+
+~
+
+Organic mental states e.g. drug or alcohol intoxication, de­
+
+lirium
+
+~
+
+Chronic Psychosis...
+
+📄 **Reference:** Page 580
+
+### 4. TB screening approaches:
+
+### TB screening approaches:
+
+TB screening approaches:
+
+•	Symptom screening or CXR
+
+•	All individuals seeking health care should be screened for TB at each
+
+visit...
+
+📄 **Reference:** Page 437
+
+### 5. ceive
 
 ### ceive
 
@@ -8975,121 +10304,7 @@ Screening for hereditary diseases e.g., sickle cell disease
 
 Sc...
 
-📄 **Reference:** Page 719
-
-### 2. Screening for Breast Cancer
-
-### Screening for Breast Cancer
-
-Screening for Breast Cancer
-
-Screening / health checkup for breast cancer involves:
-
-Breast Self-Examination (BSE): a simple, quick examination done by the
-
-client herself, aimed at early detection of lumps. Regular (monthly-not
-
-during menstruation, at least seven days after ending the menstruation)
-
-and correct technique of breast examination is important and easy to
-
-teach and administer. Health workers should note that BSE is not a
-
-standard screening test fo...
-
-📄 **Reference:** Page 676
-
-### 3. COVID-19 screening and triage process at health facilities
-
-### COVID-19 screening and triage process at health facilities
-
-COVID-19 screening and triage process at health facilities
-
-~
-
-COVID-19 triage aims to flag suspected patients at first
-
-point of contact within the healthcare system in order to
-
-~
-
-protect other patients and staff from potential exposure.
-
-~
-
-identify and rapidly address severe symptoms, rule out oth­
-
-er conditions with features similar to COVID-19, ascertain
-
-if suspect case definition is met
-
-~
-
-All suspected patients should be...
-
-📄 **Reference:** Page 214
-
-### 4. Investigations
-
-### Investigations
-
-Investigations
-
-
-
-Non-treponemal antibody tests (VDRL and RPR)
-
-- Positive 4-6 weeks after infection
-
-- Used as screening test
-
-- Possibility of false positive
-
-- Remains positive 6-12 months after treatment
-
-
-
-Treponemal antibody tests (TPHA): very sensitive, used to confirm
-
-a positive non-treponemal test. Remains positive for long even
-
-after treatment so its positivity may not indicate active disease....
-
-📄 **Reference:** Page 357
-
-### 5. 16.1  ANTENATAL CARE (ANC)
-
-### 16.1  ANTENATAL CARE (ANC)
-
-16.1  ANTENATAL CARE (ANC)     ICD10 CODE: Z36
-
-Antenatal care is a planned programme of medical care offered to
-
-pregnant women by a skilled birth attendant, from the time of con­
-
-ception to delivery, aimed at ensuring a safe and satisfying pregnancy
-
-and birth outcome.
-
-The main objective of antenatal care is to give information on:
-
-~
-
-Screening, prevention, and treatment of complications
-
-~
-
-Emergency preparedness
-
-~
-
-Birth planning
-
-~
-
-Satisfying any unmet n...
-
-📄 **Reference:** Page 759
+📄 **Reference:** Page 716
 
 
 ---
@@ -9102,7 +10317,7 @@ Next Steps / Monitoring: Consult the full source guideline or a clinician for pa
 
 When to Refer: Per excerpts and national guidance; seek urgent care if danger signs, severe disease, or instability is suspected.
 
-Citations: Page 214, Page 357, Page 676, Page 719, Page 759
+Citations: Page 437, Page 580, Page 590, Page 716, Page 845
 
 ---
 **🧪 Guardrail Brain Validation:** ✅ Passed
@@ -9130,10 +10345,10 @@ Citations: Page 214, Page 357, Page 676, Page 719, Page 759
 
 **WHAT TO DO (step by step):**
 
-**Step 1:** Assess patient carefully
-**Step 2:** Check for danger signs (see below)
-**Step 3:** If unsure, refer to health facility
-**Step 4:** Record all findings
+**Step 1:** Inhaler 2-10 puffs via a large volume spacer
+**Step 2:** Assess after 1 month and adjust the dose prn
+**Step 3:** Higher dose may be needed initially to gain
+**Step 4:** Doubling of the regular dose may be useful to
 
 **MONITORING:**
 
@@ -9166,9 +10381,9 @@ The symptoms can be managed at home with guidance. Follow the advice you were gi
 
 **FROM THE GUIDELINES:**
 
-• Uganda Clinical Guidelines 2023, Page 403: Chronic Asthma
-• Uganda Clinical Guidelines 2023, Page 403: General principles of management
-• Uganda Clinical Guidelines 2023, Page 402: Respiratory Diseases
+• Uganda Clinical Guidelines 2023, Page 397: Management of asthma attacks [HIGH FIDELITY]
+• Uganda Clinical Guidelines 2023, Page 402: Chronic Asthma [HIGH FIDELITY]
+• Uganda Clinical Guidelines 2023, Page 403: STEP 2: Mild persistent asthma [HIGH FIDELITY]
 ```
 
 #### Referral note (`referral_note`)
@@ -9180,9 +10395,9 @@ The symptoms can be managed at home with guidance. Follow the advice you were gi
 **Reason:** Routine evidence retrieval from national guidelines
 
 **Actions taken:**
-• Assess patient carefully
-• Check for danger signs (see below)
-• If unsure, refer to health facility
+• Inhaler 2-10 puffs via a large volume spacer
+• Assess after 1 month and adjust the dose prn
+• Higher dose may be needed initially to gain
 
 **Referral completed:** [ ]
 **Health worker received:** [ ]
@@ -9206,15 +10421,127 @@ Action: Follow advice below, monitor for changes
 
 **Question:** Asthma chronic management inhaler technique
 
-### 1. Chronic Asthma
+### 1. Management of asthma attacks
+
+### Management of asthma attacks
+
+Management of asthma attacks
+
+TREATMENT
+
+LOC
+
+Mild to moderate
+
+HC3
+
+
+
+Treat as an out-patient
+
+HC3
+
+
+
+Reassure patient; place him in a ½ sitting position
+
+HC3
+
+
+
+Give salbutamol
+
+- Inhaler 2-10 puffs via a large volume spacer
+
+331...
+
+📄 **Reference:** Page 397
+
+### 2. Chronic Asthma
 
 ### Chronic Asthma
 
 5.1.1.2	 Chronic Asthma...
 
+📄 **Reference:** Page 402
+
+### 3. STEP 2: Mild persistent asthma
+
+### STEP 2: Mild persistent asthma
+
+STEP 2: Mild persistent asthma
+
+~
+
+Symptoms > once/week, but < once/day
+
+~
+
+Night time symptoms > twice/month
+
+~
+
+Symptoms may affect activity
+
+HC3
+
+HC4
+
+Regular inhaled preventer therapy
+
+
+
+Salbutamol inhaler 1-2 puffs prn
+
+
+
+Plus regular standard-dose inhaled
+
+corticosteroid, e.g. beclomethasone 100-400 micrograms
+
+every 12 hours (children: 100-200 micrograms every 12 hours)
+
+- Assess after 1 month and adjust the dose prn
+
+- Higher dose may be needed initi...
+
 📄 **Reference:** Page 403
 
-### 2. General principles of management
+### 4. General principles of management
+
+### General principles of management
+
+
+
+Chest X-ray
+
+
+
+Blood: complete blood count
+
+General principles of management
+
+The four essential components of Asthma Management: Patient edu­
+
+cation, control of asthma triggers, monitoring for changes in symptoms
+
+or lung function, and pharmacologic therapy.
+
+~
+
+Inhalation route is always preferred as it delivers the med­
+
+icines directly to the airways; the dose required is smaller,
+
+the side-effects are reduced
+
+
+
+E.g., nebuliser solutions for acute...
+
+📄 **Reference:** Page 395
+
+### 5. General principles of management
 
 ### General principles of management
 
@@ -9250,89 +10577,7 @@ at a dose of:
 
 Ch...
 
-📄 **Reference:** Page 403
-
-### 3. Respiratory Diseases
-
-### Respiratory Diseases
-
-Uganda Clinical Guidelines 2023
-
-CHAPTER 5: Respiratory Diseases
-
-PRIMARY CARE - Patient presents with
-
-acute or sub-acute asthma exacerbation
-
-ASSESS the PATIENT - Is it asthma? Risk factor
-
-for asthma related death? Severity of exacerbation
-
-MILD OR MODER­
-
-ATE Talks in phrases,
-
-prefers sitting not
-
-lying, not agitated.
-
-Respiratory rate
-
-increased Accessory
-
-muscles not used
-
-SEVERE Talks in words,
-
-sits hunched forwards,
-
-agitated Respiratory
-
-rate >30/min Accessor...
-
 📄 **Reference:** Page 402
-
-### 4. STEP 1: Intermittent asthma
-
-### STEP 1: Intermittent asthma
-
-STEP 1: Intermittent asthma
-
-~
-
-Intermittent symptoms (< once/week)
-
-HC3
-
-~
-
-Night time symptoms < twice/month
-
-~
-
-Normal physical activity...
-
-📄 **Reference:** Page 403
-
-### 5. Caution
-
-### Caution
-
-Caution
-
- Do not give medicines such as morphine, propranolol, or
-
-other B-blockers to patients with asthma as they worsen
-
-respiratory problems
-
- Do not give sedatives to children with asthma, even if they
-
-are restless
-
-339...
-
-📄 **Reference:** Page 405
 
 
 ---
@@ -9345,7 +10590,7 @@ Next Steps / Monitoring: Consult the full source guideline or a clinician for pa
 
 When to Refer: Per excerpts and national guidance; seek urgent care if danger signs, severe disease, or instability is suspected.
 
-Citations: Page 402, Page 403, Page 405
+Citations: Page 395, Page 397, Page 402, Page 403
 
 ---
 **🧪 Guardrail Brain Validation:** ✅ Passed
@@ -9360,7 +10605,7 @@ Citations: Page 402, Page 403, Page 405
 
 > Chronic kidney disease staging referral
 
-**Metrics:** Triage `GREEN` | Guardrail OK `True` | Confidence `0.90`
+**Metrics:** Triage `GREEN` | Guardrail OK `True` | Confidence `0.70`
 
 #### VHT standard (`vht_response`)
 
@@ -9409,9 +10654,9 @@ The symptoms can be managed at home with guidance. Follow the advice you were gi
 
 **FROM THE GUIDELINES:**
 
-• Uganda Clinical Guidelines 2023, Page 516: Chronic Kidney Disease (CKD)
-• Uganda Clinical Guidelines 2023, Page 253: 3.1.1 Clinical Features of HIV
-• Uganda Clinical Guidelines 2023, Page 382: Risk Factor
+• Uganda Clinical Guidelines 2023, Page 514: Chronic Kidney Disease (CKD) [HIGH FIDELITY]
+• Uganda Clinical Guidelines 2023, Page 514: Renal and Urinary Diseases [HIGH FIDELITY]
+• Uganda Clinical Guidelines 2023, Page 243: Criteria for referral to regional/tertiary hospital [HIGH FIDELITY]
 ```
 
 #### Referral note (`referral_note`)
@@ -9459,119 +10704,81 @@ Chronic Kidney Disease (CKD)      ICD10 CODE: N18
 
 Chronic impairment of kidney function...
 
-📄 **Reference:** Page 516
+📄 **Reference:** Page 514
 
-### 2. 3.1.1 Clinical Features of HIV
+### 2. Renal and Urinary Diseases
 
-### 3.1.1 Clinical Features of HIV
-
-3.1.1 Clinical Features of HIV
-
-The WHO Clinical Staging of HIV for adults and children in the tables
-
-below shows the typical clinical features of HIV infection. The staging is
-
-based on demonstration of one or more opportunistic infections or key
-
-findings and correlates with disease progression and prognosis. Clinical
-
-staging should be performed at HIV diagnosis, on entry into HIV care,
-
-at ART initiation and at every visit hereafter to help guide patient ...
-
-📄 **Reference:** Page 253
-
-### 3. Risk Factor
-
-### Risk Factor
-
-Risk Factor
-
-Heart failure
-
-Post myocardial infarction
-
-Angina
-
-Diabetes
-
-Mild/moderate kidney disease
-
-Advanced chronic kidney disease
-
-Stroke
-
-Carvedilol or Bisoprolol  only...
-
-📄 **Reference:** Page 382
-
-### 4. Surgery, Radiology and Anaesthesia
-
-### Surgery, Radiology and Anaesthesia
+### Renal and Urinary Diseases
 
 Uganda Clinical Guidelines 2023
 
-CHAPTER 24 : Surgery, Radiology and Anaesthesia
+CHAPTER 7: Renal and Urinary Diseases
+
+TREATMENT
+
+LOC
+
+
+
+Refer for specialist management including possible
+
+dialysis as soon as possible and before the patient’s
+
+condition becomes critical
+
+HC4...
+
+📄 **Reference:** Page 514
+
+### 3. Criteria for referral to regional/tertiary hospital
+
+### Criteria for referral to regional/tertiary hospital
+
+Criteria for referral to regional/tertiary hospital
 
 ~
 
-Hepatomegaly or cirrhosis (fibrotic
+Persistent renal failure needing dialysis
 
 ~
 
-Gut perforation: Free air below the
+Any complication that cannot be managed locally...
 
-~
+📄 **Reference:** Page 243
 
-Kidney diseases (cancer, chronic
+### 4. 7.1 Renal Diseases........................................................................446
 
-hemidiaphgram on the CXR indi­
+### 7.1 Renal Diseases........................................................................446
 
-~
+7.1 Renal Diseases........................................................................446
 
-Liver/spleen rupture/ haematoma
+7.1.1 Acute Renal Failure........................................................................................446
 
-pyelonephritis, hydronephrosis)
-
-Ultrasound
-
-~
-
-Fluids (blood) in peritoneum
-
-~
-
-Renal trauma/haematoma
-
-cate pneumoperitoneum
-
-disease
-
-Ultrasound
-
-~
-
-Gallstones, cholecystitis
-
-~
-
-Liver masse...
-
-📄 **Reference:** Page 1120
-
-### 5. 7.1 Renal Diseases........................................................................448
-
-### 7.1 Renal Diseases........................................................................448
-
-7.1 Renal Diseases........................................................................448
-
-7.1.1 Acute Renal Failure........................................................................................448
-
-7.1.2 Chronic Kidney Disease (CKD)........................................................................450
+7.1.2 Chronic Kidney Disease (CKD)........................................................................448
 
 7.1.3 Use of Drugs in Renal Failure.............................................
 
 📄 **Reference:** Page 10
+
+### 5. Chronic stage
+
+### Chronic stage
+
+Chronic stage
+
+
+
+Encourage active use of the limb to restore muscle
+
+function/physiotherapy
+
+
+
+In event of severe contractures, refer for corrective
+
+surgery...
+
+📄 **Reference:** Page 204
 
 
 ---
@@ -9584,7 +10791,7 @@ Next Steps / Monitoring: Consult the full source guideline or a clinician for pa
 
 When to Refer: Per excerpts and national guidance; seek urgent care if danger signs, severe disease, or instability is suspected.
 
-Citations: Page 10, Page 253, Page 382, Page 516, Page 1120
+Citations: Page 10, Page 204, Page 243, Page 514
 
 ---
 **🧪 Guardrail Brain Validation:** ✅ Passed
@@ -9599,7 +10806,7 @@ Citations: Page 10, Page 253, Page 382, Page 516, Page 1120
 
 > Exclusive breastfeeding six months
 
-**Metrics:** Triage `GREEN` | Guardrail OK `True` | Confidence `0.90`
+**Metrics:** Triage `GREEN` | Guardrail OK `True` | Confidence `0.87`
 
 #### VHT standard (`vht_response`)
 
@@ -9612,10 +10819,11 @@ Citations: Page 10, Page 253, Page 382, Page 516, Page 1120
 
 **WHAT TO DO (step by step):**
 
-**Step 1:** Assess patient carefully
-**Step 2:** Check for danger signs (see below)
-**Step 3:** If unsure, refer to health facility
-**Step 4:** Record all findings
+**Step 1:** Counsel and support all mothers to initiate breastfeeding within an
+**Step 2:** Teach mother correct positioning and attachment for breastfeeding,
+**Step 3:** Counsel and support parents to introduce adequate, safe, and ap­
+**Step 4:** A good diet should be adequate in quantity and include an energy-rich
+**Step 5:** Pregnant women and lactating mothers should consume adequate
 
 **MONITORING:**
 
@@ -9648,9 +10856,9 @@ The symptoms can be managed at home with guidance. Follow the advice you were gi
 
 **FROM THE GUIDELINES:**
 
-• Uganda Clinical Guidelines 2023, Page 317: Counselling on infant feeding choice
-• Uganda Clinical Guidelines 2023, Page 317: If mother chooses breastfeeding
-• Uganda Clinical Guidelines 2023, Page 953: 19.1.1  Infant and Young Child Feeding (IYCF)
+• Uganda Clinical Guidelines 2023, Page 950: 19.1.1  Infant and Young Child Feeding (IYCF)
+• Uganda Clinical Guidelines 2023, Page 822: If breastfeeding difficult: [HIGH FIDELITY]
+• Uganda Clinical Guidelines 2023, Page 730: Indications [HIGH FIDELITY]
 ```
 
 #### Referral note (`referral_note`)
@@ -9662,9 +10870,9 @@ The symptoms can be managed at home with guidance. Follow the advice you were gi
 **Reason:** Routine evidence retrieval from national guidelines
 
 **Actions taken:**
-• Assess patient carefully
-• Check for danger signs (see below)
-• If unsure, refer to health facility
+• Counsel and support all mothers to initiate breastfeeding within an
+• Teach mother correct positioning and attachment for breastfeeding,
+• Counsel and support parents to introduce adequate, safe, and ap­
 
 **Referral completed:** [ ]
 **Health worker received:** [ ]
@@ -9688,7 +10896,87 @@ Action: Follow advice below, monitor for changes
 
 **Question:** Exclusive breastfeeding six months
 
-### 1. Counselling on infant feeding choice
+### 1. 19.1.1  Infant and Young Child Feeding (IYCF)
+
+### 19.1.1  Infant and Young Child Feeding (IYCF)
+
+19.1.1  Infant and Young Child Feeding (IYCF)
+
+1.	 Counsel and support all mothers to initiate breastfeeding within an
+
+hour of delivery and exclusively breastfeed their infants for the first
+
+six months of life, unless medically contraindicated.
+
+2.	 Teach mother correct positioning and attachment for breastfeeding,
+
+how to express and store breast milk hygienically, and how to feed
+
+the child by a cup.
+
+3.	 Counsel and support parents to intro...
+
+📄 **Reference:** Page 950
+
+### 2. If breastfeeding difficult:
+
+### If breastfeeding difficult:
+
+Support exclusive breast­
+
+feeding
+
+on demand, day and night,
+
+whenever baby wants
+
+If breastfeeding difficult:
+
+Help mother to position and
+
+attach the baby
+
+If breastfeeding not possible:
+
+Advise on safe replacement feed­
+
+ing (AFASS)
+
+756...
+
+📄 **Reference:** Page 822
+
+### 3. Indications
+
+### Indications
+
+Indications
+
+~
+
+Women <35 years needing highly effective FP method
+
+~
+
+Non-breastfeeding clients, or breastfeeding clients after 6
+
+months postpartum
+
+~
+
+Clients with dysmenorrhoea
+
+~
+
+Clients with heavy periods or ovulation pain
+
+~
+
+Clients concerned by irregular menstrual cycles...
+
+📄 **Reference:** Page 730
+
+### 4. Counselling on infant feeding choice
 
 ### Counselling on infant feeding choice
 
@@ -9720,83 +11008,13 @@ breastfeeding...
 
 📄 **Reference:** Page 317
 
-### 2. If mother chooses breastfeeding
+### 5. Breastfeeding
 
-### If mother chooses breastfeeding
+### Breastfeeding
 
-If mother chooses breastfeeding
+Breastfeeding...
 
-- The risk may be reduced by keeping the breasts healthy
-
-(mastitis and cracked nipples raise HIV infection risk)
-
-- Advise exclusive breastfeeding for 3-6 months
-
-251...
-
-📄 **Reference:** Page 317
-
-### 3. 19.1.1  Infant and Young Child Feeding (IYCF)
-
-### 19.1.1  Infant and Young Child Feeding (IYCF)
-
-19.1.1  Infant and Young Child Feeding (IYCF)
-
-1.	 Counsel and support all mothers to initiate breastfeeding within an
-
-hour of delivery and exclusively breastfeed their infants for the first
-
-six months of life, unless medically contraindicated.
-
-2.	 Teach mother correct positioning and attachment for breastfeeding,
-
-how to express and store breast milk hygienically, and how to feed
-
-the child by a cup.
-
-3.	 Counsel and support parents to intro...
-
-📄 **Reference:** Page 953
-
-### 4. If breastfeeding difficult:
-
-### If breastfeeding difficult:
-
-Support exclusive breast­
-
-feeding
-
-on demand, day and night,
-
-whenever baby wants
-
-If breastfeeding difficult:
-
-Help mother to position and
-
-attach the baby
-
-If breastfeeding not possible:
-
-Advise on safe replacement feed­
-
-ing (AFASS)
-
-759...
-
-📄 **Reference:** Page 825
-
-### 5. HC2
-
-### HC2
-
-HC2
-
-Routine deworming
-
-every six months...
-
-📄 **Reference:** Page 920
+📄 **Reference:** Page 927
 
 
 ---
@@ -9809,7 +11027,7 @@ Next Steps / Monitoring: Consult the full source guideline or a clinician for pa
 
 When to Refer: Per excerpts and national guidance; seek urgent care if danger signs, severe disease, or instability is suspected.
 
-Citations: Page 317, Page 825, Page 920, Page 953
+Citations: Page 317, Page 730, Page 822, Page 927, Page 950
 
 ---
 **🧪 Guardrail Brain Validation:** ✅ Passed
@@ -9824,7 +11042,7 @@ Citations: Page 317, Page 825, Page 920, Page 953
 
 > Pre-eclampsia severe features magnesium sulfate
 
-**Metrics:** Triage `GREEN` | Guardrail OK `True` | Confidence `0.90`
+**Metrics:** Triage `GREEN` | Guardrail OK `True` | Confidence `0.91`
 
 #### VHT standard (`vht_response`)
 
@@ -9837,10 +11055,11 @@ Citations: Page 317, Page 825, Page 920, Page 953
 
 **WHAT TO DO (step by step):**
 
-**Step 1:** Assess patient carefully
-**Step 2:** Check for danger signs (see below)
-**Step 3:** If unsure, refer to health facility
-**Step 4:** Record all findings
+**Step 1:** Draw 8 mL of a 50% MgSO4 and add 12 mL
+**Step 2:** Give the solution as a slow IV bolus over 20
+**Step 3:** minutes (the 20-20-20 rule)
+**Step 4:** Non-reassuring foetal heart
+**Step 5:** Ruptured membranes
 
 **MONITORING:**
 
@@ -9873,9 +11092,9 @@ The symptoms can be managed at home with guidance. Follow the advice you were gi
 
 **FROM THE GUIDELINES:**
 
-• Uganda Clinical Guidelines 2023, Page 795: Clinical features of severe pre-eclampsia
-• Uganda Clinical Guidelines 2023, Page 795: 16.3.7      Pre-Eclampsia
-• Uganda Clinical Guidelines 2023, Page 835: Obstetric Conditions
+• Uganda Clinical Guidelines 2023, Page 792: Clinical features of severe pre-eclampsia [HIGH FIDELITY]
+• Uganda Clinical Guidelines 2023, Page 794: Mild to moderate pre-eclampsia [HIGH FIDELITY]
+• Uganda Clinical Guidelines 2023, Page 792: 16.3.7      Pre-Eclampsia [HIGH FIDELITY]
 ```
 
 #### Referral note (`referral_note`)
@@ -9887,9 +11106,9 @@ The symptoms can be managed at home with guidance. Follow the advice you were gi
 **Reason:** Routine evidence retrieval from national guidelines
 
 **Actions taken:**
-• Assess patient carefully
-• Check for danger signs (see below)
-• If unsure, refer to health facility
+• Draw 8 mL of a 50% MgSO4 and add 12 mL
+• Give the solution as a slow IV bolus over 20
+• minutes (the 20-20-20 rule)
 
 **Referral completed:** [ ]
 **Health worker received:** [ ]
@@ -9927,11 +11146,59 @@ Headache, blurring of vision of new onset
 
 Epigastric or right upper quadrant pain, vomiting
 
-729...
+726...
 
-📄 **Reference:** Page 795
+📄 **Reference:** Page 792
 
-### 2. 16.3.7      Pre-Eclampsia
+### 2. Mild to moderate pre-eclampsia
+
+### Mild to moderate pre-eclampsia
+
+Mild to moderate pre-eclampsia
+
+
+
+Based on BP response
+
+
+
+Methyldopa, oral, 250 mg every 8 hours as a starting
+
+dose, increase to 500 mg 6 hourly according to response,
+
+Max dose 2 g daily
+
+AND/OR
+
+HC3
+
+
+
+Nifedipine 20-40 mg every 12 hours
+
+Severe pre-eclampsia (hypertensive emergency)
+
+To prevent convulsions
+
+HC3
+
+
+
+Give IV fluids (Normal saline) very slowly (1 L in 6-8
+
+hours max)
+
+
+
+Give IV loading dose of magnesium sulphate injection
+
+(4 g of MgSO4)
+
+...
+
+📄 **Reference:** Page 794
+
+### 3. 16.3.7      Pre-Eclampsia
 
 ### 16.3.7      Pre-Eclampsia
 
@@ -9953,9 +11220,41 @@ mild to severe pre-eclampsia.
 
 TYPE ...
 
+📄 **Reference:** Page 792
+
+### 4. Deliver baby
+
+### Deliver baby
+
+Deliver baby
+
+H
+
+
+
+Women with severe pre-eclampsia should be delivered
+
+urgently (vaginally or C/S) regardless of gestational age
+
+in the following situations:
+
+- Non-reassuring foetal heart
+
+- Ruptured membranes
+
+- Uncontrolled BP
+
+- Oligohydramnious
+
+- Features of IUGR
+
+- Oliguria of <500 mL/24 hours
+
+- Pulmonary Oedema...
+
 📄 **Reference:** Page 795
 
-### 3. Obstetric Conditions
+### 5. Obstetric Conditions
 
 ### Obstetric Conditions
 
@@ -10007,77 +11306,7 @@ Review in one week
 
 ...
 
-📄 **Reference:** Page 835
-
-### 4. Mild to moderate pre-eclampsia
-
-### Mild to moderate pre-eclampsia
-
-Mild to moderate pre-eclampsia
-
-
-
-Based on BP response
-
-
-
-Methyldopa, oral, 250 mg every 8 hours as a starting
-
-dose, increase to 500 mg 6 hourly according to response,
-
-Max dose 2 g daily
-
-AND/OR
-
-HC3
-
-
-
-Nifedipine 20-40 mg every 12 hours
-
-Severe pre-eclampsia (hypertensive emergency)
-
-To prevent convulsions
-
-HC3
-
-
-
-Give IV fluids (Normal saline) very slowly (1 L in 6-8
-
-hours max)
-
-
-
-Give IV loading dose of magnesium sulphate injection
-
-(4 g of MgSO4)
-
-...
-
-📄 **Reference:** Page 797
-
-### 5. Blood pressure
-
-### Blood pressure
-
-Blood pressure
-
-
-
-History of
-
-eclampsia
-
-or pre-ec­
-
-an hour
-
-lampsia
-
-769...
-
-📄 **Reference:** Page 835
+📄 **Reference:** Page 832
 
 
 ---
@@ -10090,7 +11319,7 @@ Next Steps / Monitoring: Consult the full source guideline or a clinician for pa
 
 When to Refer: Per excerpts and national guidance; seek urgent care if danger signs, severe disease, or instability is suspected.
 
-Citations: Page 795, Page 797, Page 835
+Citations: Page 792, Page 794, Page 795, Page 832
 
 ---
 **🧪 Guardrail Brain Validation:** ✅ Passed
@@ -10105,7 +11334,7 @@ Citations: Page 795, Page 797, Page 835
 
 > Sepsis empirical antibiotics adults
 
-**Metrics:** Triage `GREEN` | Guardrail OK `True` | Confidence `0.90`
+**Metrics:** Triage `GREEN` | Guardrail OK `True` | Confidence `0.83`
 
 #### VHT standard (`vht_response`)
 
@@ -10118,10 +11347,11 @@ Citations: Page 795, Page 797, Page 835
 
 **WHAT TO DO (step by step):**
 
-**Step 1:** Assess patient carefully
-**Step 2:** Check for danger signs (see below)
-**Step 3:** If unsure, refer to health facility
-**Step 4:** Record all findings
+**Step 1:** Moderate to severe wounds with extensive tissue
+**Step 2:** Very contaminated wounds
+**Step 3:** Deep puncture wounds (especially by cats)
+**Step 4:** Wounds on hands, feet, genitalia or face
+**Step 5:** Wounds with underlying structures involved
 
 **MONITORING:**
 
@@ -10154,9 +11384,9 @@ The symptoms can be managed at home with guidance. Follow the advice you were gi
 
 **FROM THE GUIDELINES:**
 
-• Uganda Clinical Guidelines 2023, Page 792: Newborn
-• Uganda Clinical Guidelines 2023, Page 701: Medicines
-• Uganda Clinical Guidelines 2023, Page 785: Post-abortal Sepsis
+• Uganda Clinical Guidelines 2023, Page 782: Post-abortal Sepsis [HIGH FIDELITY]
+• Uganda Clinical Guidelines 2023, Page 789: Newborn [HIGH FIDELITY]
+• Uganda Clinical Guidelines 2023, Page 93: Antibiotics [HIGH FIDELITY]
 ```
 
 #### Referral note (`referral_note`)
@@ -10168,9 +11398,9 @@ The symptoms can be managed at home with guidance. Follow the advice you were gi
 **Reason:** Routine evidence retrieval from national guidelines
 
 **Actions taken:**
-• Assess patient carefully
-• Check for danger signs (see below)
-• If unsure, refer to health facility
+• Moderate to severe wounds with extensive tissue
+• Very contaminated wounds
+• Deep puncture wounds (especially by cats)
 
 **Referral completed:** [ ]
 **Health worker received:** [ ]
@@ -10194,67 +11424,7 @@ Action: Follow advice below, monitor for changes
 
 **Question:** Sepsis empirical antibiotics adults
 
-### 1. Newborn
-
-### Newborn
-
-Newborn
-
-H
-
-
-
-Examine the neonate for suspected sepsis before
-
-discharge
-
-
-
-If newborn sepsis is suspected manage as in section
-
-2.1.7.1
-
-
-
-Advise the mother on how to recognize danger signs
-
-(see section 17.1.1)...
-
-📄 **Reference:** Page 792
-
-### 2. Medicines
-
-### Medicines
-
-Medicines
-
-
-
-Give antibiotics if there is evidence of surrounding cellulitis (see
-
-section 22.1.3)
-
-
-
-Control pain
-
-
-
-Control odour with topical metronidazole
-
-
-
-powder or gel until there is no foul smell
-
-
-
-If patient has sepsis, give parenteral antibiotics (see section 2.1.7
-
-for treatment of sepsis)...
-
-📄 **Reference:** Page 701
-
-### 3. Post-abortal Sepsis
+### 1. Post-abortal Sepsis
 
 ### Post-abortal Sepsis
 
@@ -10296,33 +11466,133 @@ Refer to hospital for
 
 evacuation...
 
-📄 **Reference:** Page 785
+📄 **Reference:** Page 782
 
-### 4. 16.3.6       Antepartum Haemorrhage (APH) – Abruptio Placentae
+### 2. Newborn
 
-### 16.3.6       Antepartum Haemorrhage (APH) – Abruptio Placentae
+### Newborn
 
-16.3.6       Antepartum Haemorrhage (APH) – Abruptio Placentae...
+Newborn
 
-📄 **Reference:** Page 792
-
-### 5. If the woman has a Caesarean section
-
-### If the woman has a Caesarean section
-
-If the woman has a Caesarean section
+H
 
 
 
-Continue the above antibiotics, and add metronidazole
+Examine the neonate for suspected sepsis before
 
-500 mg IV every 8 hours
+discharge
 
--
+
 
-Continue until 48 hours after fever has gone...
+If newborn sepsis is suspected manage as in section
 
-📄 **Reference:** Page 792
+2.1.7.1
+
+
+
+Advise the mother on how to recognize danger signs
+
+(see section 17.1.1)...
+
+📄 **Reference:** Page 789
+
+### 3. Antibiotics
+
+### Antibiotics
+
+Antibiotics
+
+
+
+Give only for infected or high-risk wounds including:
+
+- Moderate to severe wounds with extensive tissue
+
+- damage
+
+- Very contaminated wounds
+
+- Deep puncture wounds (especially by cats)
+
+- Wounds on hands, feet, genitalia or face
+
+- Wounds with underlying structures involved
+
+- Wounds in immunocompromised patients
+
+
+
+See next sections on wound management, human and
+
+animal bites for more details...
+
+📄 **Reference:** Page 93
+
+### 4. 1. At Emergency Unit
+
+### 1. At Emergency Unit
+
+1. At Emergency Unit
+
+ Early recognition and resuscitation with iv crystalloids Or Blood
+
+ Empirical Broad spectrum antibiotics Treatment:
+
+ Early and adequate broad-spectrum antibiotics
+
+ Intravenous access. Administer 30ml/kg of crystalloids. A large
+
+bore cannula, in an adult (gauge 16) is preferred.
+
+ Urinary catheterization: UOP in an adult is 0.5ml/kg/hr or
+
+more, an equivalent of 30-50mls/hr.
+
+ Transfer for management to ICU if not responding to
+
+resuscitat...
+
+📄 **Reference:** Page 184
+
+### 5. Management
+
+### Management
+
+Management
+
+TREATMENT
+
+LOC
+
+Bed rest
+
+Treat complications e.g. heart failure Initial empirical
+
+antibiotic therapy
+
+H
+
+Benzylpenicillin 5 MU IV every 6 hours for 4 weeks
+
+Child: Benzylpenicillin 50,000 IU/kg every 6 hours for
+
+4 weeks
+
+Plus gentamicin 1 mg/kg IV every 8 hours for 2 weeks
+
+If staphylococcus suspected, (acute onset) add:
+
+Cloxacillin IV 3 g every 6 hours
+
+Child: 50 mg/kg every 6 hours for 4 weeks
+
+If MRSA (Multi-Resistant Staphylococcus aureus)
+
+RR
+
+Vancomycin 500 ...
+
+📄 **Reference:** Page 369
 
 
 ---
@@ -10335,7 +11605,7 @@ Next Steps / Monitoring: Consult the full source guideline or a clinician for pa
 
 When to Refer: Per excerpts and national guidance; seek urgent care if danger signs, severe disease, or instability is suspected.
 
-Citations: Page 701, Page 785, Page 792
+Citations: Page 93, Page 184, Page 369, Page 782, Page 789
 
 ---
 **🧪 Guardrail Brain Validation:** ✅ Passed
@@ -10350,7 +11620,7 @@ Citations: Page 701, Page 785, Page 792
 
 > Rabies post-exposure prophylaxis dog bite
 
-**Metrics:** Triage `GREEN` | Guardrail OK `True` | Confidence `0.90`
+**Metrics:** Triage `GREEN` | Guardrail OK `True` | Confidence `0.81`
 
 #### VHT standard (`vht_response`)
 
@@ -10399,9 +11669,9 @@ The symptoms can be managed at home with guidance. Follow the advice you were gi
 
 **FROM THE GUIDELINES:**
 
-• Uganda Clinical Guidelines 2023, Page 102: 1.2.1.4  Rabies Post Exposure Prophylaxis
-• Uganda Clinical Guidelines 2023, Page 4: 1.2 Trauma and Injuries..................................................................26
-• Uganda Clinical Guidelines 2023, Page 205: Caution: the patient may bite
+• Uganda Clinical Guidelines 2023, Page 204: 2.3.5 Rabies [HIGH FIDELITY]
+• Uganda Clinical Guidelines 2023, Page 205: Caution: the patient may bite [HIGH FIDELITY]
+• Uganda Clinical Guidelines 2023, Page 335: 3.1.11.2 Pre-Exposure Prophylaxis (PrEP) [HIGH FIDELITY]
 ```
 
 #### Referral note (`referral_note`)
@@ -10439,45 +11709,7 @@ Action: Follow advice below, monitor for changes
 
 **Question:** Rabies post-exposure prophylaxis dog bite
 
-### 1. 1.2.1.4  Rabies Post Exposure Prophylaxis
-
-### 1.2.1.4  Rabies Post Exposure Prophylaxis
-
-1.2.1.4  Rabies Post Exposure Prophylaxis           ICD10 CODE:
-
-Z20.3, Z23...
-
-📄 **Reference:** Page 102
-
-### 2. 1.2 Trauma and Injuries..................................................................26
-
-### 1.2 Trauma and Injuries..................................................................26
-
-1.2 Trauma and Injuries..................................................................26
-
-1.2.1 Bites and Stings..............................................................................................26
-
-1.2.1.1  Snakebites.........................................................................................28
-
-1.2.1.2 Insect Bites & Stings....................................................
-
-📄 **Reference:** Page 4
-
-### 3. Caution: the patient may bite
-
-### Caution: the patient may bite
-
-Caution: the patient may bite
-
-
-
-Counsel caregivers on rabies and consequences
-
-139...
-
-📄 **Reference:** Page 205
-
-### 4. 2.3.5 Rabies
+### 1. 2.3.5 Rabies
 
 ### 2.3.5 Rabies
 
@@ -10499,21 +11731,129 @@ prevented by post-exposure prophylaxis....
 
 📄 **Reference:** Page 204
 
-### 5. Unit, Community Health Dept, Ministry of Health, September 2001
+### 2. Caution: the patient may bite
 
-### Unit, Community Health Dept, Ministry of Health, September 2001
+### Caution: the patient may bite
 
-Post exposure prophylaxis effectively prevents the development of rabies
+Caution: the patient may bite
 
-after the contact with saliva of infected animals, through bites, scratches,
+
 
-licks on broken skin or mucous membranes. For further details refer to
+Counsel caregivers on rabies and consequences
 
-Rabies Post-Exposure Treatment Guidelines, Veterinary Public Health
+139...
 
-Unit, Community Health Dept, Ministry of Health, September 2001...
+📄 **Reference:** Page 205
 
-📄 **Reference:** Page 102
+### 3. 3.1.11.2 Pre-Exposure Prophylaxis (PrEP)
+
+### 3.1.11.2 Pre-Exposure Prophylaxis (PrEP)
+
+3.1.11.2 Pre-Exposure Prophylaxis (PrEP)...
+
+📄 **Reference:** Page 335
+
+### 4. Recommendations for Rabies Vaccination/Serum
+
+### Recommendations for Rabies Vaccination/Serum
+
+Recommendations for Rabies Vaccination/Serum
+
+Condition Of Animal
+
+Nature Of
+
+Exposure
+
+At Time Of
+
+Exposure
+
+10 Days
+
+Later
+
+Recommended
+
+Action
+
+Saliva in contact
+
+with skin but no
+
+skin lesion
+
+Healthy
+
+Healthy
+
+Do not vaccinate
+
+Rabid
+
+Vaccinate
+
+Suspect/
+
+Unknown
+
+Healthy
+
+Do not vaccinate
+
+Rabid
+
+Vaccinate
+
+Unknown
+
+Vaccinate
+
+Saliva in
+
+contact with
+
+skin that has
+
+lesions, minor
+
+bites on trunk
+
+or proximal
+
+limbs
+
+Healthy
+
+Healthy
+
+Do no...
+
+📄 **Reference:** Page 104
+
+### 5. References
+
+### References
+
+References
+
+Ministry of Health Uganda, National Tuberculosis and Leprosy Pro­
+
+gramme, 2016. Tuberculosis and Leprosy Manual, 3rd Edition
+
+Ministry of Health Uganda, Makerere Palliative Care Unit, 2014.
+
+Palliative Care Guidelines
+
+World Health Organisation, 2010. WHO guide for Rabies Pre and
+
+Post-Exposure Prophylaxis in Humans. http://www. who.int/rabies/
+
+PEP_prophylaxis_guidelines_June10.pdf Accessed on 25/11/2016
+
+Ministry of Health Uganda, 2013. Uganda National Infection Pr...
+
+📄 **Reference:** Page 1154
 
 
 ---
@@ -10526,7 +11866,7 @@ Next Steps / Monitoring: Consult the full source guideline or a clinician for pa
 
 When to Refer: Per excerpts and national guidance; seek urgent care if danger signs, severe disease, or instability is suspected.
 
-Citations: Page 4, Page 102, Page 204, Page 205
+Citations: Page 104, Page 204, Page 205, Page 335, Page 1154
 
 ---
 **🧪 Guardrail Brain Validation:** ✅ Passed
@@ -10541,7 +11881,7 @@ Citations: Page 4, Page 102, Page 204, Page 205
 
 > Burns initial wound care and referral
 
-**Metrics:** Triage `GREEN` | Guardrail OK `True` | Confidence `0.90`
+**Metrics:** Triage `GREEN` | Guardrail OK `True` | Confidence `0.89`
 
 #### VHT standard (`vht_response`)
 
@@ -10590,9 +11930,9 @@ The symptoms can be managed at home with guidance. Follow the advice you were gi
 
 **FROM THE GUIDELINES:**
 
-• Uganda Clinical Guidelines 2023, Page 112: 2nd Degree burns or Partial thickness burns
-• Uganda Clinical Guidelines 2023, Page 112: Emergencies and Trauma
-• Uganda Clinical Guidelines 2023, Page 112: 4th Degree burns
+• Uganda Clinical Guidelines 2023, Page 116: Severe burns
+• Uganda Clinical Guidelines 2023, Page 114: Mild/moderate burns – First aid [HIGH FIDELITY]
+• Uganda Clinical Guidelines 2023, Page 112: 2nd Degree burns or Partial thickness burns [HIGH FIDELITY]
 ```
 
 #### Referral note (`referral_note`)
@@ -10630,83 +11970,7 @@ Action: Follow advice below, monitor for changes
 
 **Question:** Burns initial wound care and referral
 
-### 1. 2nd Degree burns or Partial thickness burns
-
-### 2nd Degree burns or Partial thickness burns
-
-2nd Degree burns or Partial thickness burns
-
-It is a dermal injury that is sub-classified as
-
-superficial and deep 2nd degree burns. In su­
-
-perficial 2nd degree burns, blisters result, the
-
-pink moist wound is painful. A thin eschar is
-
-formed. Heals in 10-14 days.
-
-In deep 2nd degree burns, blisters are lacking,
-
-the wound is pale, moderately painful, a thick
-
-escar is formed. Heals in
-
->1 month, requiring surgical debridement...
-
-📄 **Reference:** Page 112
-
-### 2. Emergencies and Trauma
-
-### Emergencies and Trauma
-
-Uganda Clinical Guidelines 2023
-
-CHAPTER 1: Emergencies and Trauma
-
-CRITERIA
-
-LEVEL...
-
-📄 **Reference:** Page 112
-
-### 3. 4th Degree burns
-
-### 4th Degree burns
-
-3rd Degree burns
-
-Full thickness skin destruction, leather- like
-
-rigid eschar. Painless on palpation or pinprick.
-
-Requires skin graft.
-
-4th Degree burns
-
-Full thickness skin and fascia, muscles, or bone
-
-destruction. Lifeless body part
-
-Percentage of total
-
-body surface area
-
-(TBSA)
-
-Small areas are estimated using the open palm
-
-of the patient to represent 1% TBSA. Large
-
-areas estimated using the “rules of nines” or
-
-a Lund-Browder chart. Count all areas except
-
-the one...
-
-📄 **Reference:** Page 112
-
-### 4. Severe burns
+### 1. Severe burns
 
 ### Severe burns
 
@@ -10751,45 +12015,103 @@ Use antibiotics if there are systemic signs of infection:
 
 📄 **Reference:** Page 116
 
-### 5. At health facility
+### 2. Mild/moderate burns – First aid
 
-### At health facility
+### Mild/moderate burns – First aid
 
-At health facility
+Mild/moderate burns – First aid
 
-HC2
-
-
-
-Give oral or IV analgesics as required
+HC1
 
 
 
-If TBSA <10% and patient able to drink, give oral fluids
-
-otherwise consider IV
+Stop the burning process and move the patient to safety
 
 
 
-Give TT if not fully immunised
+Roll on the ground if clothing is on fire
+
+48...
+
+📄 **Reference:** Page 114
+
+### 3. 2nd Degree burns or Partial thickness burns
+
+### 2nd Degree burns or Partial thickness burns
+
+2nd Degree burns or Partial thickness burns
+
+It is a dermal injury that is sub-classified as
+
+superficial and deep 2nd degree burns. In su­
+
+perficial 2nd degree burns, blisters result, the
+
+pink moist wound is painful. A thin eschar is
+
+formed. Heals in 10-14 days.
+
+In deep 2nd degree burns, blisters are lacking,
+
+the wound is pale, moderately painful, a thick
+
+escar is formed. Heals in
+
+>1 month, requiring surgical debridement...
+
+📄 **Reference:** Page 112
+
+### 4. Burns
+
+### Burns
+
+Burns
 
 
 
-Leave small blisters alone, drain large blisters and dress
-
-if closed dressing method is being used the urine output.
-
-The normal urine output is: Children (<30 kg) 1-2 ml/kg/
-
-hour and adults 0.5 ml/kg/hour (30-50 ml /hour)
+Reassurance that healing will occur without scarring
 
 
 
-Dress with silver sulphadiazine cream 1%, add saline
+Topical anaesthetic lidocaine 2% may help...
 
-moi...
+📄 **Reference:** Page 1097
 
-📄 **Reference:** Page 115
+### 5. 4th Degree burns
+
+### 4th Degree burns
+
+3rd Degree burns
+
+Full thickness skin destruction, leather- like
+
+rigid eschar. Painless on palpation or pinprick.
+
+Requires skin graft.
+
+4th Degree burns
+
+Full thickness skin and fascia, muscles, or bone
+
+destruction. Lifeless body part
+
+Percentage of total
+
+body surface area
+
+(TBSA)
+
+Small areas are estimated using the open palm
+
+of the patient to represent 1% TBSA. Large
+
+areas estimated using the “rules of nines” or
+
+a Lund-Browder chart. Count all areas except
+
+the one...
+
+📄 **Reference:** Page 112
 
 
 ---
@@ -10802,7 +12124,7 @@ Next Steps / Monitoring: Consult the full source guideline or a clinician for pa
 
 When to Refer: Per excerpts and national guidance; seek urgent care if danger signs, severe disease, or instability is suspected.
 
-Citations: Page 112, Page 115, Page 116
+Citations: Page 112, Page 114, Page 116, Page 1097
 
 ---
 **🧪 Guardrail Brain Validation:** ✅ Passed
@@ -10817,7 +12139,7 @@ Citations: Page 112, Page 115, Page 116
 
 > Snake bite envenomation hospital referral
 
-**Metrics:** Triage `GREEN` | Guardrail OK `True` | Confidence `0.90`
+**Metrics:** Triage `GREEN` | Guardrail OK `True` | Confidence `0.96`
 
 #### VHT standard (`vht_response`)
 
@@ -10830,10 +12152,11 @@ Citations: Page 112, Page 115, Page 116
 
 **WHAT TO DO (step by step):**
 
-**Step 1:** Assess patient carefully
-**Step 2:** Check for danger signs (see below)
-**Step 3:** If unsure, refer to health facility
-**Step 4:** Record all findings
+**Step 1:** Swelling of hand or foot (site of most bites) within 1 hour of
+**Step 2:** Swelling of elbow or knee within 3 hours of bite
+**Step 3:** Swelling of groin or chest at any time
+**Step 4:** Significant swelling of head or neck
+**Step 5:** Check package insert for IV dosage details. Ensure the
 
 **MONITORING:**
 
@@ -10866,9 +12189,9 @@ The symptoms can be managed at home with guidance. Follow the advice you were gi
 
 **FROM THE GUIDELINES:**
 
-• Uganda Clinical Guidelines 2023, Page 96: without envenomation
-• Uganda Clinical Guidelines 2023, Page 96: Management
-• Uganda Clinical Guidelines 2023, Page 96: Emergencies and Trauma
+• Uganda Clinical Guidelines 2023, Page 94: 1.2.1.1  Snakebites [HIGH FIDELITY]
+• Uganda Clinical Guidelines 2023, Page 97: Criteria for referral for administration of antivenom
+• Uganda Clinical Guidelines 2023, Page 96: without envenomation [HIGH FIDELITY]
 ```
 
 #### Referral note (`referral_note`)
@@ -10880,9 +12203,9 @@ The symptoms can be managed at home with guidance. Follow the advice you were gi
 **Reason:** Routine evidence retrieval from national guidelines
 
 **Actions taken:**
-• Assess patient carefully
-• Check for danger signs (see below)
-• If unsure, refer to health facility
+• Swelling of hand or foot (site of most bites) within 1 hour of
+• Swelling of elbow or knee within 3 hours of bite
+• Swelling of groin or chest at any time
 
 **Referral completed:** [ ]
 **Health worker received:** [ ]
@@ -10906,7 +12229,63 @@ Action: Follow advice below, monitor for changes
 
 **Question:** Snake bite envenomation hospital referral
 
-### 1. without envenomation
+### 1. 1.2.1.1  Snakebites
+
+### 1.2.1.1  Snakebites
+
+1.2.1.1  Snakebites
+
+Snakebites can cause both local and systemic effects. Non-venomous
+
+snakes cause local effects (swelling, redness, laceration) and venomous
+
+snakes cause both local and systemic effects due to envenomation.  Over
+
+70% of snakes in Uganda are non-venomous and most bites are from
+
+non-venomous snakes. Of the venomous snakes, more than 50% of
+
+bites are “dry” i.e. no envenomation occurs. In the event that venom is
+
+injected, the effect of the venom depe...
+
+📄 **Reference:** Page 94
+
+### 2. Criteria for referral for administration of antivenom
+
+### Criteria for referral for administration of antivenom
+
+Criteria for referral for administration of antivenom
+
+~
+
+Signs of systemic envenoming (paralysis, respiratory dif­
+
+ficulty, bleeding)
+
+~
+
+Spreading local damage:
+
+- Swelling of hand or foot (site of most bites) within 1 hour of
+
+bite
+
+- Swelling of elbow or knee within 3 hours of bite
+
+- Swelling of groin or chest at any time
+
+- Significant swelling of head or neck
+
+
+
+Antivenom sera polyvalent (Africa)
+
+- Check package insert for IV d...
+
+📄 **Reference:** Page 97
+
+### 3. without envenomation
 
 ### without envenomation
 
@@ -10926,103 +12305,31 @@ immunised in the last 10 years...
 
 📄 **Reference:** Page 96
 
-### 2. Management
-
-### Management
-
-Management
-
-What to do
-
-What not to do
-
- Do not panic
-
- Reassure the patient to
-
- Do not lay the patient on
-
-stay calm
-
- Lay the patient on the
-
-their back as it may block
-
-airways
-
- Do not apply a tourniquet
-
-side to avoid movement
-
-of affected areas
-
- Remove all tight items
-
- Do not squeeze or incise the
-
-wound
-
- Do not attempt to suck the
-
-around the affected area
-
- Leave the wound/bite
-
-venom out
-
- Do not try to kill or attack
-
-area alone
-
- Immobilize the patient
-
-...
-
-📄 **Reference:** Page 96
-
-### 3. Emergencies and Trauma
+### 4. Emergencies and Trauma
 
 ### Emergencies and Trauma
 
 Uganda Clinical Guidelines 2023
 
-CHAPTER 1: Emergencies and Trauma...
+CHAPTER 1: Emergencies and Trauma
 
-📄 **Reference:** Page 96
+Battersby’s green snake (Philothamnus battersbyi)  Olive House Snake (Lycodonomorphis inornatus)...
 
-### 4. If local necrosis develops
+📄 **Reference:** Page 99
 
-### If local necrosis develops
+### 5. Caution: the patient may bite
 
-If local necrosis develops
+### Caution: the patient may bite
 
-~
+Caution: the patient may bite
 
-Remove blisters, clean and dress daily, debride
+
 
-after lesions stabilise (minimum 15 days)
+Counsel caregivers on rabies and consequences
 
-30...
+139...
 
-📄 **Reference:** Page 96
-
-### 5. If signs of fang penetration
-
-### If signs of fang penetration
-
-If signs of fang penetration
-
-~
-
-Immobilise limb with a splint
-
-~
-
-Analgesic e.g. paracetamol (avoid NSAIDS like
-
-aspirin, diclofenac, ibuprofen)...
-
-📄 **Reference:** Page 96
+📄 **Reference:** Page 205
 
 
 ---
@@ -11035,7 +12342,7 @@ Next Steps / Monitoring: Consult the full source guideline or a clinician for pa
 
 When to Refer: Per excerpts and national guidance; seek urgent care if danger signs, severe disease, or instability is suspected.
 
-Citations: Page 96
+Citations: Page 94, Page 96, Page 97, Page 99, Page 205
 
 ---
 **🧪 Guardrail Brain Validation:** ✅ Passed
@@ -11050,7 +12357,7 @@ Citations: Page 96
 
 > Neonatal sepsis danger signs referral
 
-**Metrics:** Triage `GREEN` | Guardrail OK `True` | Confidence `0.90`
+**Metrics:** Triage `GREEN` | Guardrail OK `True` | Confidence `0.92`
 
 #### VHT standard (`vht_response`)
 
@@ -11099,9 +12406,9 @@ The symptoms can be managed at home with guidance. Follow the advice you were gi
 
 **FROM THE GUIDELINES:**
 
-• Uganda Clinical Guidelines 2023, Page 792: Newborn
-• Uganda Clinical Guidelines 2023, Page 153: Causes
-• Uganda Clinical Guidelines 2023, Page 183: 2.1.7.1 Neonatal Septicaemia
+• Uganda Clinical Guidelines 2023, Page 789: Newborn [HIGH FIDELITY]
+• Uganda Clinical Guidelines 2023, Page 183: 2.1.7.1 Neonatal Septicaemia [HIGH FIDELITY]
+• Uganda Clinical Guidelines 2023, Page 859: 17.1.1  Newborn Examination/Danger Signs [HIGH FIDELITY]
 ```
 
 #### Referral note (`referral_note`)
@@ -11165,51 +12472,9 @@ Advise the mother on how to recognize danger signs
 
 (see section 17.1.1)...
 
-📄 **Reference:** Page 792
+📄 **Reference:** Page 789
 
-### 2. Causes
-
-### Causes
-
-Causes
-
-~
-
-Surgical causes.
-
-- Head Injury, Chest trauma
-
-~
-
-Medical Causes
-
-- Severe Asthma, Pneumonia, Sepsis, Shock, Malaria,
-
-Covid-19, Heart Failure, Cardiac arrest, Upper airway
-
-obstruction, Severe anaemia, Pertussis, Carbon Monoxide
-
-poisoning.
-
-~
-
-Obstetric, gynaecological, and perioperative causes.
-
-- Obstructed labour, Ruptured uterus, Pre-eclampsia and
-
-eclampsia, Post caesarean section,
-
-~
-
-Neonatal causes
-
-- Transient tachypnoea of the new-born, Hypoxic Ischaemic
-
-encep...
-
-📄 **Reference:** Page 153
-
-### 3. 2.1.7.1 Neonatal Septicaemia
+### 2. 2.1.7.1 Neonatal Septicaemia
 
 ### 2.1.7.1 Neonatal Septicaemia
 
@@ -11223,7 +12488,71 @@ dose of antibiotics....
 
 📄 **Reference:** Page 183
 
-### 4. If danger signs present, treat as below
+### 3. 17.1.1  Newborn Examination/Danger Signs
+
+### 17.1.1  Newborn Examination/Danger Signs
+
+17.1.1  Newborn Examination/Danger Signs
+
+Use the following procedures to examine all newborn babies after delivery,
+
+before discharge or if baby is seen as an outpatient for routine, FOLLOW
+
+UP, or sick newborn visit during first week of life....
+
+📄 **Reference:** Page 859
+
+### 4. Danger signs
+
+### Danger signs
+
+Danger signs
+
+Sign Or Symptom
+
+Possible Cause
+
+Recent trauma to the
+
+head
+
+Intracranial bleeding
+
+Head injury
+
+High fever
+
+Malaria Meningitis
+
+Other infections
+
+Acute onset, severe
+
+Intracranial bleeding
+
+Chronic worsening
+
+headache
+
+Tumours, hypertension
+
+Altered consciousness
+
+and/or focal neurolog­
+
+ical symptoms and/or
+
+seizure
+
+Tumour, intracranial bleeding, intracranial
+
+infection
+
+495...
+
+📄 **Reference:** Page 561
+
+### 5. If danger signs present, treat as below
 
 ### If danger signs present, treat as below
 
@@ -11273,15 +12602,7 @@ Keep baby warm
 
 Vio...
 
-📄 **Reference:** Page 863
-
-### 5. 17.3.21   Check for General Danger Signs
-
-### 17.3.21   Check for General Danger Signs
-
-17.3.21   Check for General Danger Signs...
-
-📄 **Reference:** Page 892
+📄 **Reference:** Page 860
 
 
 ---
@@ -11294,7 +12615,7 @@ Next Steps / Monitoring: Consult the full source guideline or a clinician for pa
 
 When to Refer: Per excerpts and national guidance; seek urgent care if danger signs, severe disease, or instability is suspected.
 
-Citations: Page 153, Page 183, Page 792, Page 863, Page 892
+Citations: Page 183, Page 561, Page 789, Page 859, Page 860
 
 ---
 **🧪 Guardrail Brain Validation:** ✅ Passed
