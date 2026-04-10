@@ -330,6 +330,66 @@ class MedicalQASystem:
             self._response_orchestrator = ResponseOrchestrator()
         return self._response_orchestrator
 
+    # ------------------------------------------------------------------
+    # Offline query preprocessing
+    # ------------------------------------------------------------------
+
+    @staticmethod
+    def _preprocess_query(query: str) -> str:
+        """
+        Rewrite a conversational query into a retrieval-optimised form.
+        Runs entirely offline — no API calls, no internet access.
+
+        Two steps:
+        1. Strip conversational framing ("A lady has...", "My child is...")
+           so the retriever sees clinical terms, not pronouns and filler.
+        2. Expand key medical terms with synonyms so BM25 and dense
+           retrieval find relevant chunks even when the user's phrasing
+           differs from the guideline's vocabulary.
+        """
+        _CONV_INTRO = re.compile(
+            r"^(?:a |an |the )?"
+            r"(?:patient|lady|woman|child|infant|baby|man|boy|girl|person|mother|"
+            r"male|female|adult|toddler|neonate|newborn)\s+"
+            r"(?:has |have |is |was |presents?\s+(?:with\s+)?|"
+            r"comes?\s+in\s+(?:with\s+)?|complains?\s+of\s+)?",
+            re.IGNORECASE,
+        )
+        # Medical synonym map: keyword pattern → extra search terms to append.
+        # Terms are appended only when not already present to avoid repetition.
+        _SYNONYMS: List[tuple] = [
+            (r"\bbleed(?:ing|s|ed)?\b",    "bleeding haemorrhage hemorrhage"),
+            (r"\bvomit(?:ing|s|ed)?\b",    "vomiting emesis nausea"),
+            (r"\bfit(?:s|ting)?\b",         "convulsions seizures"),
+            (r"\bfever(?:ish)?\b",          "fever febrile pyrexia temperature"),
+            (r"\bdiarrho?ea\b",             "diarrhoea diarrhea loose stool"),
+            (r"\bcough(?:ing|s|ed)?\b",     "cough respiratory tract"),
+            (r"\bpregnan(?:t|cy)\b",        "pregnant pregnancy antenatal obstetric"),
+            (r"\bweak(?:ness|ly)?\b",       "weakness lethargic"),
+            (r"\bunconscious\b",            "unconscious unresponsive not waking"),
+            (r"\bchest pain\b",             "chest pain cardiac"),
+            (r"\bbreath(?:ing|s)?\b",       "breathing respiratory dyspnoea"),
+            (r"\bmalaria\b",                "malaria plasmodium ACT artemisinin"),
+            (r"\bpneumonia\b",              "pneumonia respiratory infection"),
+            (r"\banemia\b",                 "anaemia anemia haemoglobin"),
+            (r"\banaemia\b",                "anaemia anemia haemoglobin"),
+        ]
+
+        q = query.strip()
+        # Strip conversational introduction
+        q_stripped = _CONV_INTRO.sub("", q).strip()
+        if len(q_stripped) >= 8:  # only use stripped version if something remains
+            q = q_stripped
+
+        # Append synonyms for matched terms
+        for pattern, expansion in _SYNONYMS:
+            if re.search(pattern, q, re.IGNORECASE):
+                for syn in expansion.split():
+                    if syn.lower() not in q.lower():
+                        q = q + " " + syn
+
+        return q if q.strip() else query
+
     def answer_with_response(self, query: str) -> Dict[str, Any]:
         """
         Full pipeline output: BM25 + guardrail + VHT response layer (standard,
@@ -337,7 +397,11 @@ class MedicalQASystem:
         """
         assert self.guardrail is not None
 
-        _, sources, retrieved_chunks = self._retrieve_top_k(query, 5)
+        # Preprocess the query offline before retrieval (strips conversational
+        # framing, expands medical synonyms).  The original query is kept for
+        # triage inference, response formatting, and display.
+        retrieval_query = self._preprocess_query(query)
+        _, sources, retrieved_chunks = self._retrieve_top_k(retrieval_query, 5)
 
         response = f"**{self.config.document_title}**\n\n"
         response += f"**Question:** {query}\n\n"
@@ -387,4 +451,7 @@ class MedicalQASystem:
             "referral_note": orch.formatter.format(structured, ResponseFormat.REFERRAL),
             "quick_summary": orch.formatter.format(structured, ResponseFormat.VHT_QUICK),
             "structured": structured,
+            # Raw retrieved chunks — used by chat.py for "no match" detection
+            # via the _ce_best_raw field set by the retriever.
+            "_retrieved_chunks": retrieved_chunks,
         }

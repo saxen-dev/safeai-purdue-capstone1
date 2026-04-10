@@ -741,6 +741,15 @@ class HybridRetriever:
             if pairs:
                 raw_ce = self._predict_cross_encoder(pairs)
 
+                # Store the best absolute CE logit BEFORE normalization.
+                # CE logits are unbounded: positive = relevant, negative = not
+                # relevant.  This value is attached to the first result chunk as
+                # "_ce_best_raw" so callers can detect "no match" queries where
+                # ALL chunks score negatively (the normalised scores are useless
+                # for this purpose because min-max normalisation always maps the
+                # best chunk to 1.0 regardless of absolute relevance).
+                _ce_best_raw = max(raw_ce)
+
                 # Min-max normalise RRF scores for valid IDs.
                 rrf_vals = [rrf_lookup[d] for d in valid_ids]
                 rrf_min, rrf_max = min(rrf_vals), max(rrf_vals)
@@ -758,6 +767,8 @@ class HybridRetriever:
                     blended.append((doc_id, alpha * norm_rrf + (1 - alpha) * norm_ce))
 
                 fused = sorted(blended, key=lambda x: x[1], reverse=True)
+            else:
+                _ce_best_raw = None
 
         # Metadata-aware re-ranking — applies four boost signals using
         # clinical metadata already present on each chunk.
@@ -783,6 +794,11 @@ class HybridRetriever:
                 out["score"] = float(score)
                 out["retrieval_rank"] = len(results) + 1
                 results.append(out)
+
+        # Attach the absolute CE relevance to the top result so the caller
+        # can run a "no match" check without rerunning the cross-encoder.
+        if results and self._reranker:
+            results[0]["_ce_best_raw"] = _ce_best_raw
 
         return results
 

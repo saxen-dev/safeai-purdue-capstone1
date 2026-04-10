@@ -356,7 +356,31 @@ def main() -> None:
 
         try:
             result = qa.answer_with_response(query)
-            print(_format_response(result))
+
+            # No-match detection using the absolute cross-encoder score
+            # stored by the retriever BEFORE min-max normalisation.
+            # Normalised scores are useless here — the best chunk always
+            # scores 1.0 relative to the others regardless of true relevance.
+            # CE logit > 0  = the model thinks query and chunk are related
+            # CE logit < 0  = the model thinks they are unrelated
+            # Threshold -1.5 is conservative: we only reject when the best
+            # match is clearly off-topic. Borderline (-1.5 to 0) queries
+            # show the response with a low-confidence warning.
+            _NO_MATCH_CE_THRESHOLD = -1.5
+            chunks = result.get("_retrieved_chunks", [])
+            ce_best = chunks[0].get("_ce_best_raw") if chunks else None
+
+            if ce_best is not None and ce_best < _NO_MATCH_CE_THRESHOLD:
+                print()
+                print("─" * 60)
+                print("  No matching guidelines found for this query.")
+                print()
+                print("  The loaded guidelines do not appear to cover this topic.")
+                print("  Please consult a qualified health worker or refer the")
+                print("  patient to a health facility.")
+                print("─" * 60)
+            else:
+                print(_format_response(result))
         except Exception as e:
             print(f"\nSomething went wrong: {e}")
             print("Please try rephrasing your question.")
