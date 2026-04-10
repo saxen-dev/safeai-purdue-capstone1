@@ -29,6 +29,14 @@ from typing import Any, Dict, List, Optional
 
 from .config import MedicalSource, PreservationLevel, TriageLevel
 
+# Optional: fuzzy matching for typo-tolerant triage keyword detection.
+# rapidfuzz is already a pipeline dependency (requirements-pipeline.txt).
+try:
+    from rapidfuzz import fuzz as _fuzz
+    _FUZZY_AVAILABLE = True
+except ImportError:
+    _FUZZY_AVAILABLE = False
+
 
 # ---------------------------------------------------------------------------
 # Danger-sign vocabulary for triage escalation (Improvement 1)
@@ -874,19 +882,63 @@ def infer_triage_from_query(query: str) -> tuple[TriageLevel, List[str]]:
     """
     q = query.lower()
     reasons: List[str] = []
+    # Partial-prefix matching catches inflected forms:
+    #   "bleed"      → bleeding / bleeds / bled
+    #   "haemorrhag" → haemorrhage / haemorrhaging (British)
+    #   "hemorrhag"  → hemorrhage / hemorrhaging (American)
+    #   "eclampsi"   → eclampsia / pre-eclampsia
+    #   "convuls"    → convulsions / convulsing
     danger_kw = (
         ("unable to drink", "Unable to drink / cannot drink"),
         ("cannot drink", "Unable to drink / cannot drink"),
         ("convuls", "Convulsions / seizures"),
         ("seizure", "Convulsions / seizures"),
+        ("fit ", "Convulsions / fits"),         # "fits" / "a fit" — space avoids "fits into"
         ("unconscious", "Unconscious or not waking"),
+        ("not waking", "Unconscious or not waking"),
         ("very weak", "Very weak"),
         ("lethargic", "Very weak / lethargic"),
-        ("bleeding", "Bleeding"),
+        ("bleed", "Bleeding"),                  # covers bleeding/bleeds/bled
+        ("haemorrhag", "Haemorrhage"),
+        ("hemorrhag", "Hemorrhage"),
+        ("eclampsi", "Eclampsia / pre-eclampsia"),
+        ("antepartum", "Antepartum complication"),
+        ("postpartum", "Postpartum complication"),
+        ("placenta previa", "Placenta previa"),
+        ("placenta praevia", "Placenta praevia"),
+        ("abruption", "Placental abruption"),
+        ("cord prolapse", "Cord prolapse"),
+        ("obstructed labour", "Obstructed labour"),
+        ("obstructed labor", "Obstructed labor"),
+        ("not breathing", "Not breathing"),
+        ("stopped breathing", "Stopped breathing"),
+        ("sepsis", "Sepsis"),
+        ("in shock", "Shock"),
+        ("severe pain", "Severe pain"),
     )
     for needle, label in danger_kw:
         if needle in q:
             reasons.append(label)
+
+    # Fuzzy matching for typo tolerance (e.g. "leeding" → "bleeding").
+    # Only runs when exact matching found nothing, to avoid double-counting.
+    if not reasons and _FUZZY_AVAILABLE:
+        _FUZZY_TARGETS = [
+            ("bleeding", "Bleeding"),
+            ("haemorrhage", "Haemorrhage"),
+            ("hemorrhage", "Hemorrhage"),
+            ("convulsions", "Convulsions / seizures"),
+            ("unconscious", "Unconscious or not waking"),
+            ("eclampsia", "Eclampsia"),
+        ]
+        for word in q.split():
+            if len(word) < 5:
+                continue
+            for target, label in _FUZZY_TARGETS:
+                if _fuzz.ratio(word, target) >= 80:
+                    reasons.append(label)
+                    break
+
     if reasons:
         return TriageLevel.RED, list(dict.fromkeys(reasons))
 
