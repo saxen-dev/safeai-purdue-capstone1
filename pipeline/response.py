@@ -2,6 +2,22 @@
 Output layer: VHT-oriented formatting after retrieval + guardrail.
 
 Pipeline order: extraction → validation → chunking → indexing → guardrail → response.
+
+Changes (2026-04-10):
+  1. Triage escalation from retrieved chunk content — infer_triage_from_query()
+     gives the initial level; ResponseOrchestrator._escalate_triage_from_chunks()
+     can upgrade it if chunk clinical_metadata contains danger signs that were
+     absent from the query text.
+  2. PDF-first danger signs section — VHTResponseFormatter._danger_signs_section()
+     now accepts chunk danger signs and renders them instead of a hardcoded list.
+     Falls back to the hardcoded list only when no chunk danger signs are found.
+  3. PDF-first family message — _generate_family_message() scans retrieved chunk
+     text for caregiver-education sentences before falling back to templates.
+  4. Broader list item extraction — _extract_list_items_from_chunks() now captures
+     action-verb lines (Give, Check, Refer, …) and bold markdown items in addition
+     to bullet-point and numbered lists.
+  5. Cross-section deduplication — actions, monitoring, and referral criteria share
+     a deduplication pass so the same sentence never appears in two sections.
 """
 
 from __future__ import annotations
@@ -12,6 +28,46 @@ from enum import Enum
 from typing import Any, Dict, List, Optional
 
 from .config import MedicalSource, PreservationLevel, TriageLevel
+
+
+# ---------------------------------------------------------------------------
+# Danger-sign vocabulary for triage escalation (Improvement 1)
+# ---------------------------------------------------------------------------
+
+# Signs that warrant RED triage when found in chunk clinical_metadata
+_RED_DANGER_SIGNS = [
+    "unable to drink",
+    "cannot drink",
+    "convuls",
+    "seizure",
+    "unconscious",
+    "not waking",
+    "very weak",
+    "lethargic",
+]
+
+# Query keywords that indicate a patient-clinical context (vs. purely
+# informational queries).  Escalation only fires when at least one of these
+# is present — so "What are danger signs?" stays GREEN even if chunks contain
+# danger-sign metadata.
+_PATIENT_CONTEXT_SIGNALS = [
+    "patient", "child", "infant", "baby", "adult", "pregnant",
+    "treatment", "treating", "manage", "managing", "presenting",
+    "sick", "ill", "fever", "cough", "vomit", "diarrhea", "diarrhoea",
+    "cannot", "unable", "not eating", "not drinking",
+]
+
+# Query keywords that escalate GREEN → YELLOW when chunk danger signs are found
+_YELLOW_ESCALATION_QUERY = [
+    "severe", "emergency", "critical", "danger", "refer immediately",
+    "complicated", "serious",
+]
+
+# Regex for extracting caregiver-education sentences (Improvement 3)
+_FAMILY_MSG_RE = re.compile(
+    r"(?:tell|explain to|inform|advise|counsel|educate)\b.{15,180}[.!]",
+    re.IGNORECASE,
+)
 
 
 class ResponseFormat(Enum):
@@ -38,6 +94,8 @@ class ResponseContent:
     family_message: Optional[str] = None
     validation_warnings: List[str] = field(default_factory=list)
     confidence_score: float = 1.0
+    # Improvement 2: danger signs extracted from chunk clinical_metadata
+    danger_signs: List[str] = field(default_factory=list)
 
     def to_vht_format(self) -> str:
         return VHTResponseFormatter().format(self, ResponseFormat.VHT_STANDARD)
@@ -72,7 +130,8 @@ class VHTResponseFormatter:
             lines.append(act)
         if content.monitoring:
             lines.append(self._monitoring_section(content))
-        lines.append(self._danger_signs_section())
+        # Improvement 2: pass chunk danger signs to the section renderer
+        lines.append(self._danger_signs_section(content.danger_signs))
         if content.family_message:
             lines.append(self._family_message_section(content.family_message))
         lines.append(self._vht_reminder(content.triage))
@@ -120,7 +179,21 @@ class VHTResponseFormatter:
             lines.append(f"• {item}")
         return "\n".join(lines)
 
-    def _danger_signs_section(self) -> str:
+    def _danger_signs_section(self, chunk_danger_signs: Optional[List[str]] = None) -> str:
+        """
+        Render the danger signs section.
+
+        Improvement 2 (2026-04-10): if chunk clinical_metadata provided danger
+        signs, render those instead of the hardcoded list.  The hardcoded list
+        remains as fallback when no chunk-sourced signs are available.
+        """
+        if chunk_danger_signs:
+            lines = ["**DANGER SIGNS - STOP AND REFER IF YOU SEE:**", ""]
+            for sign in chunk_danger_signs[:8]:
+                lines.append(f"• {sign}")
+            return "\n".join(lines)
+
+        # Hardcoded fallback — general danger signs applicable to any condition
         return (
             "**DANGER SIGNS - STOP AND REFER IF YOU SEE:**\n\n"
             "• Cannot drink or breastfeed\n"
@@ -331,11 +404,30 @@ class ResponseOrchestrator:
         source: MedicalSource,
         dosage_info: Optional[Dict[str, Any]] = None,
     ) -> ResponseContent:
+        # Improvement 1: escalate triage if chunk evidence contains danger signs
+        triage, triage_reasons = self._escalate_triage_from_chunks(
+            query, triage, triage_reasons, retrieved_chunks
+        )
+
         actions = self._select_actions(query, triage, retrieved_chunks)
         monitoring = self._select_monitoring(query, retrieved_chunks)
         referral_criteria = self._select_referral_criteria(triage, retrieved_chunks)
+
+        # Improvement 5: cross-section deduplication
+        actions, monitoring, referral_criteria = self._deduplicate_sections(
+            actions, monitoring, referral_criteria
+        )
+
         citations = self._build_citations(retrieved_chunks, source)
-        family_message = self._generate_family_message(query, triage)
+
+        # Improvement 2: collect danger signs from chunk metadata for formatter
+        danger_signs = self._collect_metadata_field(
+            retrieved_chunks, "danger_signs", max_items=8
+        )
+
+        # Improvement 3: PDF-first family message
+        family_message = self._generate_family_message(query, triage, retrieved_chunks)
+
         warnings = list(guardrail_output.get("warnings", []))
         return ResponseContent(
             query=query,
@@ -351,26 +443,125 @@ class ResponseOrchestrator:
             confidence_score=self._calculate_confidence(
                 guardrail_output, retrieved_chunks
             ),
+            danger_signs=danger_signs,
         )
 
     # ------------------------------------------------------------------
-    # List-item extractor — pulls bullet / numbered items from PDF text
+    # Improvement 1: Triage escalation from retrieved chunk content
     # ------------------------------------------------------------------
+
+    def _escalate_triage_from_chunks(
+        self,
+        query: str,
+        triage: TriageLevel,
+        triage_reasons: List[str],
+        chunks: List[Dict[str, Any]],
+    ) -> tuple[TriageLevel, List[str]]:
+        """
+        Escalate triage level if retrieved chunk clinical_metadata contains
+        danger signs that were absent from the query.
+
+        Rules (conservative to avoid false RED classifications):
+        - Only fires when the query contains at least one patient-clinical
+          context signal (treating, patient, child, fever, etc.) — purely
+          informational queries ("What are danger signs?") are not escalated.
+        - RED escalation: a RED-level danger sign (convulsions, cannot drink,
+          unconscious, …) is found in chunk danger_signs AND the query has
+          patient context.
+        - YELLOW escalation: chunk danger_signs are non-empty AND query
+          contains a severity keyword (severe, complicated, emergency, …)
+          AND current triage is GREEN.
+        - Already-RED triage is never changed.
+        """
+        if triage == TriageLevel.RED:
+            return triage, triage_reasons
+
+        query_lower = query.lower()
+        has_patient_context = any(
+            sig in query_lower for sig in _PATIENT_CONTEXT_SIGNALS
+        )
+
+        # Collect danger signs from chunk clinical_metadata only (more precise
+        # than scanning raw text, which would produce too many false positives)
+        chunk_danger_signs: List[str] = []
+        for chunk in chunks:
+            cm = chunk.get("clinical_metadata") or {}
+            for sign in cm.get("danger_signs", []):
+                if sign and sign.lower() not in [s.lower() for s in chunk_danger_signs]:
+                    chunk_danger_signs.append(sign)
+
+        if not chunk_danger_signs or not has_patient_context:
+            return triage, triage_reasons
+
+        # Check for RED-level signs
+        red_found: List[str] = []
+        for sign in chunk_danger_signs:
+            sign_lower = sign.lower()
+            if any(needle in sign_lower for needle in _RED_DANGER_SIGNS):
+                red_found.append(sign)
+
+        if red_found:
+            new_reasons = list(triage_reasons) + [
+                f"Danger sign in guideline content: {s}" for s in red_found[:2]
+            ]
+            return TriageLevel.RED, new_reasons
+
+        # Check for YELLOW escalation from GREEN
+        if triage == TriageLevel.GREEN:
+            has_severity_keyword = any(
+                kw in query_lower for kw in _YELLOW_ESCALATION_QUERY
+            )
+            if has_severity_keyword:
+                new_reasons = list(triage_reasons) + [
+                    "Severity keyword in query with danger signs in guideline content"
+                ]
+                return TriageLevel.YELLOW, new_reasons
+
+        return triage, triage_reasons
+
+    # ------------------------------------------------------------------
+    # Improvement 4: Broader list item extraction
+    # ------------------------------------------------------------------
+
+    # Action verbs that commonly start clinical instructions
+    _ACTION_VERB_RE = re.compile(
+        r"^\s*(?:Give|Check|Refer|Ensure|Apply|Administer|Monitor|Observe|"
+        r"Weigh|Complete|Take|Wash|Keep|Remove|Avoid|Assess|Perform|Record|"
+        r"Start|Stop|Continue|Consider|Prescribe|Repeat|Review|Confirm|"
+        r"Do not|Do NOT|Do\s+not)\b(.{10,200})",
+        re.MULTILINE,
+    )
+    # Bold markdown items: **some instruction**
+    _BOLD_ITEM_RE = re.compile(r"^\s*\*\*(.{10,200})\*\*\s*$", re.MULTILINE)
 
     @staticmethod
     def _extract_list_items_from_chunks(
         chunks: List[Dict[str, Any]], max_items: int = 6
     ) -> List[str]:
         """
-        Extract bullet-point and numbered-list sentences from retrieved chunk
-        text.  These come directly from the guideline PDF, so every item is
-        traceable to a source page.  Items shorter than 10 or longer than 250
-        characters are filtered as noise.
+        Extract actionable items from retrieved chunk text using four patterns:
+        1. Bullet-point lines   (•, -, *, unicode bullet)
+        2. Numbered-list lines  (1. / 1) format)
+        3. Action-verb lines    (Give, Check, Refer, …)  — Improvement 4
+        4. Bold markdown items  (**...**)                — Improvement 4
+
+        Items between 10 and 250 characters are kept; duplicates are dropped.
+        All items come verbatim from the PDF.
         """
         _BULLET_RE = re.compile(r"^\s*[•\-\*\u2022]\s+(.+)", re.MULTILINE)
         _NUMBER_RE = re.compile(r"^\s*\d+[\.\)]\s+(.+)", re.MULTILINE)
+        _ACTION_RE = re.compile(
+            r"^\s*(?:Give|Check|Refer|Ensure|Apply|Administer|Monitor|Observe|"
+            r"Weigh|Complete|Take|Wash|Keep|Remove|Avoid|Assess|Perform|Record|"
+            r"Start|Stop|Continue|Consider|Prescribe|Repeat|Review|Confirm|"
+            r"Do not|Do NOT)\b(.{10,200})",
+            re.MULTILINE,
+        )
+        _BOLD_RE = re.compile(r"^\s*\*\*(.{10,200})\*\*\s*$", re.MULTILINE)
+
         seen: set = set()
         items: List[str] = []
+
         for chunk in chunks:
             text = chunk.get("text", "")
             for pattern in (_BULLET_RE, _NUMBER_RE):
@@ -379,8 +570,22 @@ class ResponseOrchestrator:
                     if 10 <= len(item) <= 250 and item not in seen:
                         seen.add(item)
                         items.append(item)
+            # Action-verb lines: prepend the matched verb back onto the capture
+            for m in _ACTION_RE.finditer(text):
+                # group(0) is the full line; strip leading whitespace
+                item = m.group(0).strip()
+                if 10 <= len(item) <= 250 and item not in seen:
+                    seen.add(item)
+                    items.append(item)
+            # Bold items
+            for m in _BOLD_RE.finditer(text):
+                item = m.group(1).strip()
+                if 10 <= len(item) <= 250 and item not in seen:
+                    seen.add(item)
+                    items.append(item)
             if len(items) >= max_items:
                 break
+
         return items[:max_items]
 
     @staticmethod
@@ -402,6 +607,38 @@ class ResponseOrchestrator:
             if len(results) >= max_items:
                 break
         return results[:max_items]
+
+    # ------------------------------------------------------------------
+    # Improvement 5: Cross-section deduplication
+    # ------------------------------------------------------------------
+
+    @staticmethod
+    def _deduplicate_sections(
+        actions: List[str],
+        monitoring: List[str],
+        referral_criteria: List[str],
+    ) -> tuple[List[str], List[str], List[str]]:
+        """
+        Remove items from monitoring and referral_criteria that already appear
+        in actions (or in each other).  Comparison is case-insensitive.
+        """
+        seen: set = {a.lower().strip() for a in actions}
+
+        monitoring_clean: List[str] = []
+        for item in monitoring:
+            key = item.lower().strip()
+            if key not in seen:
+                seen.add(key)
+                monitoring_clean.append(item)
+
+        referral_clean: List[str] = []
+        for item in referral_criteria:
+            key = item.lower().strip()
+            if key not in seen:
+                seen.add(key)
+                referral_clean.append(item)
+
+        return actions, monitoring_clean, referral_clean
 
     # ------------------------------------------------------------------
     # Action / monitoring / referral selection — PDF-first, template fallback
@@ -502,7 +739,34 @@ class ResponseOrchestrator:
             })
         return out
 
-    def _generate_family_message(self, query: str, triage: TriageLevel) -> str:
+    # ------------------------------------------------------------------
+    # Improvement 3: PDF-first family message
+    # ------------------------------------------------------------------
+
+    def _generate_family_message(
+        self, query: str, triage: TriageLevel, chunks: List[Dict[str, Any]]
+    ) -> str:
+        """
+        Generate a caregiver-education message.
+
+        Improvement 3 (2026-04-10): first scans retrieved chunk text for
+        sentences that begin with caregiver-education verbs (Tell, Explain,
+        Advise, Counsel, Inform).  Returns the first matching sentence from
+        the PDF verbatim.  Falls back to hardcoded templates when no
+        matching sentence is found.
+        """
+        # Primary: scan chunk text for caregiver-education sentences
+        for chunk in chunks:
+            # Only search narrative chunks — skip dosing tables
+            if chunk.get("content_type") in ("table", "image_ocr", "image_placeholder"):
+                continue
+            text = chunk.get("text", "")
+            for m in _FAMILY_MSG_RE.finditer(text):
+                sentence = m.group(0).strip()
+                if 20 <= len(sentence) <= 250:
+                    return sentence
+
+        # Fallback: hardcoded templates
         q = query.lower()
         if triage == TriageLevel.RED:
             if "cannot drink" in q or "unable to drink" in q:
@@ -565,6 +829,10 @@ def infer_triage_from_query(query: str) -> tuple[TriageLevel, List[str]]:
     """
     Rule-based triage aligned with danger-sign list used in guardrail footer.
     YELLOW: non-immediate but time-sensitive phrasing in the query.
+
+    Note: this function sets the *initial* triage level from the query text
+    only.  ResponseOrchestrator._escalate_triage_from_chunks() may upgrade
+    the level further based on retrieved chunk content.
     """
     q = query.lower()
     reasons: List[str] = []
