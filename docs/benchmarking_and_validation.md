@@ -116,7 +116,7 @@ See [`rag_output/README.md`](../rag_output/README.md) for the full directory gui
 | 2. Tables | 100% | PASS |
 | 3. Cross-consistency | 94% | PASS |
 | 4. Medical content | 100% | PASS |
-| 6. Dosing plausibility | 97% (495/509 tables) | PASS |
+| 6. Dosing plausibility | 99% (479/484 tables) | PASS |
 | 5. Human review | 43 items flagged | — |
 | **Overall confidence** | **~79%** | |
 
@@ -124,6 +124,8 @@ The Uganda PDF performs significantly better because:
 - Its table layouts are more uniform (consistent 2-3 column structures)
 - Its 212 drug keywords provide richer classification vocabulary
 - Its dosing tables use standard weight-band formats
+
+**2026-04-10 — Cross-validation fix:** Uganda's cross-consistency (Stage 3) was originally reported as 0% in earlier re-runs because the Uganda Clinical Guidelines 2023 PDF is produced by Adobe InDesign using a non-standard internal page-tree structure that pdfminer/pdfplumber cannot traverse — pdfplumber returned 0 pages. The extractor now detects this automatically: if pdfplumber returns 0 pages, it re-saves the PDF through PyMuPDF (`garbage=4, deflate=True, clean=True`) to a temporary file that normalises the structure, then runs pdfplumber on the repaired copy. This restores Uganda's cross-consistency to the correct 94% and makes cross-validation work on any PDF regardless of how it was produced. The dosing plausibility update from 97% (495/509) to 99% (479/484) also reflects the corrected re-run results.
 
 ### Response layer validation
 
@@ -134,10 +136,26 @@ Both presets were tested with 25 queries each (50 total):
 | Queries tested | 25 | 25 |
 | Guardrail pass rate | 100% | 100% |
 | Triage level consistency | All GREEN | All GREEN |
-| Response confidence | 0.90 (all) | 0.90 (all) |
+| Response confidence | 0.90 *(hardcoded constant — prior to 2026-04-09 fix)* | 0.89 (range: 0.68–1.00) |
 | VHT response length | 1,439-1,578 chars | 1,422-1,597 chars |
 
 All 50 queries passed guardrail validation with no warnings or errors.
+
+**2026-04-09 — Confidence scoring fix:** Prior to this date, `_calculate_confidence()` used a fixed baseline of `0.95` (RED triage) or `0.90` (all other queries), adjusted only for guardrail warnings. This meant every query — regardless of retrieval quality — received the same score. The WHO Malaria `0.90` value in the table above was this hardcoded constant, not a measured signal.
+
+The Uganda column (`0.89`) reflects the real computed value after the fix. The formula combines three signals:
+
+```
+confidence = 0.6 × retrieval_score + 0.4 × coverage − penalty
+```
+
+- **Retrieval score (60%)** — mean of top-3 retrieved chunk scores (normalized to [0,1] by the hybrid retriever after RRF + cross-encoder blending)
+- **Coverage (40%)** — fraction of the 5 requested chunks that were actually found
+- **Guardrail penalty (subtracted)** — −0.05 per warning, −0.15 per error, −0.10 if guardrail failed
+
+This makes the confidence score a genuine measure of how well the retrieved evidence supports the response.
+
+**2026-04-09 — PDF-first response content:** Actions, monitoring instructions, and referral criteria are now extracted verbatim from retrieved PDF chunks using regex (bullet points, numbered lists, `danger_signs` and `referral_criteria` from chunk `clinical_metadata`), rather than returned from hardcoded keyword-matched templates. Hardcoded templates remain as fallback only when the PDF chunks contain no extractable items. This ensures every response reflects the actual uploaded document.
 
 ## Retrieval benchmark results
 

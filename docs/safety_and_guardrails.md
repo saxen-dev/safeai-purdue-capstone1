@@ -10,6 +10,8 @@ This document describes the safety measures implemented across every stage of th
 
 **Cross-validation (Pass 4).** Every page of extracted text is independently re-extracted with a second library (pdfplumber) and compared. Pages with <90% consistency are flagged, alerting downstream stages to potential extraction errors.
 
+**Automatic PDF repair (2026-04-10).** Some PDFs produced by tools like Adobe InDesign use a non-standard internal page-tree structure that pdfminer/pdfplumber cannot traverse, causing pdfplumber to return 0 pages and the cross-consistency score to silently stay at 0% — a false failure. The extractor now detects this: if pdfplumber returns 0 pages, it automatically re-saves the PDF through PyMuPDF (`garbage=4, deflate=True, clean=True`) to a temporary file, which normalises the PDF structure to standard format. pdfplumber then runs on the repaired copy and produces correct results. The temporary file is deleted after cross-validation. This fix is transparent — no configuration change is needed — and makes cross-validation work correctly on any uploaded PDF.
+
 **Table classification.** Tables are classified by clinical function (dosing, clinical management, evidence, structural, other). Misclassifying a dosing table as "other" could cause it to be paraphrased instead of preserved verbatim. The classification uses conservative keyword matching with domain-specific vocabularies from `configs/*.json`.
 
 ### Stage 2: Validation safety
@@ -82,7 +84,17 @@ Six independent validation stages catch different error categories:
 
 **Preservation-level enforcement.** VERBATIM content (dosing tables) is rendered exactly as extracted — the response formatter cannot paraphrase or summarize it.
 
-**Confidence scoring.** Every response includes a numeric confidence (0.0-1.0) that decreases with each guardrail warning or error. Low-confidence responses are flagged to the user.
+**Confidence scoring (updated 2026-04-09).** Every response includes a numeric confidence (0.0–1.0) computed from three real retrieval signals:
+
+```
+confidence = 0.6 × retrieval_score + 0.4 × coverage − penalty
+```
+
+- **Retrieval score (60%)** — mean score of the top-3 retrieved chunks, normalized to [0,1] after RRF + cross-encoder blending
+- **Coverage (40%)** — fraction of the 5 requested chunks that were actually returned
+- **Guardrail penalty (subtracted)** — −0.05 per warning, −0.15 per error, −0.10 if guardrail failed
+
+Prior to this change, the score was a hardcoded constant (0.90 for all non-RED queries) adjusted only for guardrail warnings — meaning a query backed by weak evidence received the same score as one with five highly-relevant passages. The score now carries real information about how well the retrieved evidence supports the response.
 
 ## Defense-in-depth summary
 
@@ -101,7 +113,7 @@ PDF Input
   |
   [Retrieval] --- metadata-aware, not just embedding similarity
   |
-  [Response generation] --- template-based, VERBATIM dosing blocks
+  [Response generation] --- PDF-first content extraction, VERBATIM dosing blocks
   |
   [Guardrail validation] --- independent safety checks
   |
