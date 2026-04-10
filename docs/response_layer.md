@@ -107,6 +107,17 @@ All three methods fall back to the hardcoded templates only when the PDF chunks 
 
 - **Cross-section deduplication** (`_deduplicate_sections`): Actions, monitoring, and referral criteria share a deduplication pass so the same item never appears in two sections of the same response.
 
+**Updated 2026-04-10 (content leakage fix):** Relevance-score filtering for content extraction.
+
+**Why:** The retriever returns 5 chunks sorted by relevance score. In practice, chunks ranked 4th and 5th often score 0.2–0.3 — they are from tangentially related guideline sections (e.g., a general malaria background section retrieved alongside a specific treatment protocol). Because `_extract_list_items_from_chunks` and `_collect_metadata_field` iterated over all 5 chunks equally, bullet points and metadata from these low-relevance chunks leaked into the actions, monitoring, and referral output, producing steps from unrelated parts of the guidelines.
+
+**Fix:** New `_relevant_chunks()` helper filters to chunks with `score >= 0.40` and caps at the top 3. All three selection methods (`_select_actions`, `_select_monitoring`, `_select_referral_criteria`) and the danger-signs collector in `create()` now pre-filter through `_relevant_chunks()`. Fallback: always includes at least the top-1 chunk so extraction is never empty. Citations and dosing blocks continue to use the full retrieved set.
+
+```
+_CONTENT_SCORE_THRESHOLD = 0.40   # chunks below this are excluded from content extraction
+_CONTENT_MAX_CHUNKS = 3           # never pull from more than 3 chunks for list/metadata extraction
+```
+
 ### Confidence scoring
 
 **Changed 2026-04-09.** The confidence score is now computed from actual retrieval signals rather than a hardcoded baseline.

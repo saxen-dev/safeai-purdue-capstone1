@@ -2,6 +2,26 @@
 
 This guide walks through installing dependencies, configuring PDF paths, running the pipeline, and interacting with the Q&A system in your terminal.
 
+## Non-technical users (Mac): start.command
+
+If you are not comfortable with the command line, use the **`start.command`** launcher included in the project root. It handles all setup automatically.
+
+**One-time setup (Terminal, run once):**
+
+```bash
+chmod +x /path/to/safeai-purdue-capstone-main/start.command
+```
+
+After that, **double-click `start.command`** in Finder every time. It will:
+
+1. Create a Python virtual environment (`safeai-env/`) on first run
+2. Install all dependencies automatically (2–5 minutes on first run)
+3. Open a native Mac file picker to select your guideline PDF (first run only)
+4. Process the PDF into a knowledge base (first run only, 5–15 minutes)
+5. Launch the conversational assistant: "What can I help you with today?"
+
+Every subsequent run: just double-click and the assistant opens in seconds.
+
 ## Prerequisites
 
 - **Python 3.9+**
@@ -28,7 +48,7 @@ pip install -r requirements-pipeline.txt
 | `sentence-transformers` | Dense embedding (`all-MiniLM-L6-v2`) and cross-encoder reranking (`ms-marco-MiniLM-L-6-v2`) |
 | `faiss-cpu` | Approximate nearest-neighbor search |
 | `rapidfuzz` | Fuzzy text matching for cross-validation |
-| `numpy>=1.20,<2` | Pinned below 2.0 for torch compatibility |
+| `numpy>=1.26` | numpy 2.x used on Python 3.13 (pre-built wheels); 1.26.x on older Python |
 
 > **Note:** `sentence-transformers`, `faiss-cpu`, and `chromadb` are optional. If unavailable, the pipeline falls back to BM25-only retrieval.
 
@@ -274,7 +294,7 @@ Reports are written to the `reports/` directory.
 | Issue | Solution |
 |---|---|
 | `ModuleNotFoundError: No module named 'sentence_transformers'` | Install: `pip install sentence-transformers`. Pipeline will fall back to BM25-only if missing. |
-| `numpy` crash on import | Ensure `numpy<2` is installed: `pip install "numpy>=1.20,<2"` |
+| `numpy` build failure during install | Python 3.13 cannot build numpy 1.x from source. The requirement is now `numpy>=1.26` which installs pre-built numpy 2.x wheels on Python 3.13. Delete your venv and reinstall. |
 | PDF not found | Set the env var (`MALARIA_PDF` or `UGANDA_PDF`) or pass `--pdf /absolute/path` |
 | Slow first run | The first run downloads embedding models (~90 MB). Subsequent runs use the cached model. |
 | `EOFError` in scripts | The Q&A loop handles EOF gracefully. Use `Ctrl+C` or pipe `echo quit` for non-interactive runs. |

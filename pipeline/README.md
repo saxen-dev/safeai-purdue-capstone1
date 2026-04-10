@@ -186,6 +186,22 @@ The retrieval benchmark results and deployable mobile package are tracked in [`r
 
 ## Recent changes
 
+### 2026-04-10 — `pipeline/response.py`: Content leakage fix (`_relevant_chunks`)
+
+**Problem:** `_extract_list_items_from_chunks` and `_collect_metadata_field` iterated over all 5 retrieved chunks equally. Chunks ranked 4th/5th often score 0.2–0.3 (tangentially related sections), so their bullet points and metadata leaked into actions, monitoring, and referral output — producing steps from unrelated parts of the guidelines.
+
+**Fix:** New `_relevant_chunks(chunks, threshold=0.40, max_chunks=3)` static method filters to chunks above the relevance threshold, capped at 3. Falls back to the top-1 chunk if nothing exceeds the threshold. `_select_actions`, `_select_monitoring`, `_select_referral_criteria`, and the `create()` danger-signs collector all pre-filter through `_relevant_chunks`. Citations and dosing blocks use the full set unchanged.
+
+Constants added: `_CONTENT_SCORE_THRESHOLD = 0.40`, `_CONTENT_MAX_CHUNKS = 3`.
+
+### 2026-04-10 — `requirements-pipeline.txt`: numpy Python 3.13 fix
+
+Changed `numpy>=1.20,<2` → `numpy>=1.26`. numpy 1.x has no pre-built wheel for Python 3.13; pip attempts a C++ source build that fails (`type_traits` header missing). `numpy>=1.26` resolves to numpy 2.x on Python 3.13 which ships pre-built wheels, while still allowing numpy 1.26.x on older Python versions.
+
+### 2026-04-10 — `start.command`: Mac double-click launcher
+
+New shell script for non-technical users. Double-clicking the file in Finder opens a Terminal window that: creates `safeai-env/` virtual environment if absent, installs all dependencies via `pip install -r requirements-pipeline.txt`, opens a native Mac file picker (via `osascript`) to select the guideline PDF, runs `run_pipeline.py` to build the knowledge base on first use, then launches `chat.py`. All subsequent runs skip to `chat.py` immediately. Requires one-time `chmod +x start.command` from Terminal.
+
 ### 2026-04-10 — `chat.py`: Conversational interface
 
 New entry point for plain-language interaction. Run with `python3 chat.py` from the project root — no flags needed. Auto-detects available knowledge bases, prompts "What can I help you with today?", routes every query through Brain 1 → Brain 2, and displays clean terminal output (triage header, numbered actions, monitoring, referral criteria, source citations). Strips markdown formatting, deduplicates near-identical list items, and filters truncated/table-derived fragments for clean display.
