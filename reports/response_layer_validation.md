@@ -1,6 +1,6 @@
 # Response layer validation (25 queries × 2 sources)
 
-- **Generated (UTC)**: 2026-04-10T04:59:48.445208+00:00
+- **Generated (UTC)**: 2026-04-10T16:07:50.712931+00:00
 - **Method**: `MedicalQASystem.answer_with_response()` after BM25 + guardrail
 
 ## Acceptance criteria
@@ -45,7 +45,7 @@ Per preset: summary table (metrics only), then **full query** and **complete** f
 | 21 | GREEN | True | 0.86 | 1384 | 355 | 123 |
 | 22 | GREEN | True | 0.95 | 1460 | 391 | 123 |
 | 23 | GREEN | True | 0.83 | 1508 | 380 | 123 |
-| 24 | GREEN | True | 0.78 | 1454 | 380 | 123 |
+| 24 | GREEN | True | 0.78 | 1408 | 376 | 123 |
 | 25 | GREEN | True | 0.76 | 1816 | 546 | 123 |
 
 ### Full queries and formatted outputs
@@ -5589,10 +5589,8 @@ Citations: Page 10, Page 46, Page 61, Page 62, Page 64
 
 **WHAT TO DO (step by step):**
 
-**Step 1:** Assess patient carefully
-**Step 2:** Check for danger signs (see below)
-**Step 3:** If unsure, refer to health facility
-**Step 4:** Record all findings
+**Step 1:** Monitor, supervise, and evaluate national iCCM
+**Step 2:** Ensure medicines and commodity security at all
 
 **MONITORING:**
 
@@ -5639,9 +5637,8 @@ The symptoms can be managed at home with guidance. Follow the advice you were gi
 **Reason:** Routine evidence retrieval from national guidelines
 
 **Actions taken:**
-• Assess patient carefully
-• Check for danger signs (see below)
-• If unsure, refer to health facility
+• Monitor, supervise, and evaluate national iCCM
+• Ensure medicines and commodity security at all
 
 **Referral completed:** [ ]
 **Health worker received:** [ ]
@@ -6106,30 +6103,30 @@ Citations: Page 12, Page 13, Page 45, Page 63
 | # | Triage | Guardrail OK | Confidence | VHT chars | Referral chars | Quick chars |
 |---|--------|--------------|------------|-----------|----------------|-------------|
 | 1 | GREEN | True | 0.84 | 1495 | 380 | 123 |
-| 2 | GREEN | True | 0.95 | 1651 | 443 | 123 |
-| 3 | GREEN | True | 1.00 | 2298 | 565 | 123 |
+| 2 | GREEN | True | 0.95 | 1653 | 439 | 123 |
+| 3 | GREEN | True | 1.00 | 2234 | 565 | 123 |
 | 4 | GREEN | True | 0.89 | 1586 | 404 | 123 |
-| 5 | GREEN | True | 0.93 | 1532 | 380 | 123 |
-| 6 | GREEN | True | 0.93 | 1511 | 391 | 123 |
-| 7 | GREEN | True | 0.79 | 1513 | 380 | 123 |
-| 8 | GREEN | True | 0.90 | 1362 | 326 | 123 |
+| 5 | GREEN | True | 0.93 | 1488 | 378 | 123 |
+| 6 | GREEN | True | 0.93 | 1717 | 448 | 123 |
+| 7 | GREEN | True | 0.79 | 1455 | 380 | 123 |
+| 8 | GREEN | True | 0.90 | 1425 | 379 | 123 |
 | 9 | GREEN | True | 0.97 | 1586 | 374 | 123 |
-| 10 | GREEN | True | 0.94 | 1375 | 326 | 123 |
+| 10 | GREEN | True | 0.94 | 1562 | 388 | 123 |
 | 11 | GREEN | True | 0.88 | 1567 | 380 | 123 |
-| 12 | GREEN | True | 0.89 | 1488 | 380 | 123 |
-| 13 | GREEN | True | 0.91 | 2871 | 399 | 123 |
-| 14 | GREEN | True | 0.95 | 1598 | 380 | 123 |
-| 15 | GREEN | True | 0.95 | 1609 | 404 | 123 |
+| 12 | GREEN | True | 0.89 | 1395 | 339 | 123 |
+| 13 | GREEN | True | 0.91 | 2948 | 438 | 123 |
+| 14 | GREEN | True | 0.95 | 1417 | 333 | 123 |
+| 15 | GREEN | True | 0.95 | 1641 | 406 | 123 |
 | 16 | GREEN | True | 0.68 | 1420 | 377 | 123 |
-| 17 | GREEN | True | 0.90 | 1571 | 418 | 123 |
-| 18 | GREEN | True | 0.70 | 1540 | 380 | 123 |
+| 17 | GREEN | True | 0.90 | 1599 | 390 | 123 |
+| 18 | GREEN | True | 0.65 | 1590 | 331 | 123 |
 | 19 | GREEN | True | 0.87 | 1729 | 484 | 123 |
-| 20 | GREEN | True | 0.91 | 1586 | 396 | 123 |
-| 21 | GREEN | True | 0.83 | 1566 | 399 | 123 |
-| 22 | GREEN | True | 0.81 | 1516 | 380 | 123 |
-| 23 | GREEN | True | 0.89 | 1505 | 380 | 123 |
+| 20 | GREEN | True | 0.91 | 1647 | 396 | 123 |
+| 21 | GREEN | True | 0.83 | 1529 | 379 | 123 |
+| 22 | GREEN | True | 0.81 | 1381 | 297 | 123 |
+| 23 | GREEN | True | 0.89 | 1559 | 398 | 123 |
 | 24 | GREEN | True | 0.96 | 1647 | 435 | 123 |
-| 25 | GREEN | True | 0.92 | 1510 | 380 | 123 |
+| 25 | GREEN | True | 0.92 | 1448 | 350 | 123 |
 
 ### Full queries and formatted outputs
 
@@ -6425,9 +6422,9 @@ Citations: Page 16, Page 876, Page 893, Page 907, Page 929
 
 **Step 1:** Give zinc for 10 days: Child < 6 months: 10 mg per day;
 **Step 2:** If child exclusively breastfed, give ORS or safe
-**Step 3:** In addition to the usual fluid intake, give ORS after
-**Step 4:** Give the mother 2 packets to use at home
-**Step 5:** Giving ORS is especially important if the child
+**Step 3:** Give extra fluids: as much as the child will take
+**Step 4:** In addition to the usual fluid intake, give ORS after
+**Step 5:** Give the mother 2 packets to use at home
 
 **MONITORING:**
 
@@ -6476,7 +6473,7 @@ The symptoms can be managed at home with guidance. Follow the advice you were gi
 **Actions taken:**
 • Give zinc for 10 days: Child < 6 months: 10 mg per day;
 • If child exclusively breastfed, give ORS or safe
-• In addition to the usual fluid intake, give ORS after
+• Give extra fluids: as much as the child will take
 
 **Referral completed:** [ ]
 **Health worker received:** [ ]
@@ -6688,7 +6685,7 @@ Citations: Page 75, Page 77, Page 897, Page 930
 
 **WHAT TO TELL THE FAMILY:**
 
-The symptoms can be managed at home with guidance. Follow the advice you were given. Come back if symptoms get worse.
+inform the prescription of 2ndand 3rd-line medicines.
 
 **REMEMBER AS A VHT:**
 
@@ -7184,10 +7181,8 @@ Citations: Page 8, Page 9, Page 318, Page 450, Page 451
 
 **WHAT TO DO (step by step):**
 
-**Step 1:** Assess patient carefully
-**Step 2:** Check for danger signs (see below)
-**Step 3:** If unsure, refer to health facility
-**Step 4:** Record all findings
+**Step 1:** Give paracetamol 1 g every 6 hours Child: 10 mg/
+**Step 2:** Give diazepam 0.2 mg/kg (max 10 mg) slow IV or
 
 **MONITORING:**
 
@@ -7234,9 +7229,8 @@ The symptoms can be managed at home with guidance. Follow the advice you were gi
 **Reason:** Routine evidence retrieval from national guidelines
 
 **Actions taken:**
-• Assess patient carefully
-• Check for danger signs (see below)
-• If unsure, refer to health facility
+• Give paracetamol 1 g every 6 hours Child: 10 mg/
+• Give diazepam 0.2 mg/kg (max 10 mg) slow IV or
 
 **Referral completed:** [ ]
 **Health worker received:** [ ]
@@ -7467,6 +7461,9 @@ Citations: Page 235, Page 241, Page 772, Page 929
 
 **Step 1:** Resuscitation and management of obstetric haemorrhage and
 **Step 2:** Identification and management of underlying causes
+**Step 3:** Check uterus to see if contracted f Massage uterus (to
+**Step 4:** Start IV fluids (normal saline) using 2 IV lines using
+**Step 5:** Give prophylactic antibiotics until delivery to help reduce
 
 **MONITORING:**
 
@@ -7515,6 +7512,7 @@ The symptoms can be managed at home with guidance. Follow the advice you were gi
 **Actions taken:**
 • Resuscitation and management of obstetric haemorrhage and
 • Identification and management of underlying causes
+• Check uterus to see if contracted f Massage uterus (to
 
 **Referral completed:** [ ]
 **Health worker received:** [ ]
@@ -7734,7 +7732,7 @@ Citations: Page 786, Page 789, Page 809, Page 811, Page 827
 
 **WHAT TO TELL THE FAMILY:**
 
-The symptoms can be managed at home with guidance. Follow the advice you were given. Come back if symptoms get worse.
+counsel the patient and address her concerns appropriately.
 
 **REMEMBER AS A VHT:**
 
@@ -8003,6 +8001,7 @@ Citations: Page 265, Page 722, Page 726, Page 727, Page 730
 **WHAT TO DO (step by step):**
 
 **Step 1:** Diastolic of 90 mmHg and systolic of 140 mmHg
+**Step 2:** Ensure adequate depth of anaesthesia and analgesia
 
 **MONITORING:**
 
@@ -8050,6 +8049,7 @@ The symptoms can be managed at home with guidance. Follow the advice you were gi
 
 **Actions taken:**
 • Diastolic of 90 mmHg and systolic of 140 mmHg
+• Ensure adequate depth of anaesthesia and analgesia
 
 **Referral completed:** [ ]
 **Health worker received:** [ ]
@@ -8525,6 +8525,10 @@ Citations: Page 463, Page 535, Page 539, Page 541, Page 542
 **WHAT TO DO (step by step):**
 
 **Step 1:** Sodium bicarbonate 1 mEq/kg bolus followed by
+**Step 2:** Refer for ventilatory support if necessary
+**Step 3:** Keep baby warm
+**Step 4:** Give analgesics prn
+**Step 5:** Refer for radiotherapy at national referral hospital for se­
 
 **MONITORING:**
 
@@ -8572,6 +8576,8 @@ The symptoms can be managed at home with guidance. Follow the advice you were gi
 
 **Actions taken:**
 • Sodium bicarbonate 1 mEq/kg bolus followed by
+• Refer for ventilatory support if necessary
+• Keep baby warm
 
 **Referral completed:** [ ]
 **Health worker received:** [ ]
@@ -8917,10 +8923,7 @@ Citations: Page 284, Page 297, Page 329, Page 361, Page 362
 
 **WHAT TO DO (step by step):**
 
-**Step 1:** Assess patient carefully
-**Step 2:** Check for danger signs (see below)
-**Step 3:** If unsure, refer to health facility
-**Step 4:** Record all findings
+**Step 1:** Consider the following if using VIA as a screening method:
 
 **MONITORING:**
 
@@ -8967,9 +8970,7 @@ The symptoms can be managed at home with guidance. Follow the advice you were gi
 **Reason:** Routine evidence retrieval from national guidelines
 
 **Actions taken:**
-• Assess patient carefully
-• Check for danger signs (see below)
-• If unsure, refer to health facility
+• Consider the following if using VIA as a screening method:
 
 **Referral completed:** [ ]
 **Health worker received:** [ ]
@@ -9136,6 +9137,8 @@ Citations: Page 671, Page 673, Page 674, Page 679
 
 **Step 1:** Give this as early as possible in life, preferably at birth
 **Step 2:** Do NOT give BCG vaccine to any child with clinical signs
+**Step 3:** Check immunization card and classify
+**Step 4:** Give all missed
 
 **MONITORING:**
 
@@ -9354,6 +9357,7 @@ At least 1 year after Td4
 **Actions taken:**
 • Give this as early as possible in life, preferably at birth
 • Do NOT give BCG vaccine to any child with clinical signs
+• Check immunization card and classify
 
 **Referral completed:** [ ]
 **Health worker received:** [ ]
@@ -9666,10 +9670,7 @@ Citations: Page 16, Page 886, Page 938, Page 939, Page 946
 
 **WHAT TO DO (step by step):**
 
-**Step 1:** Assess patient carefully
-**Step 2:** Check for danger signs (see below)
-**Step 3:** If unsure, refer to health facility
-**Step 4:** Record all findings
+**Step 1:** Assess the child’s feeding and counsel the mother on
 
 **MONITORING:**
 
@@ -9691,7 +9692,7 @@ Citations: Page 16, Page 886, Page 938, Page 939, Page 946
 
 **WHAT TO TELL THE FAMILY:**
 
-The symptoms can be managed at home with guidance. Follow the advice you were given. Come back if symptoms get worse.
+Advise the mother to continue RUTF.
 
 **REMEMBER AS A VHT:**
 
@@ -9716,9 +9717,7 @@ The symptoms can be managed at home with guidance. Follow the advice you were gi
 **Reason:** Routine evidence retrieval from national guidelines
 
 **Actions taken:**
-• Assess patient carefully
-• Check for danger signs (see below)
-• If unsure, refer to health facility
+• Assess the child’s feeding and counsel the mother on
 
 **Referral completed:** [ ]
 **Health worker received:** [ ]
@@ -9867,11 +9866,11 @@ Citations: Page 957, Page 960, Page 962
 
 **WHAT TO DO (step by step):**
 
-**Step 1:** Persons living with HIV
-**Step 2:** Child & adult contacts of pulmonary TB patients
-**Step 3:** Assess for cough, fever, weight loss and nights
-**Step 4:** If any of the TB symptoms are present, do
-**Step 5:** evaluation for TB
+**Step 1:** Give INH for six months to HIV-exposed infant who
+**Step 2:** Persons living with HIV
+**Step 3:** Child & adult contacts of pulmonary TB patients
+**Step 4:** Assess for cough, fever, weight loss and nights
+**Step 5:** If any of the TB symptoms are present, do
 
 **MONITORING:**
 
@@ -9918,9 +9917,9 @@ The symptoms can be managed at home with guidance. Follow the advice you were gi
 **Reason:** Routine evidence retrieval from national guidelines
 
 **Actions taken:**
+• Give INH for six months to HIV-exposed infant who
 • Persons living with HIV
 • Child & adult contacts of pulmonary TB patients
-• Assess for cough, fever, weight loss and nights
 
 **Referral completed:** [ ]
 **Health worker received:** [ ]
@@ -10346,9 +10345,10 @@ Citations: Page 437, Page 580, Page 590, Page 716, Page 845
 **WHAT TO DO (step by step):**
 
 **Step 1:** Inhaler 2-10 puffs via a large volume spacer
-**Step 2:** Assess after 1 month and adjust the dose prn
-**Step 3:** Higher dose may be needed initially to gain
-**Step 4:** Doubling of the regular dose may be useful to
+**Step 2:** Give salbutamol
+**Step 3:** Assess after 1 month and adjust the dose prn
+**Step 4:** Higher dose may be needed initially to gain
+**Step 5:** Doubling of the regular dose may be useful to
 
 **MONITORING:**
 
@@ -10396,8 +10396,8 @@ The symptoms can be managed at home with guidance. Follow the advice you were gi
 
 **Actions taken:**
 • Inhaler 2-10 puffs via a large volume spacer
+• Give salbutamol
 • Assess after 1 month and adjust the dose prn
-• Higher dose may be needed initially to gain
 
 **Referral completed:** [ ]
 **Health worker received:** [ ]
@@ -10605,7 +10605,7 @@ Citations: Page 395, Page 397, Page 402, Page 403
 
 > Chronic kidney disease staging referral
 
-**Metrics:** Triage `GREEN` | Guardrail OK `True` | Confidence `0.70`
+**Metrics:** Triage `GREEN` | Guardrail OK `True` | Confidence `0.65`
 
 #### VHT standard (`vht_response`)
 
@@ -10618,10 +10618,7 @@ Citations: Page 395, Page 397, Page 402, Page 403
 
 **WHAT TO DO (step by step):**
 
-**Step 1:** Assess patient carefully
-**Step 2:** Check for danger signs (see below)
-**Step 3:** If unsure, refer to health facility
-**Step 4:** Record all findings
+**Step 1:** Refer for specialist management including possible
 
 **MONITORING:**
 
@@ -10657,6 +10654,11 @@ The symptoms can be managed at home with guidance. Follow the advice you were gi
 • Uganda Clinical Guidelines 2023, Page 514: Chronic Kidney Disease (CKD) [HIGH FIDELITY]
 • Uganda Clinical Guidelines 2023, Page 514: Renal and Urinary Diseases [HIGH FIDELITY]
 • Uganda Clinical Guidelines 2023, Page 243: Criteria for referral to regional/tertiary hospital [HIGH FIDELITY]
+
+---
+**GUARDRAIL WARNINGS:**
+
+• Contraindication warning: 'any drugs which may make kidney damage worse e' — patient context 'renal' detected in query
 ```
 
 #### Referral note (`referral_note`)
@@ -10668,9 +10670,7 @@ The symptoms can be managed at home with guidance. Follow the advice you were gi
 **Reason:** Routine evidence retrieval from national guidelines
 
 **Actions taken:**
-• Assess patient carefully
-• Check for danger signs (see below)
-• If unsure, refer to health facility
+• Refer for specialist management including possible
 
 **Referral completed:** [ ]
 **Health worker received:** [ ]
@@ -10794,7 +10794,10 @@ When to Refer: Per excerpts and national guidance; seek urgent care if danger si
 Citations: Page 10, Page 204, Page 243, Page 514
 
 ---
-**🧪 Guardrail Brain Validation:** ✅ Passed
+**🧪 Guardrail Brain Validation:**
+
+**⚠️ Warnings:**
+• Contraindication warning: 'any drugs which may make kidney damage worse e' — patient context 'renal' detected in query
 
 ```
 
@@ -11058,8 +11061,8 @@ Citations: Page 317, Page 730, Page 822, Page 927, Page 950
 **Step 1:** Draw 8 mL of a 50% MgSO4 and add 12 mL
 **Step 2:** Give the solution as a slow IV bolus over 20
 **Step 3:** minutes (the 20-20-20 rule)
-**Step 4:** Non-reassuring foetal heart
-**Step 5:** Ruptured membranes
+**Step 4:** Give IV fluids (Normal saline) very slowly (1 L in 6-8
+**Step 5:** Give IV loading dose of magnesium sulphate injection
 
 **MONITORING:**
 
@@ -11347,11 +11350,11 @@ Citations: Page 792, Page 794, Page 795, Page 832
 
 **WHAT TO DO (step by step):**
 
-**Step 1:** Moderate to severe wounds with extensive tissue
-**Step 2:** Very contaminated wounds
-**Step 3:** Deep puncture wounds (especially by cats)
-**Step 4:** Wounds on hands, feet, genitalia or face
-**Step 5:** Wounds with underlying structures involved
+**Step 1:** Give IV antibiotics cef­
+**Step 2:** Refer to hospital for
+**Step 3:** Moderate to severe wounds with extensive tissue
+**Step 4:** Very contaminated wounds
+**Step 5:** Deep puncture wounds (especially by cats)
 
 **MONITORING:**
 
@@ -11398,9 +11401,9 @@ The symptoms can be managed at home with guidance. Follow the advice you were gi
 **Reason:** Routine evidence retrieval from national guidelines
 
 **Actions taken:**
+• Give IV antibiotics cef­
+• Refer to hospital for
 • Moderate to severe wounds with extensive tissue
-• Very contaminated wounds
-• Deep puncture wounds (especially by cats)
 
 **Referral completed:** [ ]
 **Health worker received:** [ ]
@@ -11633,10 +11636,7 @@ Citations: Page 93, Page 184, Page 369, Page 782, Page 789
 
 **WHAT TO DO (step by step):**
 
-**Step 1:** Assess patient carefully
-**Step 2:** Check for danger signs (see below)
-**Step 3:** If unsure, refer to health facility
-**Step 4:** Record all findings
+**Step 1:** Do not vaccinate
 
 **MONITORING:**
 
@@ -11683,9 +11683,7 @@ The symptoms can be managed at home with guidance. Follow the advice you were gi
 **Reason:** Routine evidence retrieval from national guidelines
 
 **Actions taken:**
-• Assess patient carefully
-• Check for danger signs (see below)
-• If unsure, refer to health facility
+• Do not vaccinate
 
 **Referral completed:** [ ]
 **Health worker received:** [ ]
@@ -11894,10 +11892,10 @@ Citations: Page 104, Page 204, Page 205, Page 335, Page 1154
 
 **WHAT TO DO (step by step):**
 
-**Step 1:** Assess patient carefully
-**Step 2:** Check for danger signs (see below)
-**Step 3:** If unsure, refer to health facility
-**Step 4:** Record all findings
+**Step 1:** Give IV fluid replacement in a total volume per 24 hours
+**Step 2:** Refer for admission
+**Step 3:** Monitor vital signs and urine output
+**Step 4:** Stop the burning process and move the patient to safety
 
 **MONITORING:**
 
@@ -11944,9 +11942,9 @@ The symptoms can be managed at home with guidance. Follow the advice you were gi
 **Reason:** Routine evidence retrieval from national guidelines
 
 **Actions taken:**
-• Assess patient carefully
-• Check for danger signs (see below)
-• If unsure, refer to health facility
+• Give IV fluid replacement in a total volume per 24 hours
+• Refer for admission
+• Monitor vital signs and urine output
 
 **Referral completed:** [ ]
 **Health worker received:** [ ]
@@ -12370,10 +12368,9 @@ Citations: Page 94, Page 96, Page 97, Page 99, Page 205
 
 **WHAT TO DO (step by step):**
 
-**Step 1:** Assess patient carefully
-**Step 2:** Check for danger signs (see below)
-**Step 3:** If unsure, refer to health facility
-**Step 4:** Record all findings
+**Step 1:** Give ampicillin 50 mg/kg IM
+**Step 2:** Refer baby to hospital
+**Step 3:** Keep baby warm
 
 **MONITORING:**
 
@@ -12420,9 +12417,9 @@ The symptoms can be managed at home with guidance. Follow the advice you were gi
 **Reason:** Routine evidence retrieval from national guidelines
 
 **Actions taken:**
-• Assess patient carefully
-• Check for danger signs (see below)
-• If unsure, refer to health facility
+• Give ampicillin 50 mg/kg IM
+• Refer baby to hospital
+• Keep baby warm
 
 **Referral completed:** [ ]
 **Health worker received:** [ ]

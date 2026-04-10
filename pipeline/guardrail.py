@@ -153,19 +153,43 @@ class MedicalGuardrailBrain:
         text, and chunk clinical_metadata danger_signs fields.
 
         Returns a deduplicated list of human-readable danger sign labels.
+
+        Scans the query text and chunk clinical_metadata danger_signs only —
+        NOT raw chunk text.  Raw chunk prose almost always mentions danger signs
+        as part of treatment protocols ("watch for fast breathing"), which would
+        trigger false-positive RED requirements for routine queries.
+        clinical_metadata.danger_signs are specifically extracted by the chunker
+        and are a more precise signal.
         """
-        # Build a single search corpus: query + all chunk text + metadata signs
-        corpus = query.lower()
+        # Start with the query text
+        query_corpus = query.lower()
+
+        # Collect explicitly extracted danger signs from chunk metadata
+        metadata_signs: List[str] = []
         for chunk in retrieved_chunks:
-            corpus += " " + chunk.get("text", "").lower()
             cm = chunk.get("clinical_metadata") or {}
-            for sign in cm.get("danger_signs", []):
-                corpus += " " + sign.lower()
+            metadata_signs.extend(s.lower() for s in cm.get("danger_signs", []))
+        metadata_corpus = " ".join(metadata_signs)
 
         found: Dict[str, str] = {}  # needle → label (dedup by label)
         for needle, label in _DANGER_SIGN_NEEDLES:
-            if needle in corpus and label not in found.values():
+            if needle in query_corpus and label not in found.values():
                 found[needle] = label
+
+        # Metadata signs are a supporting signal: only add them when the query
+        # already has some clinical / patient context — prevents false positives
+        # on purely informational queries that happen to retrieve chunks with
+        # danger-sign metadata.
+        query_has_patient_context = any(
+            sig in query_corpus for sig in (
+                "patient", "child", "infant", "baby", "treating", "treatment",
+                "sick", "fever", "cough", "cannot", "unable", "presenting",
+            )
+        )
+        if query_has_patient_context:
+            for needle, label in _DANGER_SIGN_NEEDLES:
+                if needle in metadata_corpus and label not in found.values():
+                    found[needle] = label
 
         return list(found.values())
 
