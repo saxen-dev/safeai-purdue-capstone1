@@ -11,10 +11,13 @@ Retrieved chunks
   |
   +---> ResponseOrchestrator
   |       - Infer triage level (RED / YELLOW / GREEN)
-  |       - Select template actions, monitoring, referral criteria
+  |       - Extract actions from PDF chunk text (bullet/numbered lists)
+  |       - Extract monitoring from chunk clinical_metadata (danger_signs)
+  |       - Extract referral criteria from chunk clinical_metadata
+  |       - Fall back to hardcoded templates only when PDF yields nothing
   |       - Extract VERBATIM dosing blocks
   |       - Generate family education message
-  |       - Calculate confidence score
+  |       - Calculate confidence score from retrieval quality
   |
   +---> MedicalGuardrailBrain (validation)
   |       - Validate triage level against danger signs
@@ -43,7 +46,7 @@ Every response starts with a triage classification:
 | **YELLOW** | Clinical concern without danger signs | Urgent actions, monitoring checklist, referral criteria |
 | **GREEN** | Routine clinical question | Standard guidance, monitoring, when-to-refer list |
 
-Triage level drives which template actions, monitoring checklists, and referral criteria are selected.
+Triage level drives fallback template selection when PDF chunks do not yield extractable content. When chunks contain relevant list items or clinical metadata, those are used instead (see PDF-first content extraction below).
 
 ### Preservation-level-aware formatting
 
@@ -80,14 +83,37 @@ A built-in translation dictionary converts clinical terminology to VHT-friendly 
 "emesis"     →  "vomiting"
 ```
 
+### PDF-first content extraction
+
+**Changed 2026-04-09.** Actions, monitoring items, and referral criteria are now extracted directly from the retrieved guideline PDF chunks rather than selected from hardcoded template lists.
+
+**Why:** The previous implementation used hardcoded keyword-matched templates (e.g. always showing the same 6 "convulsions" steps regardless of what the PDF said). This meant the response content did not actually reflect the loaded guideline — the same fixed text was returned for any document. The fix grounds every response in the actual source material.
+
+**How it works:**
+
+- **Actions** (`_extract_list_items_from_chunks`): Scans the text of each retrieved chunk for bullet-point and numbered-list items using regex (`•`, `-`, `*`, `1.`, `2)`, etc.). Items between 10 and 250 characters are collected, deduplicated, and returned (up to 6). These come verbatim from the PDF.
+- **Monitoring** (`_collect_metadata_field` → `danger_signs`): Reads the `danger_signs` list from each chunk's `clinical_metadata`, which the chunker (`pipeline/chunker.py`) already extracts from the PDF text using `_DANGER_SIGN_RE`. Formatted as "Watch for: …".
+- **Referral criteria** (`_collect_metadata_field` → `referral_criteria`): Reads the `referral_criteria` list from chunk `clinical_metadata`, extracted from the PDF using `_REFERRAL_RE`.
+
+All three methods fall back to the hardcoded templates only when the PDF chunks yield nothing extractable (e.g. chunks are purely tabular with no prose lists).
+
 ### Confidence scoring
 
-Each response includes a confidence score (0.0 to 1.0):
+**Changed 2026-04-09.** The confidence score is now computed from actual retrieval signals rather than a hardcoded baseline.
 
-- Base: 0.95 (RED), 0.90 (YELLOW/GREEN)
-- Reduced by 0.05 per guardrail warning
-- Reduced by 0.15 per guardrail error
-- Floor: 0.0
+**Why:** The previous implementation started at a fixed `0.9` (or `0.95` for RED triage) regardless of retrieval quality. This meant the score was not a real measure — queries that retrieved weakly matched chunks received the same confidence as queries with strong evidence. The README benchmark table showed `0.90` as a result, but it was simply the hardcoded constant.
+
+**How it works (three signals):**
+
+| Signal | Weight | Source |
+|---|---|---|
+| Retrieval quality | 60% | Mean score of the top-3 retrieved chunks. Scores are normalized to [0, 1] by the hybrid retriever after RRF + cross-encoder blending. |
+| Coverage | 40% | Fraction of the 5 requested chunks that were actually found (`len(chunks) / 5`). |
+| Guardrail penalty | subtracted | −0.05 per guardrail warning (max 4), −0.15 per error (max 2), −0.10 if guardrail failed overall. |
+
+`confidence = 0.6 × retrieval_score + 0.4 × coverage − penalty`, clamped to [0.0, 1.0].
+
+A query that retrieves 5 highly-relevant chunks with no guardrail issues will score close to 1.0. A query that retrieves weakly-matched chunks or triggers guardrail warnings will score proportionally lower.
 
 ## Guardrail validation
 
@@ -120,9 +146,11 @@ Checks that the response is non-empty and doesn't contain raw error messages or 
 
 ## Rationale
 
-### Why template-based action selection?
+### Why PDF-first action selection over pure templates?
 
-For VHT workers in low-resource settings, responses must be actionable and concrete. Template-based actions ("Give oral rehydration salts", "Check temperature every 4 hours") are more useful than LLM-generated prose that might use inconsistent phrasing or miss critical steps. Templates are clinically reviewed and can be updated centrally.
+**Changed 2026-04-09.** The original rationale for template-based actions was that clinically-reviewed fixed text is safer than generated prose. This remains valid for the fallback case. However, pure template selection meant the response never adapted to the actual loaded guideline — a document-specific instruction ("Complete 3-day ACT course even if fever resolves on day 1") would never appear unless it happened to be in a hardcoded template.
+
+The current approach extracts bullet and numbered list items verbatim from the PDF, which are already clinically reviewed (they come from WHO or national guidelines). Templates remain as fallback when chunks contain no extractable lists. This preserves the safety rationale while grounding responses in the actual source document.
 
 ### Why not use an LLM for response generation?
 

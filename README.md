@@ -152,7 +152,7 @@ safeai-purdue-capstone/
 - **[Extraction strategy](docs/extraction_strategy.md)** — Multi-pass extraction design, why PyMuPDF, Docling+TableFormer integration, alternatives considered
 - **[Chunking strategy](docs/chunking_strategy.md)** — Hierarchical parent-child chunking, preservation levels, metadata extraction, alternatives rejected (fixed-size windows, LLM propositions)
 - **[Retrieval strategy](docs/retrieval_strategy.md)** — Hybrid BM25 + dense + RRF + reranking, spelling normalization, heading weighting, alternatives rejected
-- **[Response layer](docs/response_layer.md)** — Two-brain architecture, VHT formatting, triage inference, template-based actions
+- **[Response layer](docs/response_layer.md)** — Two-brain architecture, VHT formatting, triage inference, PDF-first content extraction with template fallback
 - **[Safety and guardrails](docs/safety_and_guardrails.md)** — Defense-in-depth safety across all 6 stages
 
 ### Testing and benchmarks
@@ -182,7 +182,7 @@ Tested on two clinical guideline PDFs:
 | Retrieval P@3 (30 queries) | 0.489 | — |
 | Retrieval MRR (30 queries) | 0.686 | — |
 | Guardrail pass rate (25 queries) | 100% | 100% |
-| Response confidence | 0.90 | 0.90 |
+| Response confidence | Computed per-query (retrieval score × coverage − guardrail penalty) | Computed per-query |
 
 *Docling + TableFormer ACCURATE was used for WHO Malaria extraction — requires `pip install 'docling>=2.64.0'`.*
 *ColPali v1.2 visual retrieval is integrated but requires ≥16 GB RAM to run inference; index building tested on hardware with sufficient memory.*
@@ -193,6 +193,36 @@ Tested on two clinical guideline PDFs:
 python -m pytest tests/ -q
 # 444 passed in ~55s
 ```
+
+## Changelog
+
+### 2026-04-09 — Response layer accuracy improvements (`pipeline/response.py`)
+
+#### 1. Confidence score — was hardcoded, now computed from retrieval signals
+
+**What changed:** `_calculate_confidence()` previously used a fixed baseline of `0.95` (RED triage) or `0.90` (all other queries), adjusted only for guardrail warnings. The benchmark table showed `0.90` as a result for both PDFs, but this was not a measured value — it was the hardcoded constant.
+
+**Why it was wrong:** A query that retrieved weakly-matched chunks received exactly the same confidence score as a query backed by five highly-relevant guideline passages. The score carried no real information.
+
+**What it does now:** Three real signals are combined:
+- **Retrieval quality (60%)** — mean score of the top-3 retrieved chunks. Scores are normalized to [0, 1] by the hybrid retriever after RRF + cross-encoder blending.
+- **Coverage (40%)** — fraction of the 5 requested chunks that were actually found.
+- **Guardrail penalty (subtracted)** — −0.05 per warning, −0.15 per error, −0.10 if guardrail failed.
+
+`confidence = 0.6 × retrieval_score + 0.4 × coverage − penalty`, clamped to [0.0, 1.0].
+
+#### 2. Actions, monitoring, referral criteria — were hardcoded templates, now PDF-first
+
+**What changed:** `_select_actions()`, `_select_monitoring()`, and `_select_referral_criteria()` previously returned hardcoded text lists selected by keyword-matching on the query string. There were only ~5 possible action sequences and ~2 monitoring/referral templates regardless of which guideline was loaded.
+
+**Why it was wrong:** The response content did not reflect the actual loaded PDF. A document-specific instruction (e.g. "Complete 3-day ACT course even if fever resolves on day 1") would never appear in the output. The same fixed text was returned for any guideline document.
+
+**What it does now:**
+- **Actions** — `_extract_list_items_from_chunks()` scans retrieved chunk text for bullet-point and numbered-list items using regex. Items are taken verbatim from the PDF and deduplicated (up to 6 returned).
+- **Monitoring** — `_collect_metadata_field(..., "danger_signs")` reads `danger_signs` extracted from chunk `clinical_metadata` by the chunker's `_DANGER_SIGN_RE` regex, formatted as "Watch for: …".
+- **Referral criteria** — `_collect_metadata_field(..., "referral_criteria")` reads referral conditions extracted from chunk `clinical_metadata` by `_REFERRAL_RE`.
+
+All three methods fall back to the hardcoded templates only when the PDF chunks contain no extractable list items or metadata. This preserves backward compatibility for edge cases while grounding responses in the actual source document by default.
 
 ## License
 
