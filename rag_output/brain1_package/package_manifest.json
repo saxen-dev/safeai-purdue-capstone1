@@ -1,0 +1,26 @@
+{
+  "package_version": "1.0.0",
+  "pipeline_version": "step3",
+  "source_document": "WHO guidelines for malaria - 13 August 2025",
+  "created_at": "2026-03-14T14:45:49.798396+00:00",
+  "total_children": 1695,
+  "total_parents": 1478,
+  "files": {
+    "child_chunks.json": {
+      "sha256": "200cd972aeb4c9174f02f3280578051d3cd4e3d7fb0fa96322bd6238a0ee1f19",
+      "size_bytes": 5761947
+    },
+    "faiss_index.bin": {
+      "sha256": "3903426d111c4d28541232d0e134753cd3f8d7d0e439330a63294229c996273a",
+      "size_bytes": 5207085
+    },
+    "parent_chunks.json": {
+      "sha256": "f50a0b7e1632a8fe640d40bf7d8a49b872ca9ff98d54ff4356a28e51a0d07445",
+      "size_bytes": 11325643
+    },
+    "bm25_inverted_index.json": {
+      "sha256": "9b85a9d1204d9c82505a3e6b46a6bf70fd0f23e06cd03a537dd6be855ee57e88",
+      "size_bytes": 2988607
+    }
+  }
+}
