@@ -6,6 +6,7 @@ Pipeline order: extraction → validation → chunking → indexing → guardrai
 
 from __future__ import annotations
 
+import re
 from dataclasses import dataclass, field
 from enum import Enum
 from typing import Any, Dict, List, Optional
@@ -330,9 +331,9 @@ class ResponseOrchestrator:
         source: MedicalSource,
         dosage_info: Optional[Dict[str, Any]] = None,
     ) -> ResponseContent:
-        actions = self._select_actions(query, triage)
-        monitoring = self._select_monitoring(query)
-        referral_criteria = self._select_referral_criteria(triage)
+        actions = self._select_actions(query, triage, retrieved_chunks)
+        monitoring = self._select_monitoring(query, retrieved_chunks)
+        referral_criteria = self._select_referral_criteria(triage, retrieved_chunks)
         citations = self._build_citations(retrieved_chunks, source)
         family_message = self._generate_family_message(query, triage)
         warnings = list(guardrail_output.get("warnings", []))
@@ -347,10 +348,73 @@ class ResponseOrchestrator:
             medication_dosage=dosage_info,
             family_message=family_message,
             validation_warnings=warnings,
-            confidence_score=self._calculate_confidence(triage, guardrail_output),
+            confidence_score=self._calculate_confidence(
+                guardrail_output, retrieved_chunks
+            ),
         )
 
-    def _select_actions(self, query: str, triage: TriageLevel) -> List[str]:
+    # ------------------------------------------------------------------
+    # List-item extractor — pulls bullet / numbered items from PDF text
+    # ------------------------------------------------------------------
+
+    @staticmethod
+    def _extract_list_items_from_chunks(
+        chunks: List[Dict[str, Any]], max_items: int = 6
+    ) -> List[str]:
+        """
+        Extract bullet-point and numbered-list sentences from retrieved chunk
+        text.  These come directly from the guideline PDF, so every item is
+        traceable to a source page.  Items shorter than 10 or longer than 250
+        characters are filtered as noise.
+        """
+        _BULLET_RE = re.compile(r"^\s*[•\-\*\u2022]\s+(.+)", re.MULTILINE)
+        _NUMBER_RE = re.compile(r"^\s*\d+[\.\)]\s+(.+)", re.MULTILINE)
+        seen: set = set()
+        items: List[str] = []
+        for chunk in chunks:
+            text = chunk.get("text", "")
+            for pattern in (_BULLET_RE, _NUMBER_RE):
+                for m in pattern.finditer(text):
+                    item = m.group(1).strip()
+                    if 10 <= len(item) <= 250 and item not in seen:
+                        seen.add(item)
+                        items.append(item)
+            if len(items) >= max_items:
+                break
+        return items[:max_items]
+
+    @staticmethod
+    def _collect_metadata_field(
+        chunks: List[Dict[str, Any]], field_name: str, max_items: int = 5
+    ) -> List[str]:
+        """
+        Collect a list field (e.g. danger_signs, referral_criteria) from
+        clinical_metadata across all retrieved chunks, deduplicated.
+        """
+        seen: set = set()
+        results: List[str] = []
+        for chunk in chunks:
+            cm = chunk.get("clinical_metadata") or {}
+            for item in cm.get(field_name, []):
+                if item and item not in seen:
+                    seen.add(item)
+                    results.append(item)
+            if len(results) >= max_items:
+                break
+        return results[:max_items]
+
+    # ------------------------------------------------------------------
+    # Action / monitoring / referral selection — PDF-first, template fallback
+    # ------------------------------------------------------------------
+
+    def _select_actions(
+        self, query: str, triage: TriageLevel, chunks: List[Dict[str, Any]]
+    ) -> List[str]:
+        # Primary: extract list items directly from the retrieved guideline text.
+        extracted = self._extract_list_items_from_chunks(chunks, max_items=6)
+        if extracted:
+            return extracted
+        # Fallback: hardcoded templates when the PDF chunks contain no lists.
         q = query.lower()
         if triage == TriageLevel.RED:
             if "cannot drink" in q or "unable to drink" in q:
@@ -376,12 +440,26 @@ class ResponseOrchestrator:
             "Record all findings",
         ]
 
-    def _select_monitoring(self, query: str) -> List[str]:
+    def _select_monitoring(
+        self, query: str, chunks: List[Dict[str, Any]]
+    ) -> List[str]:
+        # Primary: danger signs extracted from chunk clinical_metadata.
+        danger_signs = self._collect_metadata_field(chunks, "danger_signs")
+        if danger_signs:
+            return [f"Watch for: {s}" for s in danger_signs]
+        # Fallback: template-based monitoring.
         if "fever" in query.lower():
             return list(self.monitoring_templates["fever"])
         return list(self.monitoring_templates["generic"])
 
-    def _select_referral_criteria(self, triage: TriageLevel) -> List[str]:
+    def _select_referral_criteria(
+        self, triage: TriageLevel, chunks: List[Dict[str, Any]]
+    ) -> List[str]:
+        # Primary: referral criteria extracted from chunk clinical_metadata.
+        criteria = self._collect_metadata_field(chunks, "referral_criteria")
+        if criteria:
+            return criteria
+        # Fallback: template-based criteria.
         if triage == TriageLevel.RED:
             return list(self.referral_templates["immediate"])
         if triage == TriageLevel.YELLOW:
@@ -453,15 +531,34 @@ class ResponseOrchestrator:
 
     def _calculate_confidence(
         self,
-        triage: TriageLevel,
         guardrail_output: Dict[str, Any],
+        retrieved_chunks: List[Dict[str, Any]],
     ) -> float:
-        base = 0.95 if triage == TriageLevel.RED else 0.9
-        if guardrail_output.get("warnings"):
-            base -= 0.05 * min(len(guardrail_output["warnings"]), 3)
+        # Retrieval quality: mean score of top-3 retrieved chunks (scores are
+        # normalized to [0, 1] by the hybrid retriever after RRF + cross-encoder
+        # blending). This is the primary signal — if retrieval found strong
+        # evidence, confidence is high; if chunks are weakly matched, it is low.
+        if not retrieved_chunks:
+            retrieval_score = 0.0
+        else:
+            scores = sorted(
+                (c.get("score", 0.0) for c in retrieved_chunks), reverse=True
+            )
+            top = scores[:3]
+            retrieval_score = sum(top) / len(top)
+
+        # Coverage: fraction of the requested 5 chunks that were actually found.
+        coverage = min(len(retrieved_chunks) / 5.0, 1.0)
+
+        # Guardrail penalty: errors are safety-critical; warnings are moderate.
+        n_warnings = len(guardrail_output.get("warnings", []))
+        n_errors = len(guardrail_output.get("errors", []))
+        penalty = 0.05 * min(n_warnings, 4) + 0.15 * min(n_errors, 2)
         if not guardrail_output.get("passed", True):
-            base -= 0.1
-        return max(0.6, min(1.0, base))
+            penalty += 0.1
+
+        score = 0.6 * retrieval_score + 0.4 * coverage - penalty
+        return round(max(0.0, min(1.0, score)), 3)
 
 
 def infer_triage_from_query(query: str) -> tuple[TriageLevel, List[str]]:
