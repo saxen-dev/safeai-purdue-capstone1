@@ -63,6 +63,16 @@ _YELLOW_ESCALATION_QUERY = [
     "complicated", "serious",
 ]
 
+# Minimum relevance score for a retrieved chunk to contribute to content
+# extraction (actions, monitoring, referral criteria, danger signs).
+# Chunks below this threshold are still used for citations and dosing blocks
+# but not for list-item or metadata extraction.
+_CONTENT_SCORE_THRESHOLD = 0.40
+
+# Maximum number of chunks used for content extraction (ordered by score).
+# Caps noise from lower-ranked chunks that may be from unrelated sections.
+_CONTENT_MAX_CHUNKS = 3
+
 # Regex for extracting caregiver-education sentences (Improvement 3)
 _FAMILY_MSG_RE = re.compile(
     r"(?:tell|explain to|inform|advise|counsel|educate)\b.{15,180}[.!]",
@@ -421,8 +431,10 @@ class ResponseOrchestrator:
         citations = self._build_citations(retrieved_chunks, source)
 
         # Improvement 2: collect danger signs from chunk metadata for formatter
+        # Use only high-confidence chunks to avoid signs from unrelated sections.
+        relevant_chunks = self._relevant_chunks(retrieved_chunks)
         danger_signs = self._collect_metadata_field(
-            retrieved_chunks, "danger_signs", max_items=8
+            relevant_chunks, "danger_signs", max_items=8
         )
 
         # Improvement 3: PDF-first family message
@@ -533,6 +545,27 @@ class ResponseOrchestrator:
     )
     # Bold markdown items: **some instruction**
     _BOLD_ITEM_RE = re.compile(r"^\s*\*\*(.{10,200})\*\*\s*$", re.MULTILINE)
+
+    @staticmethod
+    @staticmethod
+    def _relevant_chunks(
+        chunks: List[Dict[str, Any]],
+        threshold: float = _CONTENT_SCORE_THRESHOLD,
+        max_chunks: int = _CONTENT_MAX_CHUNKS,
+    ) -> List[Dict[str, Any]]:
+        """
+        Return the top-scoring chunks that exceed the relevance threshold,
+        capped at max_chunks.  Always returns at least 1 chunk (the best one)
+        so content extraction has something to work with even when retrieval
+        scores are uniformly low.
+
+        Chunks are already sorted highest-score-first by the retriever, so
+        this is a simple prefix filter.
+        """
+        above = [c for c in chunks if c.get("score", 0) >= threshold]
+        if not above:
+            above = chunks[:1]  # fallback: always use the top result
+        return above[:max_chunks]
 
     @staticmethod
     def _extract_list_items_from_chunks(
@@ -647,8 +680,11 @@ class ResponseOrchestrator:
     def _select_actions(
         self, query: str, triage: TriageLevel, chunks: List[Dict[str, Any]]
     ) -> List[str]:
+        # Only use high-confidence relevant chunks to avoid content from
+        # unrelated guideline sections leaking into actions.
+        relevant = self._relevant_chunks(chunks)
         # Primary: extract list items directly from the retrieved guideline text.
-        extracted = self._extract_list_items_from_chunks(chunks, max_items=6)
+        extracted = self._extract_list_items_from_chunks(relevant, max_items=6)
         if extracted:
             return extracted
         # Fallback: hardcoded templates when the PDF chunks contain no lists.
@@ -680,8 +716,9 @@ class ResponseOrchestrator:
     def _select_monitoring(
         self, query: str, chunks: List[Dict[str, Any]]
     ) -> List[str]:
+        relevant = self._relevant_chunks(chunks)
         # Primary: danger signs extracted from chunk clinical_metadata.
-        danger_signs = self._collect_metadata_field(chunks, "danger_signs")
+        danger_signs = self._collect_metadata_field(relevant, "danger_signs")
         if danger_signs:
             return [f"Watch for: {s}" for s in danger_signs]
         # Fallback: template-based monitoring.
@@ -692,8 +729,9 @@ class ResponseOrchestrator:
     def _select_referral_criteria(
         self, triage: TriageLevel, chunks: List[Dict[str, Any]]
     ) -> List[str]:
+        relevant = self._relevant_chunks(chunks)
         # Primary: referral criteria extracted from chunk clinical_metadata.
-        criteria = self._collect_metadata_field(chunks, "referral_criteria")
+        criteria = self._collect_metadata_field(relevant, "referral_criteria")
         if criteria:
             return criteria
         # Fallback: template-based criteria.
