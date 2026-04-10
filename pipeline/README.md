@@ -186,6 +186,26 @@ The retrieval benchmark results and deployable mobile package are tracked in [`r
 
 ## Recent changes
 
+### 2026-04-10 — `chat.py`: Conversational interface
+
+New entry point for plain-language interaction. Run with `python3 chat.py` from the project root — no flags needed. Auto-detects available knowledge bases, prompts "What can I help you with today?", routes every query through Brain 1 → Brain 2, and displays clean terminal output (triage header, numbered actions, monitoring, referral criteria, source citations). Strips markdown formatting, deduplicates near-identical list items, and filters truncated/table-derived fragments for clean display.
+
+### 2026-04-10 — `pipeline/response.py`: Brain 1 — 5 improvements
+
+1. **Triage escalation from chunks** (`_escalate_triage_from_chunks`): upgrades triage level when `clinical_metadata.danger_signs` in retrieved chunks signal danger signs not present in the query. Uses metadata only (not raw text) with patient-context filter to avoid false positives.
+2. **PDF-first danger signs section**: `VHTResponseFormatter._danger_signs_section()` accepts chunk danger signs and renders them instead of a hardcoded list. `ResponseContent` gains a `danger_signs` field.
+3. **PDF-first family message**: `_generate_family_message()` scans chunks for caregiver-education sentences before falling back to templates.
+4. **Broader list extraction**: `_extract_list_items_from_chunks()` now also captures action-verb lines (Give, Check, Refer, …) and bold markdown items.
+5. **Cross-section deduplication**: `_deduplicate_sections()` ensures the same item never appears in both actions and monitoring/referral.
+
+### 2026-04-10 — `pipeline/guardrail.py` + `pipeline/orchestrator.py`: Brain 2 — 5 improvements
+
+1. **Triage from evidence**: `_collect_danger_signs()` scans query + chunk `clinical_metadata.danger_signs`. `validate_response()` accepts `retrieved_chunks`; orchestrator.py updated at both call sites.
+2. **10 dangerous advice patterns** (was 4): added double-dosing, stopping courses early, dosing without weight, home treatment for emergencies, metronidazole in first trimester, ibuprofen in infants.
+3. **Dosing value grounding** (`_validate_dosing_values`): every dosing quantity in the response is verified against retrieved source chunk text.
+4. **Contraindication cross-check** (`_check_contraindications`): patient context in query matched against chunk `clinical_metadata.contraindications`.
+5. **Section completeness** (`_check_completeness`): minimum content thresholds per section; citations must include page references.
+
 ### 2026-04-09 — `pipeline/response.py`: Confidence scoring + PDF-first content extraction
 
 **`ResponseOrchestrator._calculate_confidence()`** — previously returned a hardcoded baseline of `0.95` (RED triage) or `0.90` (all other queries), adjusted only for guardrail warnings. Every query, regardless of retrieval quality, received the same score. Now computes from real retrieval signals:

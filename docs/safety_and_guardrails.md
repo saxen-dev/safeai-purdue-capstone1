@@ -76,11 +76,25 @@ Six independent validation stages catch different error categories:
 
 **Two-brain architecture.** The response generator and the guardrail validator are separate, independent systems. The generator cannot suppress or modify guardrail findings.
 
-**Guardrail checks:**
-- Triage level must match detected danger signs
-- Dangerous advice patterns are regex-detected and blocked
-- All five required sections must be present
+**Guardrail checks (updated 2026-04-10):**
+- Triage level must match danger signs detected in query + retrieved chunk metadata
+- Dangerous advice patterns are regex-detected and blocked (10 patterns)
+- All five required sections must be present with meaningful content
 - Citations must reference real pages in the knowledge base
+- Dosing values in the response must appear verbatim in at least one retrieved source chunk
+- Drug contraindications from chunk metadata are cross-checked against patient context in the query
+
+**Guardrail improvements (2026-04-10):** Five new checks added to `MedicalGuardrailBrain`:
+
+1. **Triage validation from evidence** — `_collect_danger_signs()` scans query text and `clinical_metadata.danger_signs` from retrieved chunks (not raw chunk text, which is too noisy). If danger signs are found and the response is not RED, the check fails. `validate_response()` now accepts `retrieved_chunks` as an optional parameter — both call sites in `orchestrator.py` pass the retrieved chunks.
+
+2. **Expanded dangerous advice patterns** — 4 → 10 patterns. New: double-dosing, stopping treatment course early, dosing without weight check, home treatment for emergencies, metronidazole in first trimester, ibuprofen in infants.
+
+3. **Dosing value grounding** — `_validate_dosing_values()`: every dosing quantity in the response (mg, ml, mcg, etc.) is checked against the verbatim text and table markdown of all retrieved source chunks. A value absent from all chunks is flagged — it may have been paraphrased or invented.
+
+4. **Contraindication cross-check** — `_check_contraindications()`: patient-context signals in the query (pregnant, infant, renal, liver, breastfeeding) are matched against `contraindications` in retrieved chunk `clinical_metadata`. Any contraindication that applies to the detected patient context raises a warning.
+
+5. **Section completeness** — `_check_completeness()`: required sections must contain content above minimum character thresholds (not just a bare header). Citations section must include at least one page reference.
 
 **Preservation-level enforcement.** VERBATIM content (dosing tables) is rendered exactly as extracted — the response formatter cannot paraphrase or summarize it.
 

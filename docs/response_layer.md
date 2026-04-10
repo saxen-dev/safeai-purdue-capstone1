@@ -91,11 +91,21 @@ A built-in translation dictionary converts clinical terminology to VHT-friendly 
 
 **How it works:**
 
-- **Actions** (`_extract_list_items_from_chunks`): Scans the text of each retrieved chunk for bullet-point and numbered-list items using regex (`•`, `-`, `*`, `1.`, `2)`, etc.). Items between 10 and 250 characters are collected, deduplicated, and returned (up to 6). These come verbatim from the PDF.
+- **Actions** (`_extract_list_items_from_chunks`): Scans the text of each retrieved chunk for bullet-point and numbered-list items using regex (`•`, `-`, `*`, `1.`, `2)`, etc.), action-verb lines (Give, Check, Refer, Monitor, Administer, …), and bold markdown items (`**...**`). Items between 10 and 250 characters are collected, deduplicated, and returned (up to 6). These come verbatim from the PDF.
 - **Monitoring** (`_collect_metadata_field` → `danger_signs`): Reads the `danger_signs` list from each chunk's `clinical_metadata`, which the chunker (`pipeline/chunker.py`) already extracts from the PDF text using `_DANGER_SIGN_RE`. Formatted as "Watch for: …".
 - **Referral criteria** (`_collect_metadata_field` → `referral_criteria`): Reads the `referral_criteria` list from chunk `clinical_metadata`, extracted from the PDF using `_REFERRAL_RE`.
 
 All three methods fall back to the hardcoded templates only when the PDF chunks yield nothing extractable (e.g. chunks are purely tabular with no prose lists).
+
+**Updated 2026-04-10:** Four additional improvements:
+
+- **Triage escalation from chunk content** (`_escalate_triage_from_chunks`): After query-based triage inference, scans `clinical_metadata.danger_signs` across retrieved chunks. If RED-level danger signs are found and the query has patient-clinical context, triage is escalated to RED. If a severity keyword is present and chunk danger signs are non-empty, GREEN is escalated to YELLOW. Conservative design: only uses metadata (not raw chunk text) and requires patient-context signals in the query to prevent informational queries from being falsely escalated.
+
+- **PDF-first danger signs section**: `VHTResponseFormatter._danger_signs_section()` now accepts chunk danger signs from `ResponseContent.danger_signs` and renders them instead of the hardcoded 7-sign list. Falls back to the hardcoded list only when chunks yield nothing.
+
+- **PDF-first family message**: `_generate_family_message()` scans retrieved chunk text for caregiver-education sentences (matching Tell/Explain/Advise/Counsel/Inform patterns) before falling back to templates.
+
+- **Cross-section deduplication** (`_deduplicate_sections`): Actions, monitoring, and referral criteria share a deduplication pass so the same item never appears in two sections of the same response.
 
 ### Confidence scoring
 
@@ -117,32 +127,46 @@ A query that retrieves 5 highly-relevant chunks with no guardrail issues will sc
 
 ## Guardrail validation
 
-The `MedicalGuardrailBrain` runs five independent checks on every response:
+The `MedicalGuardrailBrain` runs seven independent checks on every response (updated 2026-04-10):
 
-### 1. Triage validation
+### 1. Required sections check
 
-Extracts the triage level from the response text and checks it against detected danger signs in the query. A query mentioning "convulsions" must produce a RED triage — anything else is flagged.
+Verifies that all five required sections are present: Triage Level, Immediate Actions, Next Steps / Monitoring, When to Refer, Citations.
 
-### 2. Dangerous advice detection
+### 2. Triage validation (updated 2026-04-10)
 
-Regex patterns detect high-risk recommendations:
+Scans query text and `clinical_metadata.danger_signs` from retrieved chunks (not raw chunk text). If danger signs are found and the response triage is not RED, the check is flagged as critical. `validate_response()` now accepts `retrieved_chunks` to enable evidence-grounded validation.
+
+### 3. Dangerous advice detection (updated 2026-04-10)
+
+10 regex patterns detect high-risk recommendations (was 4):
 
 - Prescribing medication without mentioning referral
 - Suggesting delayed referral when danger signs are present
 - Recommending home treatment for emergency conditions
 - Aspirin in children (Reye syndrome risk)
-
-### 3. Required sections check
-
-Verifies that all five required sections are present: Triage Level, Immediate Actions, Next Steps / Monitoring, When to Refer, Citations.
+- Double-dosing
+- Stopping a treatment course early
+- Dosing without weight check
+- Home treatment for severe/emergency conditions
+- Metronidazole in first trimester
+- Ibuprofen in infants under 3 months
 
 ### 4. Citation validation
 
 Extracts page references from the response and checks that each referenced page exists in the knowledge base.
 
-### 5. Output structure validation
+### 5. Dosing value grounding (new 2026-04-10)
 
-Checks that the response is non-empty and doesn't contain raw error messages or stack traces.
+Every explicit dosing quantity in the response (mg, ml, mcg, etc.) is checked against the verbatim text and table markdown of all retrieved source chunks. A value absent from all chunks is flagged — it may have been paraphrased or invented.
+
+### 6. Contraindication cross-check (new 2026-04-10)
+
+Patient-context signals in the query (pregnant, infant, renal impairment, liver disease, breastfeeding) are matched against `contraindications` in retrieved chunk `clinical_metadata`. Applicable contraindications are surfaced as warnings.
+
+### 7. Section completeness check (new 2026-04-10)
+
+Required sections must contain meaningful content above minimum character thresholds (not just a bare header). Citations section must include at least one page reference.
 
 ## Rationale
 

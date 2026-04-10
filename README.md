@@ -246,6 +246,82 @@ python -m pytest tests/ -q
 
 All three methods fall back to the hardcoded templates only when the PDF chunks contain no extractable list items or metadata. This preserves backward compatibility for edge cases while grounding responses in the actual source document by default.
 
+### 2026-04-10 — Brain 1 strengthened: 5 response layer improvements (`pipeline/response.py`)
+
+#### 1. Triage escalation from retrieved chunk content
+
+**What changed:** `_escalate_triage_from_chunks()` added to `ResponseOrchestrator`. After `infer_triage_from_query()` sets the initial triage level from the query text, this method can upgrade it if the retrieved chunks contain danger signs in their `clinical_metadata`.
+
+**Why it matters:** A query like "What is the treatment for severe malaria in a child?" returns GREEN from keyword scanning alone. If the retrieved chunks have `danger_signs: ["convulsions", "unable to drink"]` in their metadata and the query contains patient-context language (child, treatment, fever, etc.), the triage is escalated to RED with an explanation.
+
+**Design:** Conservative — only uses `clinical_metadata.danger_signs` (not raw chunk text, which is too noisy) and only fires when the query has patient-clinical context, preventing informational queries from being falsely escalated.
+
+#### 2. PDF-first danger signs section
+
+**What changed:** `VHTResponseFormatter._danger_signs_section()` now accepts `chunk_danger_signs` from `ResponseContent` and renders those instead of a hardcoded 7-sign list. `ResponseContent` gains a `danger_signs` field populated from retrieved chunk metadata.
+
+**Advantage:** The danger signs shown are specific to the condition and guideline being queried, not the same generic list every time.
+
+#### 3. PDF-first family message
+
+**What changed:** `_generate_family_message()` now scans retrieved chunk text for caregiver-education sentences (matching Tell/Explain/Advise/Counsel/Inform patterns) before falling back to keyword-matched templates.
+
+**Advantage:** Family messages now come verbatim from the actual guideline where available.
+
+#### 4. Broader list item extraction
+
+**What changed:** `_extract_list_items_from_chunks()` now captures action-verb lines (Give, Check, Refer, Monitor, Administer, Weigh, Assess, etc.) and bold markdown items (`**...**`) in addition to bullet-point and numbered lists.
+
+**Advantage:** More PDF content is captured as actionable steps, reducing template fallback for guidelines that use action-verb formatting instead of bullet points.
+
+#### 5. Cross-section deduplication
+
+**What changed:** `_deduplicate_sections()` added. After actions, monitoring, and referral criteria are selected, a shared deduplication pass removes items that already appear in a previous section.
+
+**Advantage:** The same sentence no longer appears in two sections of the same response.
+
+---
+
+### 2026-04-10 — Brain 2 strengthened: 5 guardrail improvements (`pipeline/guardrail.py`)
+
+#### 1. Triage validation against query + chunk evidence (not query alone)
+
+**What changed:** `_collect_danger_signs()` now scans the query text and `clinical_metadata.danger_signs` from retrieved chunks — not just the query string. `validate_response()` updated to accept an optional `retrieved_chunks` parameter; both call sites in `orchestrator.py` updated to pass retrieved chunks.
+
+**Why it matters:** Previously, a query that didn't mention danger signs in its text could retrieve chunks clearly about emergency conditions without the guardrail noticing.
+
+**False-positive fix (same day):** An initial version scanned raw chunk text, causing 14/25 iCCM and 7/25 Uganda queries to fail because clinical guidelines mention danger signs in every treatment protocol. Fixed to scan only `clinical_metadata.danger_signs` + query text, with a patient-context filter. Result: 100% guardrail pass rate restored on both presets.
+
+#### 2. Dangerous advice patterns expanded from 4 to 10
+
+Six new patterns added: double-dosing, stopping a treatment course early, dosing without weight check, home treatment for severe/emergency conditions, metronidazole in first trimester, ibuprofen in infants under 3 months.
+
+#### 3. Dosing value grounding
+
+**What changed:** `_validate_dosing_values()` added. Every explicit dosing quantity in the response (e.g. 500 mg, 10 ml) is checked against the verbatim text of all retrieved source chunks. Values not found in any chunk are flagged as warnings.
+
+**Advantage:** Catches any case where the response layer inadvertently altered or invented a dosing number.
+
+#### 4. Contraindication cross-check
+
+**What changed:** `_check_contraindications()` added. Detects patient-context signals in the query (pregnant, infant, renal impairment, liver disease, breastfeeding) and cross-references `contraindications` in retrieved chunk `clinical_metadata`. Mismatches are surfaced as warnings.
+
+#### 5. Section completeness check
+
+**What changed:** `_check_completeness()` added. Verifies all required sections contain meaningful content above minimum character thresholds and that the Citations section includes at least one page reference.
+
+---
+
+### 2026-04-10 — Conversational interface (`chat.py`)
+
+**What changed:** New `chat.py` entry point added. Run with `python3 chat.py`.
+
+**What it does:** Auto-detects available knowledge bases, prompts the user with "What can I help you with today?", accepts plain-language questions, routes them through the full two-brain pipeline (Brain 1 → Brain 2), and displays clean terminal output: triage level (🔴/🟡/🟢), numbered actions, monitoring checklist, referral criteria, family message, and source page citations. No command-line flags required.
+
+**Why:** The existing `run_pipeline.py` interactive loop used technical prompts ("Your question:") and printed raw VHT markdown. `chat.py` wraps the same pipeline in a friendlier interface suitable for first-time users and field workers.
+
+---
+
 ### 2026-04-10 — Cross-validation fix for all PDF types (`pipeline/extractor.py`)
 
 **What changed:** `pass4_cross_validation()` now works on any uploaded PDF, not just those compatible with pdfplumber.
