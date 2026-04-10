@@ -13,6 +13,23 @@ Given a medical guideline PDF (WHO Malaria Guidelines, Uganda Clinical Guideline
 
 ## Quick start
 
+### For non-technical users (Mac)
+
+1. Open Terminal, run this **once** to make the launcher executable:
+   ```bash
+   chmod +x /path/to/safeai-purdue-capstone-main/start.command
+   ```
+2. Double-click **`start.command`** in Finder — it handles everything automatically:
+   - Creates a Python virtual environment on first run
+   - Installs all dependencies
+   - Opens a native file picker to select your guideline PDF
+   - Processes the PDF into a knowledge base (first run only, 5–15 min)
+   - Launches the conversational assistant ("What can I help you with today?")
+
+Every subsequent run: just double-click `start.command`.
+
+### For developers
+
 ```bash
 # Install
 pip install -r requirements-pipeline.txt
@@ -21,20 +38,23 @@ pip install -r requirements-pipeline.txt
 pip install 'docling>=2.64.0'
 
 # Run with WHO Malaria preset
-python run_pipeline.py --preset who-malaria --pdf /path/to/Bookshelf_NBK588130.pdf
+python3 run_pipeline.py --preset who-malaria --pdf /path/to/Bookshelf_NBK588130.pdf
 
 # Run with Uganda Clinical Guidelines preset
-python run_pipeline.py --preset uganda --pdf /path/to/Uganda_Clinical_Guidelines_2023.pdf
+python3 run_pipeline.py --preset uganda --pdf /path/to/Uganda_Clinical_Guidelines_2023.pdf
 
 # Run with any clinical PDF (no preset)
-python run_pipeline.py --pdf /path/to/any_guideline.pdf
+python3 run_pipeline.py --pdf /path/to/any_guideline.pdf
+
+# Start the conversational assistant (after a knowledge base exists)
+python3 chat.py
 
 # Query a processed knowledge base (verbatim retrieval, no LLM)
-python query.py "What is the treatment for malaria in children?"
-python query.py "ACT dosing by weight" --top-k 3 --kb ./medical_kb_who_malaria
+python3 query.py "What is the treatment for malaria in children?"
+python3 query.py "ACT dosing by weight" --top-k 3 --kb ./medical_kb_who_malaria
 ```
 
-After processing, the system drops into an interactive Q&A session in your terminal. `query.py` provides a separate verbatim query interface that returns exact source passages with no LLM synthesis. See [docs/setup_and_usage.md](docs/setup_and_usage.md) for full installation and usage instructions.
+See [docs/setup_and_usage.md](docs/setup_and_usage.md) for full installation and usage instructions.
 
 ## Pipeline architecture
 
@@ -78,7 +98,9 @@ PDF Input
 ```
 safeai-purdue-capstone/
 |
-|-- run_pipeline.py              Entry point (delegates to pipeline/cli.py)
+|-- start.command                Mac double-click launcher (setup + chat, no terminal needed)
+|-- chat.py                      Conversational assistant interface ("What can I help you with today?")
+|-- run_pipeline.py              Pipeline entry point (delegates to pipeline/cli.py)
 |-- requirements-pipeline.txt    All Python dependencies (numpy<2 pinned)
 |-- .gitignore                   Ignores PDFs, output dirs, venvs
 |
