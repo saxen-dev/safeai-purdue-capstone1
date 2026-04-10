@@ -179,10 +179,22 @@ def _format_response(result: Dict[str, Any]) -> str:
     lines.append(sep)
 
     # Step-by-step actions
-    actions = _clean_list_items(structured.actions)
+    # For RED triage: remove any action that suggests home management and
+    # relabel the section to make clear these are pre-transport steps.
+    _HOME_MGMT_RE = re.compile(
+        r"\bat home\b|\bhome treatment\b|\bhome management\b|\bmanage at home\b",
+        re.IGNORECASE,
+    )
+    raw_actions = _clean_list_items(structured.actions)
+    if triage == TriageLevel.RED:
+        actions = [a for a in raw_actions if not _HOME_MGMT_RE.search(a)]
+        action_label = "Steps while arranging referral:"
+    else:
+        actions = raw_actions
+        action_label = "What to do:"
     if actions:
         lines.append("")
-        lines.append("What to do:")
+        lines.append(action_label)
         for i, action in enumerate(actions, 1):
             lines.append(f"  {i}. {_strip_markdown(action)}")
 

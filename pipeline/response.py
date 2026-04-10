@@ -555,7 +555,6 @@ class ResponseOrchestrator:
     _BOLD_ITEM_RE = re.compile(r"^\s*\*\*(.{10,200})\*\*\s*$", re.MULTILINE)
 
     @staticmethod
-    @staticmethod
     def _relevant_chunks(
         chunks: List[Dict[str, Any]],
         threshold: float = _CONTENT_SCORE_THRESHOLD,
@@ -801,7 +800,18 @@ class ResponseOrchestrator:
         the PDF verbatim.  Falls back to hardcoded templates when no
         matching sentence is found.
         """
-        # Primary: scan chunk text for caregiver-education sentences
+        # Primary: scan chunk text for caregiver-education sentences.
+        # Sentences are validated against triage level before use — a "manage
+        # at home" sentence from a GREEN-context chunk must not appear in a
+        # RED-triage response.
+        _HOME_LANGUAGE = re.compile(
+            r"\bat home\b|\bhome treatment\b|\bhome management\b|\bmanage at home\b",
+            re.IGNORECASE,
+        )
+        _EMERGENCY_LANGUAGE = re.compile(
+            r"\brefer\b|\bhealth facility\b|\bhospital\b|\burgent\b|\bimmediately\b|\bnow\b",
+            re.IGNORECASE,
+        )
         for chunk in chunks:
             # Only search narrative chunks — skip dosing tables
             if chunk.get("content_type") in ("table", "image_ocr", "image_placeholder"):
@@ -809,8 +819,16 @@ class ResponseOrchestrator:
             text = chunk.get("text", "")
             for m in _FAMILY_MSG_RE.finditer(text):
                 sentence = m.group(0).strip()
-                if 20 <= len(sentence) <= 250:
-                    return sentence
+                if not (20 <= len(sentence) <= 250):
+                    continue
+                # For RED triage: reject sentences that suggest home management
+                # and only accept sentences with emergency/referral language.
+                if triage == TriageLevel.RED:
+                    if _HOME_LANGUAGE.search(sentence):
+                        continue
+                    if not _EMERGENCY_LANGUAGE.search(sentence):
+                        continue
+                return sentence
 
         # Fallback: hardcoded templates
         q = query.lower()
