@@ -297,7 +297,7 @@ class MedicalQASystem:
 
         response += self._guardrail_evidence_footer(sources, query)
 
-        validation = self.guardrail.validate_response(query, response)
+        validation = self.guardrail.validate_response(query, response, chunks_top)
 
         if not validation["passed"] or validation["warnings"]:
             response += "\n---\n"
@@ -347,7 +347,7 @@ class MedicalQASystem:
             response += f"📄 **Reference:** Page {s['page']}\n\n"
 
         response += self._guardrail_evidence_footer(sources, query)
-        validation = self.guardrail.validate_response(query, response)
+        validation = self.guardrail.validate_response(query, response, retrieved_chunks)
 
         if not validation["passed"] or validation["warnings"]:
             response += "\n---\n**🧪 Guardrail Brain Validation:**\n\n"
